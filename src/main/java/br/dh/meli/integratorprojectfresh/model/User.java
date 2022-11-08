@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -33,4 +34,8 @@ public class User {
     @OneToOne(mappedBy = "user")
     @JsonIgnoreProperties("user")
     private Warehouse warehouse;
+
+    @OneToMany(mappedBy = "seller")
+    @JsonIgnoreProperties("seller")
+    private List<Announcement> announcement;
 }

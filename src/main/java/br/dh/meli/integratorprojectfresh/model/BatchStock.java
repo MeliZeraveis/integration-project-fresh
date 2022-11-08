@@ -21,9 +21,8 @@ public class BatchStock {
         @Column(name = "id")
         private Long batchNumber;
 
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "product_id", nullable = false)
-        private Long productId;
+        @Column(name = "announcement_id", nullable = false, insertable = false, updatable = false)
+        private Long announcementId;
 
         @Column(name = "current_temperature", nullable = false)
         private Float currentTemperature;
@@ -53,4 +52,9 @@ public class BatchStock {
         @JoinColumn(name = "order_number_id", insertable = false, updatable = false)
         @JsonIgnoreProperties("batchStock")
         private InboundOrder inboundOrder;
+
+        @OneToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "announcement_id")
+        @JsonIgnoreProperties("batchStock")
+        private Announcement announcement;
 }

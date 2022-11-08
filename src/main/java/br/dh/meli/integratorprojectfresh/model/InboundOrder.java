@@ -23,7 +23,7 @@ public class InboundOrder {
     @Column(name = "order_date", nullable = false)
     private LocalDate orderDate;
 
-    @Column(name = "order_code", nullable = false)
+    @Column(name = "section_code", nullable = false)
     private Long sectionCode;
 
     @Column(name = "warehouse_code", nullable = false, insertable = false, updatable = false)
@@ -37,4 +37,9 @@ public class InboundOrder {
 
     @OneToMany(mappedBy = "inboundOrder")
     private List<BatchStock> batchStock;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "section_code", insertable = false, updatable = false)
+    @JsonIgnoreProperties("inboundOrder")
+    private Section section;
 }
