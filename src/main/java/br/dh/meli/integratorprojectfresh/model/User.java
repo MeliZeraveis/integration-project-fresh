@@ -32,7 +32,7 @@ public class User {
     @Column(name = "role", nullable = false, length = 30)
     private String role;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "manager")
     @JsonIgnoreProperties("user")
     private Warehouse warehouse;
 
