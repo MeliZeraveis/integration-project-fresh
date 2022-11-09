@@ -5,21 +5,14 @@ package br.dh.meli.integratorprojectfresh.enums;
  */
 public enum ExceptionType {
   /**
-   * The Object not found.
+   * The Object was not found.
    */
   OBJECT_NOT_FOUND("Object not found"),
   /**
-   * The Parameter not valid.
+   * The Parameter is not valid.
    */
   PARAMETER_NOT_VALID("Parameter not valid");
 
-
-  /**
-   * The message public attribute.
-   */
-  public final String message;
-
-  ExceptionType(String message) {
-    this.message = message;
+   ExceptionType(String message) {
   }
 }
