@@ -1,8 +1,8 @@
 package br.dh.meli.integratorprojectfresh.controller;
 
-import br.dh.meli.integratorprojectfresh.dto.InboundOrderPutResponseDTO;
-import br.dh.meli.integratorprojectfresh.dto.InboundOrderRequestDTO;
-import br.dh.meli.integratorprojectfresh.dto.InboundOrderPostResponseDTO;
+import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPutResponseDTO;
+import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderRequestDTO;
+import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPostResponseDTO;
 import br.dh.meli.integratorprojectfresh.service.InboundOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
