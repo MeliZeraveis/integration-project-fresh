@@ -122,15 +122,15 @@ public class InboundOrderControllerTestIT {
      *
      * @throws Exception the exception
      */
-    @Test
-    void update_ReturnInboundOrderPutResponseDTO_Sucess() throws Exception{
-        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(inboundOrderRepository)));
-
-
-
-    }
+//    @Test
+//    void update_ReturnInboundOrderPutResponseDTO_Sucess() throws Exception{
+//        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(objectMapper.writeValueAsString(inboundOrderRepository)));
+//
+//
+//
+//    }
 
     //        response.andExpect(status().isCreated())
 //                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.message)))
