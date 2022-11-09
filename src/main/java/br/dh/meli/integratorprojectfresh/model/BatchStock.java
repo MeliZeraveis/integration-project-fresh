@@ -98,4 +98,6 @@ public class BatchStock {
                 this.dueDate = dueDate;
                 this.price = price;
         }
+
+
 }
