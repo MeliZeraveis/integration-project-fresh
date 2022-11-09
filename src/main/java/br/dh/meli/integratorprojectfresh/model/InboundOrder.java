@@ -56,4 +56,14 @@ public class InboundOrder {
         this.batchStock = inboundOrder.getBatchStock();
         this.section = inboundOrder.getSection();
     }
+
+    public InboundOrder(InboundOrder inboundOrder, Long orderNumber) {
+        this.orderNumber = orderNumber;
+        this.orderDate = inboundOrder.getOrderDate();
+        this.sectionCode = inboundOrder.getSectionCode();
+        this.warehouseCode = inboundOrder.getWarehouseCode();
+        this.warehouse = inboundOrder.getWarehouse();
+        this.batchStock = inboundOrder.getBatchStock();
+        this.section = inboundOrder.getSection();
+    }
 }

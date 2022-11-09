@@ -26,7 +26,6 @@ public class InboundOrderService implements IInboundOrderService {
 
         InboundOrder inboundOrder = new InboundOrder(inboundOrderResquest.getInboundOrder());
         repo.save(inboundOrder);
-        System.out.println(inboundOrderResquest.getInboundOrder().getBatchStock());
         List<BatchStock> batchStockList =  inboundOrderResquest.getInboundOrder()
                 .getBatchStock().stream()
                 .map(a -> new BatchStock(a, inboundOrder.getOrderNumber()))
@@ -40,8 +39,17 @@ public class InboundOrderService implements IInboundOrderService {
 
     @Override
     public InboundOrderPutResponseDTO update(InboundOrderRequestDTO inboundOrderResquest) {
-        InboundOrder inboundOrderUpdated = repo.save(inboundOrderResquest.getInboundOrder());
-        return new InboundOrderPutResponseDTO(inboundOrderUpdated);
+        InboundOrder inboundOrder = new InboundOrder(inboundOrderResquest.getInboundOrder(),
+                inboundOrderResquest.getInboundOrder().getOrderNumber());
+        InboundOrder inboundOrderUpdated = repo.save(inboundOrder);
+        List<BatchStock> batchStockList = inboundOrderResquest.getInboundOrder()
+                .getBatchStock().stream()
+                .map(a -> new BatchStock(a, inboundOrder.getOrderNumber(), a.getBatchNumber()))
+                .collect(Collectors.toList());
+         List<BatchStockDTO> batchStockListUpdated = batchStockRepo.saveAll(batchStockList).stream()
+                .map(BatchStockDTO::new)
+                .collect(Collectors.toList());
+        return new InboundOrderPutResponseDTO(inboundOrderUpdated, batchStockListUpdated);
     }
 
 
