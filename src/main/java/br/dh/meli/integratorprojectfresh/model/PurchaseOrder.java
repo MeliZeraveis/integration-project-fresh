@@ -36,7 +36,7 @@ public class PurchaseOrder {
 
   @ManyToOne
   @JsonIgnoreProperties("purchase_order")
-  @JoinColumn(name = "buyer_id")
+  @JoinColumn(name = "buyer_id", insertable = false, updatable = false)
   private User buyer;
 
   @OneToMany(mappedBy = "purchaseOrder")
