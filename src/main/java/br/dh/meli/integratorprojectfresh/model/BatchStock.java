@@ -74,4 +74,16 @@ public class BatchStock {
                 this.manufacturingTime = a.getManufacturingTime();
         }
 
+        public BatchStock(BatchStock a, Long orderNumber, Long batchNumber) {
+                this.batchNumber = batchNumber;
+                this.announcementId = a.getAnnouncementId();
+                this.currentTemperature = a.getCurrentTemperature();
+                this.manufacturingDate = a.getManufacturingDate();
+                this.dueDate = a.getDueDate();
+                this.productQuantity = a.getProductQuantity();
+                this.price = a.getPrice();
+                this.volume = a.getVolume();
+                this.orderNumberId = orderNumber;
+                this.manufacturingTime = a.getManufacturingTime();
+        }
 }

@@ -7,6 +7,7 @@ import lombok.Setter;
 
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,10 +18,21 @@ public class InboundOrderPutResponseDTO {
     private Long sectionCode;
     private Long warehouseCode;
 
+    private List<BatchStockDTO> batchStock;
+
     public InboundOrderPutResponseDTO(InboundOrder inboundOrderUpdated) {
         this.orderNumber = inboundOrderUpdated.getOrderNumber();
         this.orderDate = inboundOrderUpdated.getOrderDate();
         this.sectionCode = inboundOrderUpdated.getSectionCode();
         this.warehouseCode = inboundOrderUpdated.getWarehouseCode();
+
+    }
+
+    public InboundOrderPutResponseDTO(InboundOrder inboundOrderUpdated, List<BatchStockDTO> batchStockListUpdated) {
+        this.orderNumber = inboundOrderUpdated.getOrderNumber();
+        this.orderDate = inboundOrderUpdated.getOrderDate();
+        this.sectionCode = inboundOrderUpdated.getSectionCode();
+        this.warehouseCode = inboundOrderUpdated.getWarehouseCode();
+        this.batchStock = batchStockListUpdated;
     }
 }
