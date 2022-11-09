@@ -1,5 +1,6 @@
 package br.dh.meli.integratorprojectfresh.model;
 
+import br.dh.meli.integratorprojectfresh.enums.Sections;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -27,6 +29,12 @@ public class Announcement {
 
     @Column(name = "seller_id", nullable = false, length = 50)
     private Long sellerId;
+
+    @Column(name = "price", nullable = false, precision = 11, scale = 2)
+    private BigDecimal price;
+
+    @Column(name = "section", nullable = false, length = 50)
+    private Sections section;
 
     @OneToOne(mappedBy = "announcement")
     @JsonIgnoreProperties("announcement")
