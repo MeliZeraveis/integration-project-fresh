@@ -1,5 +1,7 @@
 package br.dh.meli.integratorprojectfresh.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +11,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,7 +24,7 @@ public class BatchStock {
         @Column(name = "id")
         private Long batchNumber;
 
-        @Column(name = "announcement_id", nullable = false, insertable = false, updatable = false)
+        @Column(name = "announcement_id", nullable = false)
         private Long announcementId;
 
         @Column(name = "current_temperature", nullable = false)
@@ -34,6 +37,7 @@ public class BatchStock {
         private LocalDate manufacturingDate;
 
         @Column(name = "manufacturing_time", nullable = false)
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime manufacturingTime;
 
         @Column(name = "volume", nullable = false)
@@ -54,7 +58,20 @@ public class BatchStock {
         private InboundOrder inboundOrder;
 
         @OneToOne(fetch = FetchType.LAZY)
-        @JoinColumn(name = "announcement_id")
+        @JoinColumn(name = "announcement_id", insertable = false, updatable = false)
         @JsonIgnoreProperties("batchStock")
         private Announcement announcement;
+
+        public BatchStock(BatchStock a, Long orderNumber) {
+                this.announcementId = a.getAnnouncementId();
+                this.currentTemperature = a.getCurrentTemperature();
+                this.manufacturingDate = a.getManufacturingDate();
+                this.dueDate = a.getDueDate();
+                this.productQuantity = a.getProductQuantity();
+                this.price = a.getPrice();
+                this.volume = a.getVolume();
+                this.orderNumberId = orderNumber;
+                this.manufacturingTime = a.getManufacturingTime();
+        }
+
 }
