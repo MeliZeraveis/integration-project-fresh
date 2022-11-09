@@ -30,7 +30,7 @@ public class HandleException extends ResponseEntityExceptionHandler {
   @ExceptionHandler(NotFoundException.class)
   public ResponseEntity<ExceptionDetails> handlerNotFoundException(NotFoundException ex) {
     ExceptionDetails exceptionDetails = ExceptionDetails.builder()
-            .title(ExceptionType.OBJECT_NOT_FOUND.message)
+            .title(ExceptionType.OBJECT_NOT_FOUND.name())
             .message(ex.getMessage())
             .status(HttpStatus.NOT_FOUND.value())
             .timeStamp(LocalDateTime.now())
@@ -48,7 +48,7 @@ public class HandleException extends ResponseEntityExceptionHandler {
   @ExceptionHandler (InvalidParamException.class)
   public ResponseEntity<ExceptionDetails> handlerInvalidParamException(InvalidParamException ex) {
     ExceptionDetails exceptionDetails = ExceptionDetails.builder()
-            .title(ExceptionType.PARAMETER_NOT_VALID.message)
+            .title(ExceptionType.PARAMETER_NOT_VALID.name())
             .message(ex.getMessage())
             .status(HttpStatus.BAD_REQUEST.value())
             .timeStamp(LocalDateTime.now())
@@ -72,7 +72,7 @@ public class HandleException extends ResponseEntityExceptionHandler {
 
     List<FieldError> errors = ex.getBindingResult().getFieldErrors();
     ExceptionDetailsValidate exceptionDetails = ExceptionDetailsValidate.builder()
-            .title(ExceptionType.PARAMETER_NOT_VALID.message)
+            .title(ExceptionType.PARAMETER_NOT_VALID.name())
             .message(Msg.FIELD_NOT_FOUND)
             .fields(errors.stream().map(FieldError::getField).collect(Collectors.joining(";")))
             .fieldsMessages(errors.stream().map(FieldError::getDefaultMessage).collect(Collectors.joining(";")))
