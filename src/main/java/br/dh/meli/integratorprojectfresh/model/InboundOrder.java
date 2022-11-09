@@ -1,12 +1,16 @@
 package br.dh.meli.integratorprojectfresh.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -26,20 +30,40 @@ public class InboundOrder {
     @Column(name = "section_code", nullable = false)
     private Long sectionCode;
 
-    @Column(name = "warehouse_code", nullable = false, insertable = false, updatable = false)
+    @Column(name = "warehouse_code", nullable = false )
     private Long warehouseCode;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "warehouse_code")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "warehouse_code", insertable = false, updatable = false)
     @JsonIgnoreProperties("inboundOrder")
     private Warehouse warehouse;
 
 
     @OneToMany(mappedBy = "inboundOrder")
+    @JsonIgnoreProperties("inboundOrder")
     private List<BatchStock> batchStock;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "section_code", insertable = false, updatable = false)
     @JsonIgnoreProperties("inboundOrder")
     private Section section;
+
+    public InboundOrder(InboundOrder inboundOrder) {
+        this.orderDate = inboundOrder.getOrderDate();
+        this.sectionCode = inboundOrder.getSectionCode();
+        this.warehouseCode = inboundOrder.getWarehouseCode();
+        this.warehouse = inboundOrder.getWarehouse();
+        this.batchStock = inboundOrder.getBatchStock();
+        this.section = inboundOrder.getSection();
+    }
+
+    public InboundOrder(InboundOrder inboundOrder, Long orderNumber) {
+        this.orderNumber = orderNumber;
+        this.orderDate = inboundOrder.getOrderDate();
+        this.sectionCode = inboundOrder.getSectionCode();
+        this.warehouseCode = inboundOrder.getWarehouseCode();
+        this.warehouse = inboundOrder.getWarehouse();
+        this.batchStock = inboundOrder.getBatchStock();
+        this.section = inboundOrder.getSection();
+    }
 }
