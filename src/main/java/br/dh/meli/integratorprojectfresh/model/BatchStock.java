@@ -3,6 +3,7 @@ package br.dh.meli.integratorprojectfresh.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -85,5 +86,16 @@ public class BatchStock {
                 this.volume = a.getVolume();
                 this.orderNumberId = orderNumber;
                 this.manufacturingTime = a.getManufacturingTime();
+        }
+
+        public BatchStock(Long announcementId, Float currentTemperature, int productQuantity, LocalDate manufacturingDate, LocalDateTime manufacturingTime, Float volume, LocalDate dueDate, BigDecimal price) {
+                this.announcementId = announcementId;
+                this.currentTemperature = currentTemperature;
+                this.productQuantity = productQuantity;
+                this.manufacturingDate = manufacturingDate;
+                this.manufacturingTime = manufacturingTime;
+                this.volume = volume;
+                this.dueDate = dueDate;
+                this.price = price;
         }
 }
