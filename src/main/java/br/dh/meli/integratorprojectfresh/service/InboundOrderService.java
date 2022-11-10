@@ -4,6 +4,8 @@ import br.dh.meli.integratorprojectfresh.dto.request.BatchStockDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPutResponseDTO;
 import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderRequestDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPostResponseDTO;
+import br.dh.meli.integratorprojectfresh.enums.Msg;
+import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.model.BatchStock;
 import br.dh.meli.integratorprojectfresh.model.InboundOrder;
 import br.dh.meli.integratorprojectfresh.repository.BatchStockRepository;
@@ -12,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,6 +44,15 @@ public class InboundOrderService implements IInboundOrderService {
     public InboundOrderPutResponseDTO update(InboundOrderRequestDTO inboundOrderResquest) {
         InboundOrder inboundOrder = new InboundOrder(inboundOrderResquest.getInboundOrder(),
                 inboundOrderResquest.getInboundOrder().getOrderNumber());
+        if (repo.findById(inboundOrder.getOrderNumber()).isEmpty()) {
+            throw new NotFoundException(Msg.INBOUND_ORDER_NOT_FOUND);
+        }
+       for (BatchStockDTO batchStockDTO : inboundOrderResquest.getInboundOrder().getBatchStock()) {
+           Optional<BatchStock> batchStock = batchStockRepo.findById(batchStockDTO.getBatchNumber());
+           if (batchStock.isEmpty()) {
+               throw new NotFoundException(Msg.BATCH_NOT_FOUND);
+           }
+       }
         InboundOrder inboundOrderUpdated = repo.save(inboundOrder);
         List<BatchStock> batchStockList = inboundOrderResquest.getInboundOrder()
                 .getBatchStock().stream()
@@ -51,7 +63,5 @@ public class InboundOrderService implements IInboundOrderService {
                 .collect(Collectors.toList());
         return new InboundOrderPutResponseDTO(inboundOrderUpdated, batchStockListUpdated);
     }
-
-
 }
 
