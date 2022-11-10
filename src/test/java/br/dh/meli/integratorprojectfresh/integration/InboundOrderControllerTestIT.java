@@ -12,30 +12,33 @@ import br.dh.meli.integratorprojectfresh.repository.BatchStockRepository;
 import br.dh.meli.integratorprojectfresh.repository.InboundOrderRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.CoreMatchers;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.jdbc.core.JdbcTemplate;
+
 import org.springframework.test.context.ActiveProfiles;
+
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
+;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -45,7 +48,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class InboundOrderControllerTestIT {
 
     @Autowired
@@ -60,6 +62,9 @@ public class InboundOrderControllerTestIT {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
     private InboundOrderRequestDTO inboundOrderRequestDTO;
 
     private InboundOrderPostResponseDTO inboundOrderPostResponseDTO;
@@ -71,18 +76,20 @@ public class InboundOrderControllerTestIT {
     /**
      * Setup.
      */
-    @BeforeAll
+    @BeforeEach
     void setup(){
         batchStockRepository.deleteAll();
         inboundOrderRepository.deleteAll();
+
+        jdbcTemplate.execute("ALTER TABLE inbound_order AUTO_INCREMENT = 1");
+        jdbcTemplate.execute("ALTER TABLE batch_stock AUTO_INCREMENT = 1");
 
         LocalDate manufacturingDate = LocalDate.parse("2022-02-01");
         LocalDate orderDate = LocalDate.parse("2022-03-03");
         LocalDateTime manufacturingTime = LocalDateTime.parse("2020-03-09 17:55:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
        batchStock = new BatchStock(1L, (float)1.05, 10, manufacturingDate, manufacturingTime, (float)1.5, manufacturingDate, BigDecimal.valueOf(30.5));
-       BatchStock batchStock1 = new BatchStock(2L, (float)2.05, 11, manufacturingDate, manufacturingTime, (float)1.3, manufacturingDate, BigDecimal.valueOf(20.5));
-
+        BatchStock batchStock1 = new BatchStock(2L, (float)2.05, 11, manufacturingDate, manufacturingTime, (float)1.3, manufacturingDate, BigDecimal.valueOf(20.5));
         List<BatchStock> batchStockList = new ArrayList<>();
         batchStockList.add(batchStock);
         batchStockList.add(batchStock1);
