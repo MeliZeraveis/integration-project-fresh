@@ -1,6 +1,6 @@
 package br.dh.meli.integratorprojectfresh.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import br.dh.meli.integratorprojectfresh.enums.Sections;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +21,8 @@ public class Section {
     private Long sectionCode;
 
     @Column(name = "type", nullable = false, length = 50)
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private Sections type;
 
     @Column(name = "max_capacity", nullable = false)
     private Float maxCapacity;
