@@ -21,7 +21,6 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 public class BatchStockDTO {
-    @JsonIgnore
     private Long batchNumber;
 
     @NotNull(message = Msg.ANNOUNCEMENT_ID_REQUIRED)
@@ -59,6 +58,7 @@ public class BatchStockDTO {
     private Long orderNumberId;
 
     public BatchStockDTO(BatchStock a) {
+        this.batchNumber = a.getBatchNumber();
         this.announcementId = a.getAnnouncementId();
         this.currentTemperature = a.getCurrentTemperature();
         this.manufacturingDate = a.getManufacturingDate();

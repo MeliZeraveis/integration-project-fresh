@@ -47,7 +47,7 @@ public class InboundOrderService implements IInboundOrderService {
                 .map(a -> new BatchStock(a, inboundOrder.getOrderNumber(), a.getBatchNumber()))
                 .collect(Collectors.toList());
          List<BatchStockDTO> batchStockListUpdated = batchStockRepo.saveAll(batchStockList).stream()
-                .map(BatchStockDTO::new)
+                .map(a ->new BatchStockDTO(a))
                 .collect(Collectors.toList());
         return new InboundOrderPutResponseDTO(inboundOrderUpdated, batchStockListUpdated);
     }
