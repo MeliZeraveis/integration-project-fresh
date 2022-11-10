@@ -11,4 +11,5 @@ public class Msg {
   public static final String FIELD_NOT_POSITIVE =  "One or more fields are not positive.";
   public static final String FIELD_SIZE_NOT_VALID =  "One or more fields are not valid.";
   public static final String FIELD_VALUE_NOT_VALID =  "One or more fields are not valid.";
+  public static final String FIELD_MIN_VALUE = "One or more fields are less than the minimum value.";
 }
