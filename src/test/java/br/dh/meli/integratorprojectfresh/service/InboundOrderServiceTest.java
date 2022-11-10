@@ -5,12 +5,14 @@ import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderDTO;
 import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderRequestDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPostResponseDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPutResponseDTO;
+import br.dh.meli.integratorprojectfresh.model.BatchStock;
 import br.dh.meli.integratorprojectfresh.model.InboundOrder;
 import br.dh.meli.integratorprojectfresh.repository.BatchStockRepository;
 import br.dh.meli.integratorprojectfresh.repository.InboundOrderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -22,17 +24,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 @ExtendWith(MockitoExtension.class)
-public class InboundOrderServiceTest {
+class InboundOrderServiceTest {
 
     @InjectMocks
     private InboundOrderService service;
 
     @Mock
     private InboundOrderRepository inboundOrderRepo;
+    @Mock
     private BatchStockRepository batchStockRepo;
     private BatchStockDTO batchStockDTO;
     private InboundOrderPostResponseDTO inboundOrderPostResponseDTO;
@@ -40,6 +42,7 @@ public class InboundOrderServiceTest {
     private InboundOrderRequestDTO inboundOrderRequestDTO;
     private InboundOrder inboundOrder;
     List<BatchStockDTO> batchStockList;
+    List<BatchStock> batchStockList2;
 
     @BeforeEach
     void setup() {
@@ -61,7 +64,10 @@ public class InboundOrderServiceTest {
 
         inboundOrderPostResponseDTO = new InboundOrderPostResponseDTO(batchStockList);
 
-//        InboundOrder inboundOrder = new InboundOrder(inboundOrderDTO, 1L); - é para o PUT!?
+        batchStockList2 = batchStockList.stream().map(a -> new BatchStock(a, inboundOrder.getOrderNumber())).collect(Collectors.toList());
+
+        inboundOrder = new InboundOrder(inboundOrderDTO, 1L);
+//        InboundOrder inboundOrder = new InboundOrder(inboundOrderDTO, 1L);
 
 //        List<BatchStock> batchStockList1 = batchStockList.stream()
 //                .map(a -> new BatchStock(a, inboundOrderDTO.getOrderNumber()))
@@ -71,12 +77,14 @@ public class InboundOrderServiceTest {
     @Test
     void insert_returnNewInboundOrder_whenBatchStockIsCorrect() {
 
-        Mockito.when(inboundOrderRepo.save(ArgumentMatchers.any()))
-                .thenReturn(inboundOrderPostResponseDTO);
+        BDDMockito.when(inboundOrderRepo.save(ArgumentMatchers.any()))
+                .thenReturn(inboundOrder);
+        BDDMockito.when(batchStockRepo.saveAll(ArgumentMatchers.any()))
+                .thenReturn(batchStockList2);
 
         InboundOrderPostResponseDTO inboundOrderPostTest = service.save(inboundOrderRequestDTO);
 
-        assertThat(inboundOrderPostTest.getBatchStock());
+        assertThat(inboundOrderPostTest).isNotNull();
 
     }
 
