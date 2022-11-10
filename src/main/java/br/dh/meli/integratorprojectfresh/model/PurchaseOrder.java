@@ -43,4 +43,15 @@ public class PurchaseOrder {
   @OneToMany(mappedBy = "purchaseOrder")
   @JsonIgnoreProperties("purchaseOrder")
   private List<PurchaseOrderItems> orderItem;
+
+  /**
+   * getTotalPrice
+   * Calculates the total price of the purchase order
+   * @return BigDecimal
+   */
+  public BigDecimal getTotalPrice() {
+    return orderItem.stream()
+      .map((item) -> item.getProductPrice().multiply(BigDecimal.valueOf(item.getProductQuantity())))
+      .reduce(BigDecimal.ZERO, BigDecimal::add);
+  }
 }
