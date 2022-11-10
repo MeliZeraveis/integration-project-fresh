@@ -66,4 +66,12 @@ public class InboundOrder {
         this.batchStock = inboundOrder.getBatchStock();
         this.section = inboundOrder.getSection();
     }
+
+    public InboundOrder(Long orderNumber, LocalDate orderDate, Long sectionCode, Long warehouseCode, List<BatchStock> batchStock) {
+        this.orderNumber = orderNumber;
+        this.orderDate = orderDate;
+        this.sectionCode = sectionCode;
+        this.warehouseCode = warehouseCode;
+        this.batchStock = batchStock;
+    }
 }

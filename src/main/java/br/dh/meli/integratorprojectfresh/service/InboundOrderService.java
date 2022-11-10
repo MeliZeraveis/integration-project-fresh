@@ -20,7 +20,7 @@ public class InboundOrderService implements IInboundOrderService {
 
 
     private final InboundOrderRepository repo;
-    private  final BatchStockRepository batchStockRepo;
+    private final BatchStockRepository batchStockRepo;
     @Override
     public InboundOrderPostResponseDTO save(InboundOrderRequestDTO inboundOrderResquest) {
 

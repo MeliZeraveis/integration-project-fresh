@@ -37,7 +37,7 @@ public class BatchStock {
         private LocalDate manufacturingDate;
 
         @Column(name = "manufacturing_time", nullable = false)
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        @JsonFormat(pattern = "HH:mm:ss")
         private LocalDateTime manufacturingTime;
 
         @Column(name = "volume", nullable = false)
@@ -85,5 +85,16 @@ public class BatchStock {
                 this.volume = a.getVolume();
                 this.orderNumberId = orderNumber;
                 this.manufacturingTime = a.getManufacturingTime();
+        }
+
+        public BatchStock(Long announcementId, Float currentTemperature, int productQuantity, LocalDate manufacturingDate, LocalDateTime manufacturingTime, Float volume, LocalDate dueDate, BigDecimal price) {
+                this.announcementId = announcementId;
+                this.currentTemperature = currentTemperature;
+                this.productQuantity = productQuantity;
+                this.manufacturingDate = manufacturingDate;
+                this.manufacturingTime = manufacturingTime;
+                this.volume = volume;
+                this.dueDate = dueDate;
+                this.price = price;
         }
 }

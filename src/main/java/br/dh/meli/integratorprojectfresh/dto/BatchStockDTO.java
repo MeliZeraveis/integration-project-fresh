@@ -42,4 +42,6 @@ public class BatchStockDTO {
         this.price = a.getPrice();
         this.manufacturingTime = a.getManufacturingTime();
     }
+
+
 }
