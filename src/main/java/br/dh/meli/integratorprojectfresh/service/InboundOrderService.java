@@ -1,6 +1,6 @@
 package br.dh.meli.integratorprojectfresh.service;
 
-import br.dh.meli.integratorprojectfresh.dto.BatchStockDTO;
+import br.dh.meli.integratorprojectfresh.dto.request.BatchStockDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPutResponseDTO;
 import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderRequestDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPostResponseDTO;
