@@ -32,7 +32,7 @@ public class InboundOrderService implements IInboundOrderService {
                 .collect(Collectors.toList());
         batchStockRepo.saveAll(batchStockList);
 
-               return new InboundOrderPostResponseDTO( batchStockList.stream()
+        return new InboundOrderPostResponseDTO( batchStockList.stream()
                 .map(BatchStockDTO::new)
                 .collect(Collectors.toList()));
     }
