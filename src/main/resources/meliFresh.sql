@@ -1,132 +1,74 @@
--- MySQL dump 10.13  Distrib 8.0.31, for macos12 (x86_64)
---
--- Host: localhost    Database: meli_fresh
--- ------------------------------------------------------
--- Server version	8.0.31
+use meli_fresh;
+INSERT INTO `user` VALUES (1, 'jonatasbene@email.com', '1234', 'buyer',  'JonatasBene'),
+                          (2, 'brunacampos@email.com', '1234', 'buyer', 'BrunaCampos'),
+                          (3, 'rosysantos@email.com', '5678', 'seller', 'RosySantos'),
+                          (4, 'estherporto@email.com', '5678', 'seller', 'EstherPorto'),
+                          (5, 'marcelloalves@email.com', '9090', 'manager', 'MarcelloAlves'),
+                          (6, 'hugocaxias@email.com', '9090', 'manager', 'HugoCaxias');
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+INSERT INTO warehouse VALUES (1,'Address A','BR', 'MLBSP01', 5),
+                             (2,'Address B','BR', 'MLBSP02', 5),
+                             (3,'AddressC','AR', 'MLARBA01', 6);
 
---
--- Table structure for table `announcement`
---
+INSERT INTO section VALUES (1,1000,'Fresh', 800),
+                           (2,1500, 'Refrigerated', 1000),
+                           (3,2000, 'Frozen', 1200);
 
-DROP TABLE IF EXISTS `announcement`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `announcement` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `description` varchar(100) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `seller_id` bigint NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FKkjp0ij7gmr87d524p9mfrylx4` (`seller_id`),
-  CONSTRAINT `FKkjp0ij7gmr87d524p9mfrylx4` FOREIGN KEY (`seller_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+SELECT * FROM meli_fresh.announcement;
+INSERT INTO announcement VALUES (1,'descricao', 'Maçã', 2.50, 1 , 3),
+                                (2,'descricao', 'Banana', 3.00, 1, 3),
+                                (3,'descricao', 'Sorvete', 20.0, 3, 4),
+                                (4,'descricao', 'Carne Moida', 40.0, 3, 4),
+                                (5,'descricao', 'Manteiga', 5.55, 2, 3),
+                                (6,'descricao', 'Requeijão', 6.75, 2, 4),
+                                (7,'descricao', 'Cereja', 18.55, 3, 3),
+                                (8,'descricao', 'Queijo', 45.70, 2, 3),
+                                (9,'descricao', 'Camarão', 80.70, 3, 4);
 
---
--- Dumping data for table `announcement`
---
+SELECT * FROM meli_fresh.inbound_order;
+INSERT INTO inbound_order VALUES (1,'2023-01-25',1,1),
+                                 (2,'2023-01-25',1,1),
+                                 (3,'2023-01-25',3,2),
+                                 (4,'2023-01-25',3,2),
+                                 (5,'2023-01-25',2,2),
+                                 (6,'2023-01-25',2,1),
+                                 (7,'2023-01-25',1,3),
+                                 (8,'2023-01-25',2,3),
+                                 (9,'2023-01-25',3,3);
 
-LOCK TABLES `announcement` WRITE;
-/*!40000 ALTER TABLE `announcement` DISABLE KEYS */;
-/*!40000 ALTER TABLE `announcement` ENABLE KEYS */;
-UNLOCK TABLES;
 
---
--- Table structure for table `section`
---
+SELECT * FROM meli_fresh.batch_stock;
+INSERT INTO batch_stock VALUES (1, 1, 18.0, '2022-12-30', '2022-08-13', '2022-08-13 17:55:00', 1, 450, 150, 150),
+                                (2, 2, 18.0, '2022-12-30', '2022-08-13', '2022-08-13 17:55:00', 1, 450, 150, 150),
+                               (3, 3, 1.0, '2023-12-31', '2022-08-13', '2022-08-13 17:55:00', 1, 2000, 100,150 ),
+                               (4, 4, 2.0, '2023-02-27', '2022-08-13', '2022-08-13 17:55:00', 2, 4000, 100, 100),
+                               (5, 5, 10.0, '2023-11-25', '2022-08-13', '2022-08-13 17:55:00', 2, 555, 100, 100),
+                               (6, 6, 13.0, '2023-01-05', '2022-08-13', '2022-08-13 17:55:00', 2, 675, 100, 100),
+                               (7, 7, 13.0, '2022-12-30', '2022-08-13', '2022-08-13 17:55:00', 3, 185.5, 100, 100),
+                               (8, 8, 10.0, '2022-12-30', '2022-08-13', '2022-08-13 17:55:00', 4, 4570, 100, 100),
+                               (9, 9, 3.0, '2023-01-15', '2022-08-13', '2022-08-13 17:55:00', 4, 8070, 100, 100);
 
-DROP TABLE IF EXISTS `section`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `section` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `type` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `section`
---
 
-LOCK TABLES `section` WRITE;
-/*!40000 ALTER TABLE `section` DISABLE KEYS */;
-INSERT INTO `section` VALUES (1,'fresco');
-/*!40000 ALTER TABLE `section` ENABLE KEYS */;
-UNLOCK TABLES;
+SELECT * FROM meli_fresh.purchase_order;
+INSERT INTO purchase_order VALUES (1, 1, '2022-12-30', 'Pending', 150),
+                                  (2, 1, '2022-12-30', 'Approved', 450),
+                                  (3, 1, '2022-12-30', 'Approved', 300),
+                                  (4, 2, '2022-12-30', 'Approved', 150),
+                                  (5, 2, '2022-12-30', 'Approved', 320),
+                                  (6, 1, '2022-12-30', 'Approved', 450.77),
+                                  (7, 2, '2022-12-30', 'Approved', 125.12),
+                                  (8, 1, '2022-12-30', 'Approved', 1000.55),
+                                  (9, 2, '2022-12-30', 'Approved', 150.88);
 
---
--- Table structure for table `user`
---
 
-DROP TABLE IF EXISTS `user`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `email` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
-  `role` varchar(30) NOT NULL,
-  `username` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user`
---
-
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'meli@meli.com','12345678','manager','meli');
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `warehouse`
---
-
-DROP TABLE IF EXISTS `warehouse`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `warehouse` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `warehouse_name` varchar(50) NOT NULL,
-  `id_user` bigint DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FKl0lq5qohv9c6yhr39nshhkp70` (`id_user`),
-  CONSTRAINT `FKl0lq5qohv9c6yhr39nshhkp70` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `warehouse`
---
-
-LOCK TABLES `warehouse` WRITE;
-/*!40000 ALTER TABLE `warehouse` DISABLE KEYS */;
-INSERT INTO `warehouse` VALUES (1,'meli',1);
-/*!40000 ALTER TABLE `warehouse` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2022-11-08 18:23:37
+SELECT * FROM meli_fresh.purchase_order_items;
+INSERT INTO purchase_order_items VALUES (1, 1,  807, 10, 1),
+                                        (2, 8, 450.7, 10, 2),
+                                        (3, 7, 185.5, 10, 3),
+                                        (4, 6,  101.25, 15, 4),
+                                        (5, 5,  27.75, 5, 5),
+                                        (6, 4,  80, 2, 6),
+                                        (7, 3,  20, 1, 7),
+                                        (8, 2,  12, 4, 8),
+                                        (9, 1,  5, 2, 9);
