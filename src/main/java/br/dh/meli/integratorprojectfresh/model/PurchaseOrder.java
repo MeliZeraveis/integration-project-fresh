@@ -26,6 +26,7 @@ public class PurchaseOrder {
   private LocalDateTime date;
 
   @Column(name = "status", nullable = false)
+  @Enumerated(EnumType.STRING)
   private OrderStatus status;
 
   @Column(name = "total", nullable = false)
