@@ -1,9 +1,9 @@
 package br.dh.meli.integratorprojectfresh.service;
 
-import br.dh.meli.integratorprojectfresh.dto.BatchStockDTO;
-import br.dh.meli.integratorprojectfresh.dto.InboundOrderPutResponseDTO;
-import br.dh.meli.integratorprojectfresh.dto.InboundOrderRequestDTO;
-import br.dh.meli.integratorprojectfresh.dto.InboundOrderPostResponseDTO;
+import br.dh.meli.integratorprojectfresh.dto.request.BatchStockDTO;
+import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPutResponseDTO;
+import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderRequestDTO;
+import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPostResponseDTO;
 import br.dh.meli.integratorprojectfresh.model.BatchStock;
 import br.dh.meli.integratorprojectfresh.model.InboundOrder;
 import br.dh.meli.integratorprojectfresh.repository.BatchStockRepository;
@@ -32,7 +32,7 @@ public class InboundOrderService implements IInboundOrderService {
                 .collect(Collectors.toList());
         batchStockRepo.saveAll(batchStockList);
 
-        return new InboundOrderPostResponseDTO( batchStockList.stream()
+        return new InboundOrderPostResponseDTO(  batchStockRepo.saveAll(batchStockList).stream()
                 .map(BatchStockDTO::new)
                 .collect(Collectors.toList()));
     }
@@ -47,7 +47,7 @@ public class InboundOrderService implements IInboundOrderService {
                 .map(a -> new BatchStock(a, inboundOrder.getOrderNumber(), a.getBatchNumber()))
                 .collect(Collectors.toList());
          List<BatchStockDTO> batchStockListUpdated = batchStockRepo.saveAll(batchStockList).stream()
-                .map(BatchStockDTO::new)
+                .map(a ->new BatchStockDTO(a))
                 .collect(Collectors.toList());
         return new InboundOrderPutResponseDTO(inboundOrderUpdated, batchStockListUpdated);
     }

@@ -1,5 +1,6 @@
 package br.dh.meli.integratorprojectfresh.model;
 
+import br.dh.meli.integratorprojectfresh.dto.request.BatchStockDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -62,7 +63,7 @@ public class BatchStock {
         @JsonIgnoreProperties("batchStock")
         private Announcement announcement;
 
-        public BatchStock(BatchStock a, Long orderNumber) {
+        public BatchStock(BatchStockDTO a, Long orderNumber) {
                 this.announcementId = a.getAnnouncementId();
                 this.currentTemperature = a.getCurrentTemperature();
                 this.manufacturingDate = a.getManufacturingDate();
@@ -71,10 +72,10 @@ public class BatchStock {
                 this.price = a.getPrice();
                 this.volume = a.getVolume();
                 this.orderNumberId = orderNumber;
-                this.manufacturingTime = a.getManufacturingTime();
+                this.manufacturingTime =  a.getManufacturingTime();
         }
 
-        public BatchStock(BatchStock a, Long orderNumber, Long batchNumber) {
+        public BatchStock(BatchStockDTO a, Long orderNumber, Long batchNumber) {
                 this.batchNumber = batchNumber;
                 this.announcementId = a.getAnnouncementId();
                 this.currentTemperature = a.getCurrentTemperature();
