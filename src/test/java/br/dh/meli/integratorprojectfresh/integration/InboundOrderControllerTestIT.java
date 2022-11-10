@@ -120,8 +120,6 @@ public class InboundOrderControllerTestIT {
         assertThat(inboundOrderRepository.findAll().get(0)).isNotNull();
         assertThat(batchStockRepository.findAll().size()).isEqualTo(2);
         assertThat(batchStockRepository.findAll().get(0)).isNotNull();
-
-
     }
 
 //    @Test
