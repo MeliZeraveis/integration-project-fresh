@@ -3,7 +3,9 @@ package br.dh.meli.integratorprojectfresh.enums;
 /**
  * The enum Msg lists all the messages returned to the user.
  */
-public class Msg {
+public enum Msg {
+  __MSG__;
+
   public static final String FIELD_NOT_FOUND =  "One or more fields are invalid.";
   public static final String FIELD_MIN_VALUE = "One or more fields are less than the minimum value.";
   public static final String DATE_PAST_OR_PRESENT = "One or more fields are not past or present.";
