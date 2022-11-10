@@ -37,10 +37,10 @@ class InboundOrderServiceTest {
     @Mock
     private BatchStockRepository batchStockRepo;
     private BatchStockDTO batchStockDTO;
-    private InboundOrderPostResponseDTO inboundOrderPostResponseDTO;
-    private InboundOrderPutResponseDTO inboundOrderPutResponseDTO;
-    private InboundOrderRequestDTO inboundOrderRequestDTO;
-    private InboundOrder inboundOrder;
+    InboundOrderPostResponseDTO inboundOrderPostResponseDTO;
+    InboundOrderPutResponseDTO inboundOrderPutResponseDTO;
+    InboundOrderRequestDTO inboundOrderRequestDTO;
+    InboundOrder inboundOrder;
     List<BatchStockDTO> batchStockList;
     List<BatchStock> batchStockList2;
 
@@ -64,14 +64,9 @@ class InboundOrderServiceTest {
 
         inboundOrderPostResponseDTO = new InboundOrderPostResponseDTO(batchStockList);
 
-        batchStockList2 = batchStockList.stream().map(a -> new BatchStock(a, inboundOrder.getOrderNumber())).collect(Collectors.toList());
-
         inboundOrder = new InboundOrder(inboundOrderDTO, 1L);
-//        InboundOrder inboundOrder = new InboundOrder(inboundOrderDTO, 1L);
 
-//        List<BatchStock> batchStockList1 = batchStockList.stream()
-//                .map(a -> new BatchStock(a, inboundOrderDTO.getOrderNumber()))
-//                .collect(Collectors.toList());
+        batchStockList2 = batchStockList.stream().map(a -> new BatchStock(a, inboundOrder.getOrderNumber())).collect(Collectors.toList());
     }
 
     @Test

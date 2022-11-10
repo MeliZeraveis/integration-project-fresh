@@ -20,13 +20,8 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class InboundOrderRequestDTO {
      @NotNull(message = Msg.DATE_REQUIRED)
      @Valid InboundOrderDTO inboundOrder;
-
-     public InboundOrderRequestDTO(InboundOrder inboundOrder) {
-     }
-
-    public InboundOrderRequestDTO(InboundOrderDTO inboundOrderDTO) {
-    }
 }
