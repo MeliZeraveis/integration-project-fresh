@@ -8,5 +8,5 @@ public enum Routes {
 
   public static final String BASE_ROUTE = "/api/v1/fresh-product";
   public static final String INBOUND_ORDER = "/inbound-order";
-  public static final String PURCHASE_ORDER = "/purchase-order";
+  public static final String PURCHASE_ORDER = "/orders";
 }
