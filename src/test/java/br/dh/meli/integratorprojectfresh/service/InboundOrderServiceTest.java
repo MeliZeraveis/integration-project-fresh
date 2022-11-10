@@ -1,10 +1,10 @@
 package br.dh.meli.integratorprojectfresh.service;
 
-import br.dh.meli.integratorprojectfresh.dto.BatchStockDTO;
-import br.dh.meli.integratorprojectfresh.dto.InboundOrderPostResponseDTO;
-import br.dh.meli.integratorprojectfresh.dto.InboundOrderPutResponseDTO;
-import br.dh.meli.integratorprojectfresh.dto.InboundOrderRequestDTO;
-import br.dh.meli.integratorprojectfresh.model.BatchStock;
+import br.dh.meli.integratorprojectfresh.dto.request.BatchStockDTO;
+import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderDTO;
+import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderRequestDTO;
+import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPostResponseDTO;
+import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPutResponseDTO;
 import br.dh.meli.integratorprojectfresh.model.InboundOrder;
 import br.dh.meli.integratorprojectfresh.repository.BatchStockRepository;
 import br.dh.meli.integratorprojectfresh.repository.InboundOrderRepository;
@@ -38,45 +38,45 @@ public class InboundOrderServiceTest {
     private InboundOrderPostResponseDTO inboundOrderPostResponseDTO;
     private InboundOrderPutResponseDTO inboundOrderPutResponseDTO;
     private InboundOrderRequestDTO inboundOrderRequestDTO;
-    private List<BatchStock> batchStockList;
     private InboundOrder inboundOrder;
+    List<BatchStockDTO> batchStockList;
 
     @BeforeEach
     void setup() {
-        LocalDate manufacturingDate = LocalDate.parse("2022-02-01");
+        LocalDate manufacturingDate = LocalDate.parse("2022-03-09");
+        LocalDate dueDate = LocalDate.parse("2023-02-01");
         LocalDate orderDate = LocalDate.parse("2022-03-03");
         LocalDateTime manufacturingTime = LocalDateTime.parse("2020-03-09 17:55:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-        BatchStock batchStock1 = new BatchStock(1L, (float) 1.05, 10, manufacturingDate, manufacturingTime, (float) 1.5, manufacturingDate, BigDecimal.valueOf(30.5));
-        BatchStock batchStock2 = new BatchStock(2L, (float) 2.05, 11, manufacturingDate, manufacturingTime, (float) 1.3, manufacturingDate, BigDecimal.valueOf(20.5));
+        BatchStockDTO batchStock1 = new BatchStockDTO( 1L, (float) 1.05, 10, manufacturingDate, manufacturingTime, (float) 1.5, dueDate, BigDecimal.valueOf(30.5));
+        BatchStockDTO batchStock2 = new BatchStockDTO( 2L, (float) 2.05, 11, manufacturingDate, manufacturingTime, (float) 1.3, dueDate, BigDecimal.valueOf(20.5));
 
         batchStockList = new ArrayList<>();
         batchStockList.add(batchStock1);
         batchStockList.add(batchStock2);
 
-        inboundOrder = new InboundOrder(1L, orderDate, 1L, 1L, batchStockList);
+        InboundOrderDTO inboundOrderDTO = new InboundOrderDTO(1L, orderDate, 1L, 1L, batchStockList);
 
-        inboundOrderRequestDTO = new InboundOrderRequestDTO(inboundOrder);
+        inboundOrderRequestDTO = new InboundOrderRequestDTO(inboundOrderDTO);
 
-        List<BatchStockDTO> batchStockDTO = batchStockList.stream()
-                .map(BatchStockDTO::new)
-                .collect(Collectors.toList());
+        inboundOrderPostResponseDTO = new InboundOrderPostResponseDTO(batchStockList);
+
+//        InboundOrder inboundOrder = new InboundOrder(inboundOrderDTO, 1L); - é para o PUT!?
+
+//        List<BatchStock> batchStockList1 = batchStockList.stream()
+//                .map(a -> new BatchStock(a, inboundOrderDTO.getOrderNumber()))
+//                .collect(Collectors.toList());
     }
 
     @Test
     void insert_returnNewInboundOrder_whenBatchStockIsCorrect() {
 
-        Mockito.when(inboundOrderRepo.save(ArgumentMatchers.any(InboundOrder.class)))
-                .thenReturn(inboundOrder);
-
-        Mockito.when(batchStockRepo.saveAll(batchStockList))
-                .thenReturn(batchStockList);
+        Mockito.when(inboundOrderRepo.save(ArgumentMatchers.any()))
+                .thenReturn(inboundOrderPostResponseDTO);
 
         InboundOrderPostResponseDTO inboundOrderPostTest = service.save(inboundOrderRequestDTO);
 
-        assertThat(inboundOrderPostTest).isNotNull();
-
-
+        assertThat(inboundOrderPostTest.getBatchStock());
 
     }
 

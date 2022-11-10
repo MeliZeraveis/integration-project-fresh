@@ -71,4 +71,6 @@ public class BatchStockDTO {
     }
 
 
+    public BatchStockDTO(long id, float currentTemperature, int productQuantity, LocalDate manufacturingDate, LocalDateTime manufacturingTime, float volume, LocalDate dueDate, BigDecimal valueOf) {
+    }
 }
