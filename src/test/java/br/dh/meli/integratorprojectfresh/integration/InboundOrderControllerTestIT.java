@@ -1,9 +1,10 @@
 package br.dh.meli.integratorprojectfresh.integration;
 
 
-import br.dh.meli.integratorprojectfresh.dto.BatchStockDTO;
-import br.dh.meli.integratorprojectfresh.dto.InboundOrderPostResponseDTO;
-import br.dh.meli.integratorprojectfresh.dto.InboundOrderRequestDTO;
+import br.dh.meli.integratorprojectfresh.dto.request.BatchStockDTO;
+import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderDTO;
+import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderRequestDTO;
+import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPostResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.ExceptionType;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.model.BatchStock;
@@ -11,8 +12,7 @@ import br.dh.meli.integratorprojectfresh.model.InboundOrder;
 import br.dh.meli.integratorprojectfresh.repository.BatchStockRepository;
 import br.dh.meli.integratorprojectfresh.repository.InboundOrderRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.hamcrest.CoreMatchers;
-import org.junit.jupiter.api.BeforeAll;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import javax.transaction.Transactional;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -66,9 +66,9 @@ public class InboundOrderControllerTestIT {
 
     private InboundOrderRequestDTO inboundOrderRequestDTO;
 
-    private InboundOrder inboundOrder;
+    private InboundOrderDTO inboundOrderDTO;
 
-    private List<BatchStock> batchStockList;
+    private List<BatchStockDTO> batchStockList;
 
     @BeforeEach
     void setup() {
@@ -79,22 +79,20 @@ public class InboundOrderControllerTestIT {
         jdbcTemplate.execute("ALTER TABLE batch_stock AUTO_INCREMENT = 1");
 
         LocalDate manufacturingDate = LocalDate.parse("2022-02-01");
+        LocalDate dueDate = LocalDate.parse("2023-02-01");
         LocalDate orderDate = LocalDate.parse("2022-03-03");
         LocalDateTime manufacturingTime = LocalDateTime.parse("2020-03-09 17:55:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-        BatchStock batchStock = new BatchStock(1L, (float) 1.05, 10, manufacturingDate, manufacturingTime, (float) 1.5, manufacturingDate, BigDecimal.valueOf(30.5));
-        BatchStock batchStock1 = new BatchStock(2L, (float) 2.05, 11, manufacturingDate, manufacturingTime, (float) 1.3, manufacturingDate, BigDecimal.valueOf(20.5));
+        BatchStockDTO batchStock = new BatchStockDTO( 1L, (float) 1.05, 10, manufacturingDate, manufacturingTime, (float) 1.5, dueDate,BigDecimal.valueOf(30.5));
+        BatchStockDTO batchStock1 = new BatchStockDTO( 2L, (float) 2.05, 11, manufacturingDate, manufacturingTime, (float) 1.3,dueDate , BigDecimal.valueOf(20.5));
         batchStockList = new ArrayList<>();
         batchStockList.add(batchStock);
         batchStockList.add(batchStock1);
-        inboundOrder = new InboundOrder(1L, orderDate, 1L, 1L, batchStockList);
+        inboundOrderDTO = new InboundOrderDTO(1L, orderDate, 1L, 1L, batchStockList);
 
-        inboundOrderRequestDTO = new InboundOrderRequestDTO(inboundOrder);
+        inboundOrderRequestDTO = new InboundOrderRequestDTO(inboundOrderDTO);
 
-        List<BatchStockDTO> batchStockDTO = batchStockList.stream()
-                .map(BatchStockDTO::new)
-                .collect(Collectors.toList());
-
+        InboundOrder inboundOrder = new InboundOrder(inboundOrderDTO, 1L);
 
         List<BatchStock> batchStockList1 = batchStockList.stream()
                 .map(a -> new BatchStock(a, inboundOrder.getOrderNumber()))
@@ -109,7 +107,16 @@ public class InboundOrderControllerTestIT {
     @Test
     void save_ReturnInboundOrderPostResponseDTO_Sucess() throws Exception {
         LocalDate orderDate2 = LocalDate.parse("2022-08-08");
-        inboundOrder.setOrderDate(orderDate2);
+        inboundOrderDTO.setOrderDate(orderDate2);
+        inboundOrderDTO.setOrderDate(orderDate2);
+        batchStockList.get(0).setOrderNumberId(1L);
+        batchStockList.get(0).setBatchNumber(1L);
+        batchStockList.get(0).setPrice(BigDecimal.valueOf(4000.00));
+        batchStockList.get(0).setProductQuantity(400);
+        batchStockList.get(1).setOrderNumberId(1L);
+        batchStockList.get(1).setBatchNumber(1L);
+        batchStockList.get(1).setPrice(BigDecimal.valueOf(2000.00));
+        batchStockList.get(1).setProductQuantity(700);
         ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
@@ -118,7 +125,7 @@ public class InboundOrderControllerTestIT {
 
         assertThat(inboundOrderRepository.findAll().size()).isEqualTo(2);
         assertThat(inboundOrderRepository.findAll().get(0)).isNotNull();
-        assertThat(batchStockRepository.findAll().size()).isEqualTo(2);
+        assertThat(batchStockRepository.findAll().size()).isEqualTo(4);
         assertThat(batchStockRepository.findAll().get(0)).isNotNull();
     }
 
@@ -138,11 +145,12 @@ public class InboundOrderControllerTestIT {
     @Test
     void update_ReturnInboundOrderPutResponseDTO_Sucess() throws Exception {
         LocalDate orderDate2 = LocalDate.parse("2022-07-07");
-        inboundOrder.setOrderDate(orderDate2);
+        inboundOrderDTO.setOrderDate(orderDate2);
+        inboundOrderDTO.setOrderNumber(1L);
         batchStockList.get(0).setOrderNumberId(1L);
         batchStockList.get(0).setBatchNumber(1L);
         batchStockList.get(0).setPrice(BigDecimal.valueOf(5000.00));
-        batchStockList.get(0).setProductQuantity(400);
+        batchStockList.get(0).setProductQuantity(200);
         batchStockList.get(1).setBatchNumber(2L);
         ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
                 .contentType(MediaType.APPLICATION_JSON)

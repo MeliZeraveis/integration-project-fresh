@@ -6,6 +6,7 @@ import br.dh.meli.integratorprojectfresh.model.InboundOrder;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,6 +21,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class BatchStockDTO {
     private Long batchNumber;
 
@@ -69,4 +71,19 @@ public class BatchStockDTO {
         this.orderNumberId = a.getOrderNumberId();
         this.manufacturingTime = a.getManufacturingTime();
     }
+
+    public BatchStockDTO(long announcementId, float currentTemperature, int productQuantity, LocalDate manufacturingDate, LocalDateTime manufacturingTime, float volume, LocalDate dueDate, BigDecimal price) {
+        this.announcementId = announcementId;
+        this.currentTemperature = currentTemperature;
+        this.manufacturingDate = manufacturingDate;
+        this.dueDate = dueDate;
+        this.productQuantity = productQuantity;
+        this.price = price;
+        this.volume = volume;
+        this.manufacturingTime = manufacturingTime;
+    }
+
+//    public BatchStockDTO(long l, float v, int i, LocalDate manufacturingDate, LocalDateTime manufacturingTime, float v1, LocalDate manufacturingDate1, BigDecimal valueOf) {
+//
+//    }
 }

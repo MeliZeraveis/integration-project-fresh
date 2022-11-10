@@ -40,4 +40,12 @@ public class InboundOrderDTO {
         this.sectionCode = inboundOrder.getSectionCode();
         this.warehouseCode = inboundOrder.getWarehouseCode();
     }
+
+    public InboundOrderDTO(long orderNumber, LocalDate orderDate, Long sectionCode, Long warehouseCode, List<BatchStockDTO> batchStockList) {
+        this.orderDate = orderDate;
+        this.sectionCode = sectionCode;
+        this.warehouseCode = warehouseCode;
+        this.batchStock = batchStockList;
+    }
+
 }
