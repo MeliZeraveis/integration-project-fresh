@@ -12,6 +12,7 @@ import br.dh.meli.integratorprojectfresh.repository.BatchStockRepository;
 import br.dh.meli.integratorprojectfresh.repository.InboundOrderRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.CoreMatchers;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,12 +40,10 @@ import java.util.stream.Collectors;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * The type Inbound order controller test it.
- */
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -67,17 +66,12 @@ public class InboundOrderControllerTestIT {
 
     private InboundOrderRequestDTO inboundOrderRequestDTO;
 
-    private InboundOrderPostResponseDTO inboundOrderPostResponseDTO;
-
     private InboundOrder inboundOrder;
 
-    private BatchStock batchStock;
+    private List<BatchStock> batchStockList;
 
-    /**
-     * Setup.
-     */
     @BeforeEach
-    void setup(){
+    void setup() {
         batchStockRepository.deleteAll();
         inboundOrderRepository.deleteAll();
 
@@ -88,12 +82,12 @@ public class InboundOrderControllerTestIT {
         LocalDate orderDate = LocalDate.parse("2022-03-03");
         LocalDateTime manufacturingTime = LocalDateTime.parse("2020-03-09 17:55:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-       batchStock = new BatchStock(1L, (float)1.05, 10, manufacturingDate, manufacturingTime, (float)1.5, manufacturingDate, BigDecimal.valueOf(30.5));
-        BatchStock batchStock1 = new BatchStock(2L, (float)2.05, 11, manufacturingDate, manufacturingTime, (float)1.3, manufacturingDate, BigDecimal.valueOf(20.5));
-        List<BatchStock> batchStockList = new ArrayList<>();
+        BatchStock batchStock = new BatchStock(1L, (float) 1.05, 10, manufacturingDate, manufacturingTime, (float) 1.5, manufacturingDate, BigDecimal.valueOf(30.5));
+        BatchStock batchStock1 = new BatchStock(2L, (float) 2.05, 11, manufacturingDate, manufacturingTime, (float) 1.3, manufacturingDate, BigDecimal.valueOf(20.5));
+        batchStockList = new ArrayList<>();
         batchStockList.add(batchStock);
         batchStockList.add(batchStock1);
-        inboundOrder = new InboundOrder(orderDate, 1L, 1L, batchStockList);
+        inboundOrder = new InboundOrder(1L, orderDate, 1L, 1L, batchStockList);
 
         inboundOrderRequestDTO = new InboundOrderRequestDTO(inboundOrder);
 
@@ -101,62 +95,28 @@ public class InboundOrderControllerTestIT {
                 .map(BatchStockDTO::new)
                 .collect(Collectors.toList());
 
-        InboundOrder inboundOrder1 = new InboundOrder(inboundOrderRequestDTO.getInboundOrder());
 
         List<BatchStock> batchStockList1 = batchStockList.stream()
-                .map(a -> new BatchStock(a, inboundOrder1.getOrderNumber()))
+                .map(a -> new BatchStock(a, inboundOrder.getOrderNumber()))
                 .collect(Collectors.toList());
 
-        inboundOrderPostResponseDTO = new InboundOrderPostResponseDTO(batchStockDTO);
-//        inboundOrderRepository.save(inboundOrder1);
-//        batchStockRepository.saveAll(batchStockList1);
+
+        inboundOrderRepository.save(inboundOrder);
+        batchStockRepository.saveAll(batchStockList1);
 
     }
 
-    /**
-     * Save return inbound order post response dto sucess.
-     *
-     * @throws Exception the exception
-     */
     @Test
-    void save_ReturnInboundOrderPostResponseDTO_Sucess() throws Exception{
+    void save_ReturnInboundOrderPostResponseDTO_Sucess() throws Exception {
+        LocalDate orderDate2 = LocalDate.parse("2022-08-08");
+        inboundOrder.setOrderDate(orderDate2);
         ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
 
-                response.andExpect(status().isCreated());
-//                .andExpect(jsonPath("$.batchStock", CoreMatchers.is(inboundOrderPostResponseDTO.getBatchStock())));
-
-                assertThat(inboundOrderRepository.findAll().size()).isEqualTo(1);
-                assertThat(inboundOrderRepository.findAll().get(0)).isNotNull();
-                assertThat(batchStockRepository.findAll().size()).isEqualTo(2);
-                assertThat(batchStockRepository.findAll().get(0)).isNotNull();
-
-
-    }
-
-    //        response.andExpect(status().isCreated())
-//                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.message)))
-//                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
-//                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("roomName")));
-
-    //  .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.ROOM_NAME_SIZE_NOT_VALID)))
-
-    /**
-     * Update return inbound order put response dto sucess.
-     *
-     * @throws Exception the exception
-     */
-    @Test
-    void update_ReturnInboundOrderPutResponseDTO_Sucess() throws Exception{
-        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
-
         response.andExpect(status().isCreated());
-//                .andExpect(jsonPath("$.batchStock", CoreMatchers.is(inboundOrderPostResponseDTO.getBatchStock())));
-//
-        assertThat(inboundOrderRepository.findAll().size()).isEqualTo(1);
+
+        assertThat(inboundOrderRepository.findAll().size()).isEqualTo(2);
         assertThat(inboundOrderRepository.findAll().get(0)).isNotNull();
         assertThat(batchStockRepository.findAll().size()).isEqualTo(2);
         assertThat(batchStockRepository.findAll().get(0)).isNotNull();
@@ -164,9 +124,51 @@ public class InboundOrderControllerTestIT {
 
     }
 
-    //        response.andExpect(status().isCreated())
+//    @Test
+//    void save_ReturnInboundOrderPostResponseDTO_NotSucess() throws Exception{
+//        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+    //        response.andExpect(status().isBadRequest())
 //                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.message)))
 //                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
 //                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("roomName")));
 
+    //  .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.ROOM_NAME_SIZE_NOT_VALID)))
+//}
+    @Test
+    void update_ReturnInboundOrderPutResponseDTO_Sucess() throws Exception {
+        LocalDate orderDate2 = LocalDate.parse("2022-07-07");
+        inboundOrder.setOrderDate(orderDate2);
+        batchStockList.get(0).setOrderNumberId(1L);
+        batchStockList.get(0).setBatchNumber(1L);
+        batchStockList.get(0).setPrice(BigDecimal.valueOf(5000.00));
+        batchStockList.get(0).setProductQuantity(400);
+        batchStockList.get(1).setBatchNumber(2L);
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isCreated())
+                .andDo(print());
+
+        assertThat(inboundOrderRepository.findAll().size()).isEqualTo(1);
+        assertThat(inboundOrderRepository.findAll().get(0)).isNotNull();
+        assertThat(batchStockRepository.findAll().size()).isEqualTo(2);
+        assertThat(batchStockRepository.findAll().get(0)).isNotNull();
+
+    }
+
+//    @Test
+//    void update_ReturnInboundOrderPutResponseDTO_NotSucess() throws Exception{
+//        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+// response.andExpect(status().isBadRequest())
+    //        response.andExpect(status().isCreated())
+//                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.message)))
+//                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+//                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("roomName")));
+//.andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.ROOM_NAME_SIZE_NOT_VALID)))
 }
