@@ -1,5 +1,6 @@
 package br.dh.meli.integratorprojectfresh.model;
 
+import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -48,23 +49,17 @@ public class InboundOrder {
     @JsonIgnoreProperties("inboundOrder")
     private Section section;
 
-    public InboundOrder(InboundOrder inboundOrder) {
+    public InboundOrder(InboundOrderDTO inboundOrder) {
         this.orderDate = inboundOrder.getOrderDate();
         this.sectionCode = inboundOrder.getSectionCode();
         this.warehouseCode = inboundOrder.getWarehouseCode();
-        this.warehouse = inboundOrder.getWarehouse();
-        this.batchStock = inboundOrder.getBatchStock();
-        this.section = inboundOrder.getSection();
     }
 
-    public InboundOrder(InboundOrder inboundOrder, Long orderNumber) {
+    public InboundOrder(InboundOrderDTO inboundOrder, Long orderNumber) {
         this.orderNumber = orderNumber;
         this.orderDate = inboundOrder.getOrderDate();
         this.sectionCode = inboundOrder.getSectionCode();
         this.warehouseCode = inboundOrder.getWarehouseCode();
-        this.warehouse = inboundOrder.getWarehouse();
-        this.batchStock = inboundOrder.getBatchStock();
-        this.section = inboundOrder.getSection();
     }
 
     public InboundOrder(Long orderNumber, LocalDate orderDate, Long sectionCode, Long warehouseCode, List<BatchStock> batchStock) {
