@@ -26,10 +26,9 @@ public class BatchStockDTO {
     @NotNull(message = Msg.FIELD_REQUIRED)
     private Long announcementId;
     @NotNull(message = Msg.FIELD_REQUIRED)
-    @Min(value = 1, message = Msg.FIELD_MIN_VALUE)
     private Float currentTemperature;
     @NotNull(message = Msg.FIELD_REQUIRED)
-    @Min(value = 1, message = Msg.FIELD_MIN_VALUE)
+    @Min(value = 0, message = Msg.FIELD_MIN_VALUE)
     private int productQuantity;
     private LocalDate manufacturingDate;
     private LocalDateTime manufacturingTime;
