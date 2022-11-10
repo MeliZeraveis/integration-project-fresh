@@ -19,9 +19,13 @@ import java.util.List;
 @NoArgsConstructor
 //@AllArgsConstructor
 public class InboundOrderRequestDTO {
+    InboundOrder inboundOrder;
+
     @NotNull( message = Msg.FIELD_REQUIRED)
     private Long orderNumber;
+
     private LocalDate orderDate;
+
     @NotNull( message = Msg.FIELD_REQUIRED)
     private Long sectionCode;
 
