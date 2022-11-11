@@ -6,6 +6,7 @@ import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPutResponseDTO
 import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderRequestDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPostResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
+import br.dh.meli.integratorprojectfresh.exception.LimitCapacitySectionExeption;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.model.*;
 import br.dh.meli.integratorprojectfresh.repository.*;
@@ -35,32 +36,33 @@ public class InboundOrderService implements IInboundOrderService {
             throw new NotFoundException(Msg.WAREHOUSE_NOT_FOUND);
         }
     }
-//    void validSection(long sectionCode, List<BatchStock>batchStockList) {
-//        Optional<Section> sectionOptional = sectionRepo.findById(sectionCode);
-//
-//        if (sectionOptional.isEmpty()){
-//            throw new NotFoundException(Msg.WAREHOUSE_NOT_FOUND);
-//        }
-//        float sectionMaxCapacity = sectionOptional.get().getMaxCapacity();
-//        float sectionCapacityUsed = sectionOptional.get().getUsedCapacity();
-//        for (BatchStock b : batchStockList) {
-//            float totalSum = sectionCapacityUsed + b.getProductQuantity();
-//            if (totalSum > sectionMaxCapacity) {
-//                throw new NotFoundException(Msg.LIMIT_CAPACITY_SECTION);
-//            }
-//            sectionOptional.get().setUsedCapacity(totalSum);
-//            sectionRepo.save(sectionOptional.get());
-//        }
-//
-//    }
+    void validSection(long sectionCode, List<BatchStockDTO>batchStockList) {
+        Optional<Section> sectionOptional = sectionRepo.findById(sectionCode);
+
+        if (sectionOptional.isEmpty()){
+            throw new NotFoundException(Msg.WAREHOUSE_NOT_FOUND);
+        }
+        float sectionMaxCapacity = sectionOptional.get().getMaxCapacity();
+        float sectionCapacityUsed = sectionOptional.get().getUsedCapacity();
+        for (BatchStockDTO b : batchStockList) {
+            float totalSum = sectionCapacityUsed + b.getProductQuantity();
+            if (totalSum > sectionMaxCapacity) {
+                throw new LimitCapacitySectionExeption(Msg.LIMIT_CAPACITY_SECTION);
+            }
+            System.out.println(totalSum);
+            sectionOptional.get().setUsedCapacity(totalSum);
+            sectionRepo.save(sectionOptional.get());
+        }
+
+    }
 
 
     @Override
     public InboundOrderPostResponseDTO save(InboundOrderRequestDTO inboundOrderResquest) {
         InboundOrder inboundOrder = new InboundOrder(inboundOrderResquest.getInboundOrder());
         validIfWarehouseExist(inboundOrder.getWarehouseCode());
-//        validSection(inboundOrder.getSectionCode(), inboundOrder.getBatchStock());
         validIfAnnouncementExist(inboundOrderResquest.getInboundOrder().getBatchStock());
+        validSection(inboundOrder.getSectionCode(), inboundOrderResquest.getInboundOrder().getBatchStock());
         repo.save(inboundOrder);
         List<BatchStock> batchStockList =  inboundOrderResquest.getInboundOrder()
                 .getBatchStock().stream()
@@ -70,7 +72,6 @@ public class InboundOrderService implements IInboundOrderService {
     }
 
     void validIfAnnouncementExist(List<BatchStockDTO> batchStockDTOList) throws NotFoundException {
-
         for (BatchStockDTO batchStockDTO : batchStockDTOList) {
             Optional<Announcement> announcementOptional = announcementRepo.findById(batchStockDTO.getAnnouncementId());
             if (announcementOptional.isEmpty()){
@@ -101,10 +102,13 @@ public class InboundOrderService implements IInboundOrderService {
         InboundOrder inboundOrder = new InboundOrder(inboundOrderDTO, inboundOrderDTO.getOrderNumber());
 
         validIfWarehouseExist(inboundOrder.getWarehouseCode());
-//        validSection(inboundOrder.getSectionCode(), inboundOrder.getBatchStock());
+
+        validIfAnnouncementExist(inboundOrderResquest.getInboundOrder().getBatchStock());
 
         validBatch(inboundOrderDTO.getBatchStock());
-        validIfAnnouncementExist(inboundOrderResquest.getInboundOrder().getBatchStock());
+
+        validSection(inboundOrder.getSectionCode(), inboundOrderResquest.getInboundOrder().getBatchStock());
+
         InboundOrder inboundOrderUpdated = repo.save(inboundOrder);
 
         List<BatchStock> batchStockList = inboundOrderResquest.getInboundOrder()

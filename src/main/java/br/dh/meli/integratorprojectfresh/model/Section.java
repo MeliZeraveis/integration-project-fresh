@@ -21,8 +21,8 @@ public class Section {
     private Long sectionCode;
 
     @Column(name = "type", nullable = false, length = 50)
-    @Enumerated(EnumType.STRING)
-    private Sections type;
+//    @Enumerated(EnumType.STRING)
+    private String type;
 
     @Column(name = "max_capacity", nullable = false)
     private Float maxCapacity;
