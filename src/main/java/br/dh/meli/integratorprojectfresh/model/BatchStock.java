@@ -58,7 +58,7 @@ public class BatchStock {
         @JsonIgnoreProperties("batchStock")
         private InboundOrder inboundOrder;
 
-        @OneToOne(fetch = FetchType.LAZY)
+        @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "announcement_id", insertable = false, updatable = false)
         @JsonIgnoreProperties("batchStock")
         private Announcement announcement;

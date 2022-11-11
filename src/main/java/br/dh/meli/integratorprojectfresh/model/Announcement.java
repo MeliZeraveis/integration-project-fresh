@@ -36,9 +36,9 @@ public class Announcement {
     @Column(name = "section", nullable = false, length = 50)
     private Sections section;
 
-    @OneToOne(mappedBy = "announcement")
+    @OneToMany(mappedBy = "announcement")
     @JsonIgnoreProperties("announcement")
-    private BatchStock batchStock;
+    private List<BatchStock> batchStock;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id", insertable = false, updatable = false)
