@@ -3,6 +3,7 @@ package br.dh.meli.integratorprojectfresh.model;
 import br.dh.meli.integratorprojectfresh.enums.Roles;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "user")
 public class User {
@@ -41,4 +43,12 @@ public class User {
     @OneToMany(mappedBy = "seller")
     @JsonIgnoreProperties("seller")
     private List<Announcement> announcement;
+
+    public User(long id, String username, String password, String email, String role) {
+        this.userId = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+    }
 }

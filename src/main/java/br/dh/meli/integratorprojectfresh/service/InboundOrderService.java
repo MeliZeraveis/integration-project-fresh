@@ -6,13 +6,13 @@ import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPutResponseDTO
 import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderRequestDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPostResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
-import br.dh.meli.integratorprojectfresh.exception.LimitCapacitySectionExeption;
+import br.dh.meli.integratorprojectfresh.exception.LimitCapacitySectionException;
+import br.dh.meli.integratorprojectfresh.exception.ManagerNotValidException;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.exception.SectionTypeException;
 import br.dh.meli.integratorprojectfresh.model.*;
 import br.dh.meli.integratorprojectfresh.repository.*;
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -58,7 +58,7 @@ public class InboundOrderService implements IInboundOrderService {
             }
             float totalSum = sectionCapacityUsed + b.getProductQuantity();
             if (totalSum > sectionMaxCapacity) {
-                throw new LimitCapacitySectionExeption(Msg.LIMIT_CAPACITY_SECTION);
+                throw new LimitCapacitySectionException(Msg.LIMIT_CAPACITY_SECTION);
             }
             System.out.println(totalSum);
             sectionOptional.get().setUsedCapacity(totalSum);

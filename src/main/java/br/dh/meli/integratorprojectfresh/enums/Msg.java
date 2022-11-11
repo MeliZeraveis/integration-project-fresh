@@ -35,4 +35,6 @@ public enum Msg {
   public  static  final String LIMIT_CAPACITY_SECTION = "Total sector capacity limit exceeded.";
 
   public  static  final String ANNOUNCEMENT_NOT_FOUND = "Announcement not found.";
+
+  public  static  final String INSERT_BATCH_SECTION_INCORRET = "Insert batch in wrong section";
 }

@@ -86,8 +86,11 @@ class InboundOrderServiceTest {
 
         inboundOrderPutResponseDTO = new InboundOrderPutResponseDTO(inboundOrder, batchStockList2);
 
+        batchStockList.get(0).setAnnouncementId(1L);
+        batchStockList.get(1).setAnnouncementId(1L);
 
-        warehouseTest = new Warehouse(1L, "Test", "Address Test", "BR-Test", new ArrayList<>(), null);
+        User user = new User(5L, "Test", "1234", "test@email.com", "manager");
+        warehouseTest = new Warehouse(1L, "Test", "Address Test", "BR-Test", new ArrayList<>(), user);
         sectionTest = new Section(1L, "Fresh", (float)100.0, (float)80.0, new ArrayList<>());
         announcementTest = new Announcement(1L, "Alface Test", "description", 3L, BigDecimal.valueOf(1.80), "Fresh", null, null, new ArrayList<>());
     }
@@ -118,15 +121,14 @@ class InboundOrderServiceTest {
         assertThrows(NotFoundException.class, () -> {
             service.save(inboundOrderRequestDTO);
         });
-
-//        InboundOrderPostResponseDTO inboundOrderPostTest = service.save(inboundOrderRequestDTO);
-
-//        assertThat(inboundOrderPostTest).isNull();
     }
 
     @Test
     void insert_returnException_whenAnnouncementNotExists() throws NotFoundException {
-//        BDDMockito.given(announcementRepository.findById(ArgumentMatchers.any())).willThrow(new NotFoundException(Msg.ANNOUNCEMENT_NOT_FOUND));
+        BDDMockito.when(warehouseRepository.findById(1L))
+                .thenReturn(java.util.Optional.ofNullable(warehouseTest));
+
+        BDDMockito.given(announcementRepository.findById(ArgumentMatchers.any())).willThrow(new NotFoundException(Msg.ANNOUNCEMENT_NOT_FOUND));
 
         assertThrows(NotFoundException.class, () -> {
             service.save(inboundOrderRequestDTO);
@@ -135,33 +137,33 @@ class InboundOrderServiceTest {
 
     @Test
     void insert_returnException_whenSectionIsEmpty() throws NotFoundException {
-//        BDDMockito.given(sectionRepository.findById(ArgumentMatchers.any())).willThrow(new NotFoundException(Msg.SECTION_NOT_FOUND));
+        BDDMockito.when(warehouseRepository.findById(1L))
+                .thenReturn(java.util.Optional.ofNullable(warehouseTest));
+        BDDMockito.when(announcementRepository.findById(1L))
+                .thenReturn(java.util.Optional.ofNullable(announcementTest));
+        BDDMockito.given(sectionRepository.findById(ArgumentMatchers.any())).willThrow(new NotFoundException(Msg.SECTION_NOT_FOUND));
 
         assertThrows(NotFoundException.class, () -> {
             service.save(inboundOrderRequestDTO);
         });
     }
 
-//    @Test
-//    void insert_returnLimitCapacitySectionExeption_whenFilledInSection() throws LimitCapacitySectionException {
-//
-//        BDDMockito.when(warehouseRepository.findById(1L))
-//                .thenReturn(java.util.Optional.ofNullable(warehouseTest));
-//        BDDMockito.when(sectionRepository.findById(1L))
-//                .thenReturn(java.util.Optional.ofNullable(sectionTest));
-//        BDDMockito.when(announcementRepository.findById(1L))
-//                .thenReturn(java.util.Optional.ofNullable(announcementTest));
-//
-////        InboundOrderPostResponseDTO inboundOrderPostTest = service.save(inboundOrderRequestDTO);
-////
-////        assertThat(inboundOrderPostTest).isNotNull();
-//
-//        BDDMockito.given(sectionRepository.)
-//                .willThrow(new LimitCapacitySectionException(Msg.LIMIT_CAPACITY_SECTION));
-//        assertThrows(LimitCapacitySectionException.class, () -> {
-//            service.save(inboundOrderRequestDTO);
-//        });
-//    }
+    @Test
+    void insert_returnLimitCapacitySectionExeption_whenFilledInSection() throws LimitCapacitySectionException {
+
+        batchStockList.get(0).setProductQuantity(3000);
+
+        BDDMockito.when(warehouseRepository.findById(1L))
+                .thenReturn(java.util.Optional.ofNullable(warehouseTest));
+        BDDMockito.when(sectionRepository.findById(1L))
+                .thenReturn(java.util.Optional.ofNullable(sectionTest));
+        BDDMockito.when(announcementRepository.findById(1L))
+                .thenReturn(java.util.Optional.ofNullable(announcementTest));
+
+        assertThrows(LimitCapacitySectionException.class, () -> {
+            service.save(inboundOrderRequestDTO);
+        });
+    }
 //    @Test
 //    void update_returnUpdatedInboundOrder_whenBatchStockIsCorrect() {
 //
@@ -206,10 +208,5 @@ class InboundOrderServiceTest {
 //    void insert_returnInvalidParamException_whenSectionNotBelongToCorrectProduct() {
 //
 //    }
-//
 
-//
-//
-//
-//
 }
