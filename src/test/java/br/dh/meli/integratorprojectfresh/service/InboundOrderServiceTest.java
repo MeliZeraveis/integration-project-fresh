@@ -64,13 +64,14 @@ class InboundOrderServiceTest {
 
         inboundOrderRequestDTO = new InboundOrderRequestDTO(inboundOrderDTO);
 
-        inboundOrderPostResponseDTO = new InboundOrderPostResponseDTO(batchStockList);
-
         inboundOrder = new InboundOrder(inboundOrderDTO, 1L);
 
         batchStockList2 = batchStockList.stream().map(a -> new BatchStock(a, inboundOrder.getOrderNumber())).collect(Collectors.toList());
 
-        inboundOrderPutResponseDTO = new InboundOrderPutResponseDTO(inboundOrder, batchStockList);
+        inboundOrderPostResponseDTO = new InboundOrderPostResponseDTO(batchStockList2);
+
+
+        inboundOrderPutResponseDTO = new InboundOrderPutResponseDTO(inboundOrder, batchStockList2);
     }
 
     @Test
