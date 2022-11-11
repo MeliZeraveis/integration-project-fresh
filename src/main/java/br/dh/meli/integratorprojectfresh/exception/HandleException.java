@@ -57,6 +57,19 @@ public class HandleException extends ResponseEntityExceptionHandler {
     return new ResponseEntity<>(exceptionDetails, HttpStatus.BAD_REQUEST);
   }
 
+
+  @ExceptionHandler (LimitCapacitySectionExeption.class)
+  public ResponseEntity<ExceptionDetails> handlerLimitCapacitySectionException(LimitCapacitySectionExeption ex) {
+    ExceptionDetails exceptionDetails = ExceptionDetails.builder()
+            .title("Action not allowed")
+            .message(ex.getMessage())
+            .status(HttpStatus.UNPROCESSABLE_ENTITY.value())
+            .timeStamp(LocalDateTime.now())
+            .build();
+
+    return new ResponseEntity<>(exceptionDetails, HttpStatus.UNPROCESSABLE_ENTITY);
+  }
+
   /**
    * Handler for MethodArgumentNotValidException entity.
    *

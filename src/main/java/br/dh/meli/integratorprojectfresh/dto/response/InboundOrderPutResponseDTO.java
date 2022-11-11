@@ -1,6 +1,7 @@
 package br.dh.meli.integratorprojectfresh.dto.response;
 
 import br.dh.meli.integratorprojectfresh.dto.request.BatchStockDTO;
+import br.dh.meli.integratorprojectfresh.model.BatchStock;
 import br.dh.meli.integratorprojectfresh.model.InboundOrder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -29,11 +31,11 @@ public class InboundOrderPutResponseDTO {
 
     }
 
-    public InboundOrderPutResponseDTO(InboundOrder inboundOrderUpdated, List<BatchStockDTO> batchStockListUpdated) {
+    public InboundOrderPutResponseDTO(InboundOrder inboundOrderUpdated, List<BatchStock> batchStockListUpdated) {
         this.orderNumber = inboundOrderUpdated.getOrderNumber();
         this.orderDate = inboundOrderUpdated.getOrderDate();
         this.sectionCode = inboundOrderUpdated.getSectionCode();
         this.warehouseCode = inboundOrderUpdated.getWarehouseCode();
-        this.batchStock = batchStockListUpdated;
+        this.batchStock = batchStockListUpdated.stream().map(a ->new BatchStockDTO(a)).collect(Collectors.toList());;
     }
 }

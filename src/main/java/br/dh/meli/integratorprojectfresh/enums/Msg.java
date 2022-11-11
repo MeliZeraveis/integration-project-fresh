@@ -25,4 +25,12 @@ public enum Msg {
   public static final String TIME_REQUIRED = "Time is required.";
   public static final String TIME_PAST_OR_PRESENT = "Time is not past or present.";
   public static final String SECTION_CODE_POSITIVE = "Section code is not positive.";
+  public static final String INBOUND_ORDER_NOT_FOUND = "Inbound order not found.";
+  public static final String BATCH_NOT_FOUND = "Batch not found.";
+
+  public static final String WAREHOUSE_NOT_FOUND =  "Warehouse not found.";
+
+  public  static  final String LIMIT_CAPACITY_SECTION = "Total sector capacity limit exceeded.";
+
+  public  static  final String ANNOUNCEMENT_NOT_FOUND = "Announcement not found.";
 }
