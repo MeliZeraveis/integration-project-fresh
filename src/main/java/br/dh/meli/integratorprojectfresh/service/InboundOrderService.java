@@ -49,6 +49,7 @@ public class InboundOrderService implements IInboundOrderService {
 //                throw new NotFoundException(Msg.LIMIT_CAPACITY_SECTION);
 //            }
 //            sectionOptional.get().setUsedCapacity(totalSum);
+//            sectionRepo.save(sectionOptional.get());
 //        }
 //
 //    }
