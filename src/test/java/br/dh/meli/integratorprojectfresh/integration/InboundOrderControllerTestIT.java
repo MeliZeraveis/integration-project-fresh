@@ -4,7 +4,7 @@ package br.dh.meli.integratorprojectfresh.integration;
 import br.dh.meli.integratorprojectfresh.dto.request.BatchStockDTO;
 import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderDTO;
 import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderRequestDTO;
-import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPostResponseDTO;
+
 import br.dh.meli.integratorprojectfresh.enums.ExceptionType;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.model.BatchStock;
@@ -80,17 +80,19 @@ public class InboundOrderControllerTestIT {
         jdbcTemplate.execute("ALTER TABLE inbound_order AUTO_INCREMENT = 1");
         jdbcTemplate.execute("ALTER TABLE batch_stock AUTO_INCREMENT = 1");
 
-        LocalDate manufacturingDate = LocalDate.parse("2022-02-01");
+        LocalDate manufacturingDate = LocalDate.parse("2022-03-09");
         LocalDate dueDate = LocalDate.parse("2023-02-01");
         LocalDate orderDate = LocalDate.parse("2022-03-03");
         LocalDateTime manufacturingTime = LocalDateTime.parse("2020-03-09 17:55:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-        BatchStockDTO batchStock = new BatchStockDTO( 1L, (float) 1.05, 10, manufacturingDate, manufacturingTime, (float) 1.5, dueDate,BigDecimal.valueOf(30.5));
-        BatchStockDTO batchStock1 = new BatchStockDTO( 2L, (float) 2.05, 11, manufacturingDate, manufacturingTime, (float) 1.3,dueDate , BigDecimal.valueOf(20.5));
+        BatchStockDTO batchStock1 = new BatchStockDTO(1L, "Fresh", 10, manufacturingDate, manufacturingTime, (float) 1.5, dueDate, BigDecimal.valueOf(30.5));
+        BatchStockDTO batchStock2 = new BatchStockDTO(2L, "Fresh", 11, manufacturingDate, manufacturingTime, (float) 1.3, dueDate, BigDecimal.valueOf(20.5));
+
         batchStockList = new ArrayList<>();
-        batchStockList.add(batchStock);
         batchStockList.add(batchStock1);
-        inboundOrderDTO = new InboundOrderDTO(1L, orderDate, 1L, 1L, batchStockList);
+        batchStockList.add(batchStock2);
+
+        inboundOrderDTO = new InboundOrderDTO(orderDate, 1L, 1L, batchStockList);
 
         inboundOrderRequestDTO = new InboundOrderRequestDTO(inboundOrderDTO);
 
@@ -114,11 +116,11 @@ public class InboundOrderControllerTestIT {
         batchStockList.get(0).setOrderNumberId(1L);
         batchStockList.get(0).setBatchNumber(1L);
         batchStockList.get(0).setPrice(BigDecimal.valueOf(4000.00));
-        batchStockList.get(0).setProductQuantity(400);
+        batchStockList.get(0).setProductQuantity(100);
         batchStockList.get(1).setOrderNumberId(1L);
         batchStockList.get(1).setBatchNumber(1L);
         batchStockList.get(1).setPrice(BigDecimal.valueOf(2000.00));
-        batchStockList.get(1).setProductQuantity(700);
+        batchStockList.get(1).setProductQuantity(10);
         ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
@@ -139,7 +141,7 @@ public class InboundOrderControllerTestIT {
         batchStockList.get(0).setOrderNumberId(1L);
         batchStockList.get(0).setBatchNumber(1L);
         batchStockList.get(0).setPrice(BigDecimal.valueOf(5000.00));
-        batchStockList.get(0).setProductQuantity(200);
+        batchStockList.get(0).setProductQuantity(100);
         batchStockList.get(1).setBatchNumber(2L);
         ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -296,7 +298,7 @@ public class InboundOrderControllerTestIT {
 
     @Test
     void save_ReturnExceptionCurrentTemperatureNull_Fail() throws Exception {
-        batchStockList.get(0).setCurrentTemperature(null);
+        batchStockList.get(0).setSectionType(null);
 
         ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -305,7 +307,7 @@ public class InboundOrderControllerTestIT {
         response.andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
                 .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
-                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].currentTemperature")))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].sectionType")))
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.TEMPERATURE_REQUIRED)));
     }
 
@@ -575,7 +577,7 @@ public class InboundOrderControllerTestIT {
 
     @Test
     void update_ReturnExceptionCurrentTemperatureNull_Fail() throws Exception {
-        batchStockList.get(0).setCurrentTemperature(null);
+        batchStockList.get(0).setSectionType(null);
 
         ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -584,7 +586,7 @@ public class InboundOrderControllerTestIT {
         response.andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
                 .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
-                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].currentTemperature")))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].sectionType")))
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.TEMPERATURE_REQUIRED)));
     }
 

@@ -38,7 +38,7 @@ public class BatchStock {
         private LocalDate manufacturingDate;
 
         @Column(name = "manufacturing_time", nullable = false)
-        @JsonFormat(pattern = "HH:mm:ss")
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime manufacturingTime;
 
         @Column(name = "volume", nullable = false)
