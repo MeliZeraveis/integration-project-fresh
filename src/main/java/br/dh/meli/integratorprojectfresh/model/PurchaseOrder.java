@@ -44,9 +44,9 @@ public class PurchaseOrder {
   @JsonIgnoreProperties("purchaseOrder")
   private List<PurchaseOrderItems> orderItem;
 
-  public PurchaseOrder(LocalDateTime date, OrderStatus orderStatus, BigDecimal total, Long buyerId) {
+  public PurchaseOrder(LocalDateTime date, OrderStatus status, BigDecimal total, Long buyerId) {
     this.date = date;
-    this.orderStatus = orderStatus;
+    this.status = status;
     this.total = total;
     this.buyerId = buyerId;
   }

@@ -27,6 +27,7 @@ public enum Msg {
   public static final String PURCHASE_ORDER_ID_NOT_NULL = "Purchase Order ID cannot be null.";
   public static final String PURCHASE_ORDER_ID_NOT_VALID = "Purchase Order ID is not valid.";
   public static final String PURCHASE_ORDER_ITEMS_NOT_EMPTY = "Purchase Order items list cannot be empty.";
+  public static final String PURCHASE_ORDER_ITEMS_NOT_FOUND = "Purchase Order items not found.";
   public static final String PURCHASE_ORDER_STATUS_NOT_NULL = "Purchase Order status cannot be null.";
   public static final String PURCHASE_ORDER_STATUS_NOT_VALID = "Purchase Order status is not valid.";
   public static final String QUANTITY_MIN_VALUE = "Quantity is less than the minimum value.";
