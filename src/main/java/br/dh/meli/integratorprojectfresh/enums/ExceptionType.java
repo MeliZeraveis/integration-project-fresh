@@ -11,7 +11,12 @@ public enum ExceptionType {
   /**
    * The Parameter is not valid.
    */
-  PARAMETER_NOT_VALID("Parameter not valid");
+  PARAMETER_NOT_VALID("Parameter not valid"),
+
+  /**
+   * The Purchase Order was not found.
+   */
+  PURCHASE_ORDER_NOT_FOUND("Purchase Order not found");
 
    ExceptionType(String message) {
   }
