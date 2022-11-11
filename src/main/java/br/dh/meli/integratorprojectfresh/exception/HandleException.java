@@ -58,8 +58,8 @@ public class HandleException extends ResponseEntityExceptionHandler {
   }
 
 
-  @ExceptionHandler (LimitCapacitySectionExeption.class)
-  public ResponseEntity<ExceptionDetails> handlerLimitCapacitySectionException(LimitCapacitySectionExeption ex) {
+  @ExceptionHandler (LimitCapacitySectionException.class)
+  public ResponseEntity<ExceptionDetails> handlerLimitCapacitySectionException(LimitCapacitySectionException ex) {
     ExceptionDetails exceptionDetails = ExceptionDetails.builder()
             .title("Action not allowed")
             .message(ex.getMessage())

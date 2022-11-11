@@ -6,7 +6,7 @@ import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPutResponseDTO
 import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderRequestDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPostResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
-import br.dh.meli.integratorprojectfresh.exception.LimitCapacitySectionExeption;
+import br.dh.meli.integratorprojectfresh.exception.LimitCapacitySectionException;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.model.*;
 import br.dh.meli.integratorprojectfresh.repository.*;
@@ -40,14 +40,14 @@ public class InboundOrderService implements IInboundOrderService {
         Optional<Section> sectionOptional = sectionRepo.findById(sectionCode);
 
         if (sectionOptional.isEmpty()){
-            throw new NotFoundException(Msg.WAREHOUSE_NOT_FOUND);
+            throw new NotFoundException(Msg.SECTION_NOT_FOUND);
         }
         float sectionMaxCapacity = sectionOptional.get().getMaxCapacity();
         float sectionCapacityUsed = sectionOptional.get().getUsedCapacity();
         for (BatchStockDTO b : batchStockList) {
             float totalSum = sectionCapacityUsed + b.getProductQuantity();
             if (totalSum > sectionMaxCapacity) {
-                throw new LimitCapacitySectionExeption(Msg.LIMIT_CAPACITY_SECTION);
+                throw new LimitCapacitySectionException(Msg.LIMIT_CAPACITY_SECTION);
             }
             System.out.println(totalSum);
             sectionOptional.get().setUsedCapacity(totalSum);

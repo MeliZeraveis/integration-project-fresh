@@ -6,7 +6,7 @@ import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderRequestDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPostResponseDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPutResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
-import br.dh.meli.integratorprojectfresh.enums.Sections;
+import br.dh.meli.integratorprojectfresh.exception.LimitCapacitySectionException;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.model.*;
 import br.dh.meli.integratorprojectfresh.repository.*;
@@ -99,11 +99,11 @@ class InboundOrderServiceTest {
                 .thenReturn(inboundOrder);
         BDDMockito.when(batchStockRepo.saveAll(ArgumentMatchers.any()))
                 .thenReturn(batchStockList2);
-        BDDMockito.when(warehouseRepository.findById(ArgumentMatchers.anyLong()))
+        BDDMockito.when(warehouseRepository.findById(1L))
                 .thenReturn(java.util.Optional.ofNullable(warehouseTest));
-        BDDMockito.when(sectionRepository.findById(ArgumentMatchers.anyLong()))
+        BDDMockito.when(sectionRepository.findById(1L))
                 .thenReturn(java.util.Optional.ofNullable(sectionTest));
-        BDDMockito.when(announcementRepository.findById(ArgumentMatchers.anyLong()))
+        BDDMockito.when(announcementRepository.findById(1L))
                 .thenReturn(java.util.Optional.ofNullable(announcementTest));
 
         InboundOrderPostResponseDTO inboundOrderPostTest = service.save(inboundOrderRequestDTO);
@@ -124,6 +124,44 @@ class InboundOrderServiceTest {
 //        assertThat(inboundOrderPostTest).isNull();
     }
 
+    @Test
+    void insert_returnException_whenAnnouncementNotExists() throws NotFoundException {
+//        BDDMockito.given(announcementRepository.findById(ArgumentMatchers.any())).willThrow(new NotFoundException(Msg.ANNOUNCEMENT_NOT_FOUND));
+
+        assertThrows(NotFoundException.class, () -> {
+            service.save(inboundOrderRequestDTO);
+        });
+    }
+
+    @Test
+    void insert_returnException_whenSectionIsEmpty() throws NotFoundException {
+//        BDDMockito.given(sectionRepository.findById(ArgumentMatchers.any())).willThrow(new NotFoundException(Msg.SECTION_NOT_FOUND));
+
+        assertThrows(NotFoundException.class, () -> {
+            service.save(inboundOrderRequestDTO);
+        });
+    }
+
+//    @Test
+//    void insert_returnLimitCapacitySectionExeption_whenFilledInSection() throws LimitCapacitySectionException {
+//
+//        BDDMockito.when(warehouseRepository.findById(1L))
+//                .thenReturn(java.util.Optional.ofNullable(warehouseTest));
+//        BDDMockito.when(sectionRepository.findById(1L))
+//                .thenReturn(java.util.Optional.ofNullable(sectionTest));
+//        BDDMockito.when(announcementRepository.findById(1L))
+//                .thenReturn(java.util.Optional.ofNullable(announcementTest));
+//
+////        InboundOrderPostResponseDTO inboundOrderPostTest = service.save(inboundOrderRequestDTO);
+////
+////        assertThat(inboundOrderPostTest).isNotNull();
+//
+//        BDDMockito.given(sectionRepository.)
+//                .willThrow(new LimitCapacitySectionException(Msg.LIMIT_CAPACITY_SECTION));
+//        assertThrows(LimitCapacitySectionException.class, () -> {
+//            service.save(inboundOrderRequestDTO);
+//        });
+//    }
 //    @Test
 //    void update_returnUpdatedInboundOrder_whenBatchStockIsCorrect() {
 //
@@ -169,10 +207,7 @@ class InboundOrderServiceTest {
 //
 //    }
 //
-//    @Test
-//    void insert_returnFilleInSectionException_whenFilledInSection() {
-//
-//    }
+
 //
 //
 //
