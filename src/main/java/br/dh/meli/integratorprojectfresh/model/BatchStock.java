@@ -28,8 +28,8 @@ public class BatchStock {
         @Column(name = "announcement_id", nullable = false)
         private Long announcementId;
 
-        @Column(name = "current_temperature", nullable = false)
-        private Float currentTemperature;
+        @Column(name = "section_type", nullable = false)
+        private String sectionType;
 
         @Column(name = "product_quantity", nullable = false)
         private int productQuantity;
@@ -65,7 +65,7 @@ public class BatchStock {
 
         public BatchStock(BatchStockDTO a, Long orderNumber) {
                 this.announcementId = a.getAnnouncementId();
-                this.currentTemperature = a.getCurrentTemperature();
+                this.sectionType = a.getSectionType();
                 this.manufacturingDate = a.getManufacturingDate();
                 this.dueDate = a.getDueDate();
                 this.productQuantity = a.getProductQuantity();
@@ -78,7 +78,7 @@ public class BatchStock {
         public BatchStock(BatchStockDTO a, Long orderNumber, Long batchNumber) {
                 this.batchNumber = batchNumber;
                 this.announcementId = a.getAnnouncementId();
-                this.currentTemperature = a.getCurrentTemperature();
+                this.sectionType = a.getSectionType();
                 this.manufacturingDate = a.getManufacturingDate();
                 this.dueDate = a.getDueDate();
                 this.productQuantity = a.getProductQuantity();
@@ -88,9 +88,9 @@ public class BatchStock {
                 this.manufacturingTime = a.getManufacturingTime();
         }
 
-        public BatchStock(Long announcementId, Float currentTemperature, int productQuantity, LocalDate manufacturingDate, LocalDateTime manufacturingTime, Float volume, LocalDate dueDate, BigDecimal price) {
+        public BatchStock(Long announcementId, String sectionType, int productQuantity, LocalDate manufacturingDate, LocalDateTime manufacturingTime, Float volume, LocalDate dueDate, BigDecimal price) {
                 this.announcementId = announcementId;
-                this.currentTemperature = currentTemperature;
+                this.sectionType = sectionType;
                 this.productQuantity = productQuantity;
                 this.manufacturingDate = manufacturingDate;
                 this.manufacturingTime = manufacturingTime;

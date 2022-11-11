@@ -29,7 +29,7 @@ public class BatchStockDTO {
     private Long announcementId;
 
     @NotNull(message = Msg.TEMPERATURE_REQUIRED)
-    private Float currentTemperature;
+    private String sectionType;
 
     @NotNull(message = Msg.QUANTITY_REQUIRED)
     @Min(value = 1, message = Msg.QUANTITY_MIN_VALUE)
@@ -62,7 +62,7 @@ public class BatchStockDTO {
     public BatchStockDTO(BatchStock a) {
         this.batchNumber = a.getBatchNumber();
         this.announcementId = a.getAnnouncementId();
-        this.currentTemperature = a.getCurrentTemperature();
+        this.sectionType = a.getSectionType();
         this.manufacturingDate = a.getManufacturingDate();
         this.dueDate = a.getDueDate();
         this.productQuantity = a.getProductQuantity();
@@ -73,8 +73,8 @@ public class BatchStockDTO {
     }
 
 
-    public BatchStockDTO(float currentTemperature, int productQuantity, LocalDate manufacturingDate, LocalDateTime manufacturingTime, float volume, LocalDate dueDate, BigDecimal price) {
-        this.currentTemperature = currentTemperature;
+    public BatchStockDTO(String sectionType, int productQuantity, LocalDate manufacturingDate, LocalDateTime manufacturingTime, float volume, LocalDate dueDate, BigDecimal price) {
+        this.sectionType = sectionType;
         this.productQuantity = productQuantity;
         this.manufacturingDate = manufacturingDate;
         this.manufacturingTime = manufacturingTime;

@@ -67,8 +67,8 @@ class InboundOrderServiceTest {
         LocalDate orderDate = LocalDate.parse("2022-03-03");
         LocalDateTime manufacturingTime = LocalDateTime.parse("2020-03-09 17:55:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-        BatchStockDTO batchStock1 = new BatchStockDTO((float) 1.05, 10, manufacturingDate, manufacturingTime, (float) 1.5, dueDate, BigDecimal.valueOf(30.5));
-        BatchStockDTO batchStock2 = new BatchStockDTO((float) 2.05, 11, manufacturingDate, manufacturingTime, (float) 1.3, dueDate, BigDecimal.valueOf(20.5));
+        BatchStockDTO batchStock1 = new BatchStockDTO("Fresh", 10, manufacturingDate, manufacturingTime, (float) 1.5, dueDate, BigDecimal.valueOf(30.5));
+        BatchStockDTO batchStock2 = new BatchStockDTO("Fresh", 11, manufacturingDate, manufacturingTime, (float) 1.3, dueDate, BigDecimal.valueOf(20.5));
 
         batchStockList = new ArrayList<>();
         batchStockList.add(batchStock1);

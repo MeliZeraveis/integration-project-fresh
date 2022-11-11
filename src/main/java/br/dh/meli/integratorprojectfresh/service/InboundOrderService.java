@@ -6,14 +6,17 @@ import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPutResponseDTO
 import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderRequestDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPostResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
-import br.dh.meli.integratorprojectfresh.exception.LimitCapacitySectionException;
+import br.dh.meli.integratorprojectfresh.exception.LimitCapacitySectionExeption;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
+import br.dh.meli.integratorprojectfresh.exception.SectionTypeException;
 import br.dh.meli.integratorprojectfresh.model.*;
 import br.dh.meli.integratorprojectfresh.repository.*;
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -35,6 +38,11 @@ public class InboundOrderService implements IInboundOrderService {
         if (warehouseOptional.isEmpty()){
             throw new NotFoundException(Msg.WAREHOUSE_NOT_FOUND);
         }
+
+        if (warehouseOptional.get().getManager() == null
+                || !Objects.equals(warehouseOptional.get().getManager().getRole(), "manager")){
+            throw new ManagerNotValidException("Warehouse does not have a valid manager");
+        }
     }
     void validSection(long sectionCode, List<BatchStockDTO>batchStockList) {
         Optional<Section> sectionOptional = sectionRepo.findById(sectionCode);
@@ -45,9 +53,12 @@ public class InboundOrderService implements IInboundOrderService {
         float sectionMaxCapacity = sectionOptional.get().getMaxCapacity();
         float sectionCapacityUsed = sectionOptional.get().getUsedCapacity();
         for (BatchStockDTO b : batchStockList) {
+            if(!Objects.equals(sectionOptional.get().getType(), b.getSectionType())){
+                throw new SectionTypeException(Msg.INSERT_BATCH_SECTION_INCORRET);
+            }
             float totalSum = sectionCapacityUsed + b.getProductQuantity();
             if (totalSum > sectionMaxCapacity) {
-                throw new LimitCapacitySectionException(Msg.LIMIT_CAPACITY_SECTION);
+                throw new LimitCapacitySectionExeption(Msg.LIMIT_CAPACITY_SECTION);
             }
             System.out.println(totalSum);
             sectionOptional.get().setUsedCapacity(totalSum);
@@ -55,7 +66,6 @@ public class InboundOrderService implements IInboundOrderService {
         }
 
     }
-
 
     @Override
     public InboundOrderPostResponseDTO save(InboundOrderRequestDTO inboundOrderResquest) {
@@ -101,11 +111,11 @@ public class InboundOrderService implements IInboundOrderService {
         validIfInboundOrderExist(inboundOrderDTO.getOrderNumber());
         InboundOrder inboundOrder = new InboundOrder(inboundOrderDTO, inboundOrderDTO.getOrderNumber());
 
+        validBatch(inboundOrderDTO.getBatchStock());
+
         validIfWarehouseExist(inboundOrder.getWarehouseCode());
 
         validIfAnnouncementExist(inboundOrderResquest.getInboundOrder().getBatchStock());
-
-        validBatch(inboundOrderDTO.getBatchStock());
 
         validSection(inboundOrder.getSectionCode(), inboundOrderResquest.getInboundOrder().getBatchStock());
 
