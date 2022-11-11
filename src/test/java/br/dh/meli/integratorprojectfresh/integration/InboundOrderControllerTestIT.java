@@ -85,8 +85,8 @@ public class InboundOrderControllerTestIT {
         LocalDate orderDate = LocalDate.parse("2022-03-03");
         LocalDateTime manufacturingTime = LocalDateTime.parse("2020-03-09 17:55:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-        BatchStockDTO batchStock1 = new BatchStockDTO(1L, "Fresh", 10, manufacturingDate, manufacturingTime, (float) 1.5, dueDate, BigDecimal.valueOf(30.5));
-        BatchStockDTO batchStock2 = new BatchStockDTO(2L, "Fresh", 11, manufacturingDate, manufacturingTime, (float) 1.3, dueDate, BigDecimal.valueOf(20.5));
+        BatchStockDTO batchStock1 = new BatchStockDTO(1L, "Fresh", 10, manufacturingDate, manufacturingTime, (float) 20.5, dueDate, BigDecimal.valueOf(30.5));
+        BatchStockDTO batchStock2 = new BatchStockDTO(2L, "Fresh", 11, manufacturingDate, manufacturingTime, (float) 20.3, dueDate, BigDecimal.valueOf(20.5));
 
         batchStockList = new ArrayList<>();
         batchStockList.add(batchStock1);
@@ -120,7 +120,7 @@ public class InboundOrderControllerTestIT {
         batchStockList.get(1).setOrderNumberId(1L);
         batchStockList.get(1).setBatchNumber(1L);
         batchStockList.get(1).setPrice(BigDecimal.valueOf(2000.00));
-        batchStockList.get(1).setProductQuantity(10);
+        batchStockList.get(1).setVolume((float) 10);
         ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
@@ -142,7 +142,10 @@ public class InboundOrderControllerTestIT {
         batchStockList.get(0).setBatchNumber(1L);
         batchStockList.get(0).setPrice(BigDecimal.valueOf(5000.00));
         batchStockList.get(0).setProductQuantity(100);
+        batchStockList.get(0).setProductQuantity(100);
         batchStockList.get(1).setBatchNumber(2L);
+        batchStockList.get(1).setVolume((float) 30);
+
         ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
