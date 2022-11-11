@@ -43,6 +43,13 @@ public class PurchaseOrder {
   @JsonIgnoreProperties("purchaseOrder")
   private List<PurchaseOrderItems> orderItem;
 
+  public PurchaseOrder(LocalDateTime date, OrderStatus orderStatus, BigDecimal total, Long buyerId) {
+    this.date = date;
+    this.orderStatus = orderStatus;
+    this.total = total;
+    this.buyerId = buyerId;
+  }
+
   /**
    * getTotalPrice
    * Calculates the total price of the purchase order
