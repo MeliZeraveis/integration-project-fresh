@@ -12,14 +12,15 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @Entity
-@IdClass(PurchaseOrderItems.class)
 @Table(name = "purchase_order_items")
-public class PurchaseOrderItems implements Serializable {
+public class PurchaseOrderItems {
   @Id
+  @Column(name = "id")
+  private Long id;
+
   @Column(name = "purchase_order_id")
   private Long purchaseOrderId;
 
-  @Id
   @Column(name = "announcement_id", nullable = false)
   private Long announcementId;
 
@@ -32,4 +33,8 @@ public class PurchaseOrderItems implements Serializable {
   @ManyToOne
   @JoinColumn(name = "purchase_order_id", insertable = false, updatable = false)
   private PurchaseOrder purchaseOrder;
+
+  @ManyToOne
+  @JoinColumn(name = "announcement_id", insertable = false, updatable = false)
+  private Announcement announcement;
 }

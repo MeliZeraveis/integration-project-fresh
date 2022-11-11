@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
@@ -43,4 +44,8 @@ public class Announcement {
     @JoinColumn(name = "seller_id", insertable = false, updatable = false)
     @JsonIgnoreProperties("announcement")
     private User seller;
+
+    @OneToMany(mappedBy = "announcement")
+    @JsonIgnoreProperties("announcement")
+    private List<PurchaseOrderItems> purchaseOrderItems;
 }
