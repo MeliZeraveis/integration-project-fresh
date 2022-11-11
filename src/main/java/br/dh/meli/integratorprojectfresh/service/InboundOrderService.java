@@ -49,7 +49,7 @@ public class InboundOrderService implements IInboundOrderService {
         Optional<Section> sectionOptional = sectionRepo.findById(sectionCode);
 
         if (sectionOptional.isEmpty()){
-            throw new NotFoundException(Msg.WAREHOUSE_NOT_FOUND);
+            throw new NotFoundException(Msg.SECTION_NOT_FOUND);
         }
         float sectionMaxCapacity = sectionOptional.get().getMaxCapacity();
         float sectionCapacityUsed = sectionOptional.get().getUsedCapacity();
@@ -112,11 +112,11 @@ public class InboundOrderService implements IInboundOrderService {
         validIfInboundOrderExist(inboundOrderDTO.getOrderNumber());
         InboundOrder inboundOrder = new InboundOrder(inboundOrderDTO, inboundOrderDTO.getOrderNumber());
 
+        validBatch(inboundOrderDTO.getBatchStock());
+
         validIfWarehouseExist(inboundOrder.getWarehouseCode());
 
         validIfAnnouncementExist(inboundOrderResquest.getInboundOrder().getBatchStock());
-
-        validBatch(inboundOrderDTO.getBatchStock());
 
         validSection(inboundOrder.getSectionCode(), inboundOrderResquest.getInboundOrder().getBatchStock());
 
