@@ -5,10 +5,11 @@ import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderDTO;
 import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderRequestDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPostResponseDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPutResponseDTO;
-import br.dh.meli.integratorprojectfresh.model.BatchStock;
-import br.dh.meli.integratorprojectfresh.model.InboundOrder;
-import br.dh.meli.integratorprojectfresh.repository.BatchStockRepository;
-import br.dh.meli.integratorprojectfresh.repository.InboundOrderRepository;
+import br.dh.meli.integratorprojectfresh.enums.Msg;
+import br.dh.meli.integratorprojectfresh.enums.Sections;
+import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
+import br.dh.meli.integratorprojectfresh.model.*;
+import br.dh.meli.integratorprojectfresh.repository.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertThrows;;
+
 
 
 @ExtendWith(MockitoExtension.class)
@@ -32,6 +35,14 @@ class InboundOrderServiceTest {
     @InjectMocks
     private InboundOrderService service;
 
+    @Mock
+    private WarehouseRepository warehouseRepository;
+
+    @Mock
+    private SectionRepository sectionRepository;
+
+    @Mock
+    private AnnouncementRepository announcementRepository;
     @Mock
     private InboundOrderRepository inboundOrderRepo;
     @Mock
@@ -44,6 +55,9 @@ class InboundOrderServiceTest {
     List<BatchStockDTO> batchStockList;
     List<BatchStock> batchStockList2;
     InboundOrderDTO inboundOrderDTO;
+    Warehouse warehouseTest;
+    Section sectionTest;
+    Announcement announcementTest;
 
 
     @BeforeEach
@@ -70,8 +84,12 @@ class InboundOrderServiceTest {
 
         inboundOrderPostResponseDTO = new InboundOrderPostResponseDTO(batchStockList2);
 
-
         inboundOrderPutResponseDTO = new InboundOrderPutResponseDTO(inboundOrder, batchStockList2);
+
+
+        warehouseTest = new Warehouse(1L, "Test", "Address Test", "BR-Test", new ArrayList<>(), null);
+        sectionTest = new Section(1L, "Fresh", (float)100.0, (float)80.0, new ArrayList<>());
+        announcementTest = new Announcement(1L, "Alface Test", "description", 3L, BigDecimal.valueOf(1.80), "Fresh", null, null, new ArrayList<>());
     }
 
     @Test
@@ -81,64 +99,82 @@ class InboundOrderServiceTest {
                 .thenReturn(inboundOrder);
         BDDMockito.when(batchStockRepo.saveAll(ArgumentMatchers.any()))
                 .thenReturn(batchStockList2);
+        BDDMockito.when(warehouseRepository.findById(ArgumentMatchers.anyLong()))
+                .thenReturn(java.util.Optional.ofNullable(warehouseTest));
+        BDDMockito.when(sectionRepository.findById(ArgumentMatchers.anyLong()))
+                .thenReturn(java.util.Optional.ofNullable(sectionTest));
+        BDDMockito.when(announcementRepository.findById(ArgumentMatchers.anyLong()))
+                .thenReturn(java.util.Optional.ofNullable(announcementTest));
 
         InboundOrderPostResponseDTO inboundOrderPostTest = service.save(inboundOrderRequestDTO);
 
         assertThat(inboundOrderPostTest).isNotNull();
-
     }
 
     @Test
-    void update_returnUpdatedInboundOrder_whenBatchStockIsCorrect() {
+    void insert_returnException_whenWarehouseNotFound() throws NotFoundException {
+        BDDMockito.given(warehouseRepository.findById(ArgumentMatchers.any())).willThrow(new NotFoundException(Msg.WAREHOUSE_NOT_FOUND));
 
-        inboundOrderDTO.setOrderNumber(1L);
-        batchStockList.get(0).setBatchNumber(1L);
-        batchStockList.get(1).setBatchNumber(2L);
+        assertThrows(NotFoundException.class, () -> {
+            service.save(inboundOrderRequestDTO);
+        });
 
-        BDDMockito.when(inboundOrderRepo.save(ArgumentMatchers.any()))
-                .thenReturn(inboundOrder);
-        BDDMockito.when(batchStockRepo.saveAll(ArgumentMatchers.any()))
-                .thenReturn(batchStockList2);
+//        InboundOrderPostResponseDTO inboundOrderPostTest = service.save(inboundOrderRequestDTO);
 
-        InboundOrderPutResponseDTO inboundOrderPutResponseDTO = service.update(inboundOrderRequestDTO);
-
-        assertThat(inboundOrderPutResponseDTO).isNotNull();
-        assertThat(inboundOrderPutResponseDTO.getBatchStock()).isNotNull();
-        assertThat(inboundOrderPutResponseDTO.getOrderNumber()).isPositive();
-
-    }
-
-    @Test
-    void insert_returnInvalidParamException_whenAnnouncementNotValid() {
-
-    }
-
-    @Test
-    void insert_returnInvalidParamException_whenWarehouseNotValid() {
-
+//        assertThat(inboundOrderPostTest).isNull();
     }
 
 //    @Test
-//    void insert_returnInvalidParamException_whenManagerNotBelongToCorrectWarehouse() {
+//    void update_returnUpdatedInboundOrder_whenBatchStockIsCorrect() {
+//
+//        inboundOrderDTO.setOrderNumber(1L);
+//        batchStockList.get(0).setBatchNumber(1L);
+//        batchStockList.get(1).setBatchNumber(2L);
+//
+//        BDDMockito.when(inboundOrderRepo.save(ArgumentMatchers.any()))
+//                .thenReturn(inboundOrder);
+//        BDDMockito.when(batchStockRepo.saveAll(ArgumentMatchers.any()))
+//                .thenReturn(batchStockList2);
+//
+//        InboundOrderPutResponseDTO inboundOrderPutResponseDTO = service.update(inboundOrderRequestDTO);
+//
+//        assertThat(inboundOrderPutResponseDTO).isNotNull();
+//        assertThat(inboundOrderPutResponseDTO.getBatchStock()).isNotNull();
+//        assertThat(inboundOrderPutResponseDTO.getOrderNumber()).isPositive();
 //
 //    }
-
-    @Test
-    void insert_returnInvalidParamException_whenSectionIsNotValid() {
-
-    }
-
-    @Test
-    void insert_returnInvalidParamException_whenSectionNotBelongToCorrectProduct() {
-
-    }
-
-    @Test
-    void insert_returnFilleInSectionException_whenFilledInSection() {
-
-    }
-
-
-
-
+//
+//    @Test
+//    void insert_returnInvalidParamException_whenAnnouncementNotValid() {
+//
+//    }
+//
+//    @Test
+//    void insert_returnInvalidParamException_whenWarehouseNotValid() {
+//
+//    }
+//
+////    @Test
+////    void insert_returnInvalidParamException_whenManagerNotBelongToCorrectWarehouse() {
+////
+////    }
+//
+//    @Test
+//    void insert_returnInvalidParamException_whenSectionIsNotValid() {
+//
+//    }
+//
+//    @Test
+//    void insert_returnInvalidParamException_whenSectionNotBelongToCorrectProduct() {
+//
+//    }
+//
+//    @Test
+//    void insert_returnFilleInSectionException_whenFilledInSection() {
+//
+//    }
+//
+//
+//
+//
 }

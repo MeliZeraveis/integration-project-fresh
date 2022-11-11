@@ -2,6 +2,7 @@ package br.dh.meli.integratorprojectfresh.model;
 
 import br.dh.meli.integratorprojectfresh.enums.Sections;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "announcement")
 public class Announcement {
@@ -34,7 +36,7 @@ public class Announcement {
     private BigDecimal price;
 
     @Column(name = "section", nullable = false, length = 50)
-    private Sections section;
+    private String section;
 
     @OneToMany(mappedBy = "announcement")
     @JsonIgnoreProperties("announcement")
