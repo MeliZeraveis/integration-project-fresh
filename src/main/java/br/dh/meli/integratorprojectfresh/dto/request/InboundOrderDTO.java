@@ -35,17 +35,10 @@ public class InboundOrderDTO {
     @NotEmpty(message = Msg.BATCHSTOCK_NOT_EMPTY)
     private List<@Valid BatchStockDTO> batchStock;
 
-    public InboundOrderDTO(InboundOrderDTO inboundOrder) {
-        this.orderDate = inboundOrder.getOrderDate();
-        this.sectionCode = inboundOrder.getSectionCode();
-        this.warehouseCode = inboundOrder.getWarehouseCode();
-    }
-
     public InboundOrderDTO(long orderNumber, LocalDate orderDate, Long sectionCode, Long warehouseCode, List<BatchStockDTO> batchStockList) {
         this.orderDate = orderDate;
         this.sectionCode = sectionCode;
         this.warehouseCode = warehouseCode;
         this.batchStock = batchStockList;
     }
-
 }

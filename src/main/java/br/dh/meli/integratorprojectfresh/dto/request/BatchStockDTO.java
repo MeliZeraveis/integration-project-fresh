@@ -33,7 +33,7 @@ public class BatchStockDTO {
 
     @NotNull(message = Msg.QUANTITY_REQUIRED)
     @Min(value = 1, message = Msg.QUANTITY_MIN_VALUE)
-    private int productQuantity;
+    private Integer productQuantity;
 
     @NotNull(message = Msg.DATE_REQUIRED)
     @PastOrPresent(message = Msg.DATE_PAST_OR_PRESENT)

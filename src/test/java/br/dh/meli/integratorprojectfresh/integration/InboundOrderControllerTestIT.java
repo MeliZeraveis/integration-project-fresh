@@ -324,6 +324,21 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.QUANTITY_MIN_VALUE)));
     }
 
+
+    @Test
+    void save_ReturnExceptionProductQuantityIsNull_Fail() throws Exception {
+        batchStockList.get(0).setProductQuantity(null);
+
+        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].productQuantity")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.QUANTITY_REQUIRED)));
+    }
     @Test
     void save_ReturnExceptionManufacturingTimeDateFuture_Fail() throws Exception {
         LocalDateTime orderDate2 = LocalDateTime.parse("2024-03-09 17:55:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
@@ -340,18 +355,6 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].manufacturingTime")))
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.TIME_PAST_OR_PRESENT)));
     }
-//    @Test
-//    void save_ReturnExceptionManufacturingTimeDateInvalidFormat_Fail() throws Exception {
-//        LocalDateTime orderDate2 = LocalDateTime.parse("2020-03-09 17:55", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-//        batchStockList.get(0).setManufacturingTime(orderDate2);
-//
-//
-//        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
-//
-//        response.andExpect(status().isBadRequest());
-//    }
 
     @Test
     void save_ReturnExceptionManufacturingTimeNull_Fail() throws Exception {
@@ -601,6 +604,21 @@ public class InboundOrderControllerTestIT {
     }
 
     @Test
+    void update_ReturnExceptionProductQuantityIsNull_Fail() throws Exception {
+        batchStockList.get(0).setProductQuantity(null);
+
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].productQuantity")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.QUANTITY_REQUIRED)));
+    }
+
+    @Test
     void update_ReturnExceptionManufacturingTimeDateFuture_Fail() throws Exception {
         LocalDateTime orderDate2 = LocalDateTime.parse("2024-03-09 17:55:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         batchStockList.get(0).setManufacturingTime(orderDate2);
@@ -615,18 +633,6 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
                 .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].manufacturingTime")))
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.TIME_PAST_OR_PRESENT)));
-    }
-    @Test
-    void update_ReturnExceptionManufacturingTimeDateInvalidFormat_Fail() throws Exception {
-        LocalDateTime orderDate2 = LocalDateTime.parse("2024-03-09 17:55:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        batchStockList.get(0).setManufacturingTime(orderDate2);
-
-
-        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
-
-        response.andExpect(status().isBadRequest());
     }
 
     @Test
