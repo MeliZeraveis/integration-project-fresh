@@ -2,16 +2,19 @@ package br.dh.meli.integratorprojectfresh.model;
 
 import br.dh.meli.integratorprojectfresh.enums.Sections;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "announcement")
 public class Announcement {
@@ -33,14 +36,18 @@ public class Announcement {
     private BigDecimal price;
 
     @Column(name = "section", nullable = false, length = 50)
-    private Sections section;
+    private String section;
 
-    @OneToOne(mappedBy = "announcement")
+    @OneToMany(mappedBy = "announcement")
     @JsonIgnoreProperties("announcement")
-    private BatchStock batchStock;
+    private List<BatchStock> batchStock;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id", insertable = false, updatable = false)
     @JsonIgnoreProperties("announcement")
     private User seller;
+
+    @OneToMany(mappedBy = "announcement")
+    @JsonIgnoreProperties("announcement")
+    private List<PurchaseOrderItems> purchaseOrderItems;
 }

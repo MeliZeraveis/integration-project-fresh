@@ -4,7 +4,6 @@ import br.dh.meli.integratorprojectfresh.dto.request.BatchStockDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,8 +28,8 @@ public class BatchStock {
         @Column(name = "announcement_id", nullable = false)
         private Long announcementId;
 
-        @Column(name = "current_temperature", nullable = false)
-        private Float currentTemperature;
+        @Column(name = "section_type", nullable = false)
+        private String sectionType;
 
         @Column(name = "product_quantity", nullable = false)
         private int productQuantity;
@@ -39,7 +38,7 @@ public class BatchStock {
         private LocalDate manufacturingDate;
 
         @Column(name = "manufacturing_time", nullable = false)
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        @JsonFormat(pattern = "HH:mm:ss")
         private LocalDateTime manufacturingTime;
 
         @Column(name = "volume", nullable = false)
@@ -59,14 +58,14 @@ public class BatchStock {
         @JsonIgnoreProperties("batchStock")
         private InboundOrder inboundOrder;
 
-        @OneToOne(fetch = FetchType.LAZY)
+        @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "announcement_id", insertable = false, updatable = false)
         @JsonIgnoreProperties("batchStock")
         private Announcement announcement;
 
         public BatchStock(BatchStockDTO a, Long orderNumber) {
                 this.announcementId = a.getAnnouncementId();
-                this.currentTemperature = a.getCurrentTemperature();
+                this.sectionType = a.getSectionType();
                 this.manufacturingDate = a.getManufacturingDate();
                 this.dueDate = a.getDueDate();
                 this.productQuantity = a.getProductQuantity();
@@ -79,7 +78,7 @@ public class BatchStock {
         public BatchStock(BatchStockDTO a, Long orderNumber, Long batchNumber) {
                 this.batchNumber = batchNumber;
                 this.announcementId = a.getAnnouncementId();
-                this.currentTemperature = a.getCurrentTemperature();
+                this.sectionType = a.getSectionType();
                 this.manufacturingDate = a.getManufacturingDate();
                 this.dueDate = a.getDueDate();
                 this.productQuantity = a.getProductQuantity();
@@ -89,9 +88,9 @@ public class BatchStock {
                 this.manufacturingTime = a.getManufacturingTime();
         }
 
-        public BatchStock(Long announcementId, Float currentTemperature, int productQuantity, LocalDate manufacturingDate, LocalDateTime manufacturingTime, Float volume, LocalDate dueDate, BigDecimal price) {
+        public BatchStock(Long announcementId, String sectionType, int productQuantity, LocalDate manufacturingDate, LocalDateTime manufacturingTime, Float volume, LocalDate dueDate, BigDecimal price) {
                 this.announcementId = announcementId;
-                this.currentTemperature = currentTemperature;
+                this.sectionType = sectionType;
                 this.productQuantity = productQuantity;
                 this.manufacturingDate = manufacturingDate;
                 this.manufacturingTime = manufacturingTime;

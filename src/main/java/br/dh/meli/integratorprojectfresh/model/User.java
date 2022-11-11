@@ -1,5 +1,6 @@
 package br.dh.meli.integratorprojectfresh.model;
 
+import br.dh.meli.integratorprojectfresh.enums.Roles;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
@@ -30,6 +31,7 @@ public class User {
     private String email;
 
     @Column(name = "role", nullable = false, length = 30)
+//    @Enumerated(EnumType.STRING)
     private String role;
 
     @OneToOne(mappedBy = "manager")

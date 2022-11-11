@@ -26,6 +26,8 @@ CREATE TABLE `announcement` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `description` varchar(100) NOT NULL,
   `name` varchar(50) NOT NULL,
+  `price` decimal(11,2) NOT NULL,
+  `section` int NOT NULL,
   `seller_id` bigint NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FKkjp0ij7gmr87d524p9mfrylx4` (`seller_id`),
@@ -39,7 +41,7 @@ CREATE TABLE `announcement` (
 
 LOCK TABLES `announcement` WRITE;
 /*!40000 ALTER TABLE `announcement` DISABLE KEYS */;
-INSERT INTO `announcement` VALUES (1,'Maçã','descricao',3),(2,'Banana','descricao',3),(3,'Sorvete','descricao',4),(4,'Carne Moida','descricao',4),(5,'Manteiga','descricao',3),(6,'Requeijão','descricao',4),(7,'Cereja','descricao',3),(8,'Queijo','descricao',3),(9,'Camarão','descricao',4);
+INSERT INTO `announcement` VALUES (1,'descricao','Maçã',2.50,1,3),(2,'descricao','Banana',3.00,1,3),(3,'descricao','Sorvete',20.00,3,4),(4,'descricao','Carne Moida',40.00,3,4),(5,'descricao','Manteiga',5.55,2,3),(6,'descricao','Requeijão',6.75,2,4),(7,'descricao','Cereja',18.55,3,3),(8,'descricao','Queijo',45.70,2,3),(9,'descricao','Camarão',80.70,3,4);
 /*!40000 ALTER TABLE `announcement` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -75,7 +77,7 @@ CREATE TABLE `batch_stock` (
 
 LOCK TABLES `batch_stock` WRITE;
 /*!40000 ALTER TABLE `batch_stock` DISABLE KEYS */;
-INSERT INTO `batch_stock` VALUES (1,1,17,'2022-12-30','2022-08-13','2020-08-13 17:55:00.000000',1,10.00,2,2.5),(2,2,18,'2022-12-30','2022-08-13','2020-08-13 17:55:00.000000',1,20.00,2,3.5),(3,3,1,'2023-12-31','2022-08-13','2020-08-13 17:55:00.000000',1,1.00,2,4),(4,4,2,'2023-02-28','2022-08-13','2020-08-13 17:55:00.000000',2,1.00,3,3),(5,5,10,'2023-11-25','2022-08-13','2020-08-13 17:55:00.000000',2,15.00,3,1),(6,6,13,'2023-01-05','2022-08-13','2020-08-13 17:55:00.000000',2,8.00,3,1),(7,7,13,'2022-12-30','2022-08-13','2020-08-13 17:55:00.000000',3,12.00,1,1),(8,8,10,'2022-12-30','2022-08-13','2020-08-13 17:55:00.000000',4,15.00,1,1),(9,9,3,'2023-01-15','2022-08-13','2020-08-13 17:55:00.000000',4,5.00,2,2.5);
+INSERT INTO `batch_stock` VALUES (2,2,18,'2022-12-30','2022-08-13','2022-08-13 17:55:00.000000',1,450.00,150,150),(3,3,1,'2023-12-31','2022-08-13','2022-08-13 17:55:00.000000',1,2000.00,100,150),(4,4,2,'2023-02-27','2022-08-13','2022-08-13 17:55:00.000000',2,4000.00,100,100),(5,5,10,'2023-11-25','2022-08-13','2022-08-13 17:55:00.000000',2,555.00,100,100),(6,6,13,'2023-01-05','2022-08-13','2022-08-13 17:55:00.000000',2,675.00,100,100),(7,7,13,'2022-12-30','2022-08-13','2022-08-13 17:55:00.000000',3,185.50,100,100),(8,8,10,'2022-12-30','2022-08-13','2022-08-13 17:55:00.000000',4,4570.00,100,100),(9,9,3,'2023-01-15','2022-08-13','2022-08-13 17:55:00.000000',4,8070.00,100,100);
 /*!40000 ALTER TABLE `batch_stock` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -96,7 +98,7 @@ CREATE TABLE `inbound_order` (
   KEY `FKt40w6a2pkaqetpo7gfax7j01l` (`warehouse_code`),
   CONSTRAINT `FKf3ycfu0pg4auw1tu7mee2rkbe` FOREIGN KEY (`section_code`) REFERENCES `section` (`id`),
   CONSTRAINT `FKt40w6a2pkaqetpo7gfax7j01l` FOREIGN KEY (`warehouse_code`) REFERENCES `warehouse` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -105,8 +107,68 @@ CREATE TABLE `inbound_order` (
 
 LOCK TABLES `inbound_order` WRITE;
 /*!40000 ALTER TABLE `inbound_order` DISABLE KEYS */;
-INSERT INTO `inbound_order` VALUES (1,'2023-11-09',1,1),(2,'2023-11-09',2,2),(3,'2023-11-09',2,1),(4,'2023-11-09',3,3);
+INSERT INTO `inbound_order` VALUES (1,'2023-01-25',1,1),(2,'2023-01-25',1,1),(3,'2023-01-25',3,2),(4,'2023-01-25',3,2),(5,'2023-01-25',2,2),(6,'2023-01-25',2,1),(7,'2023-01-25',1,3),(8,'2023-01-25',2,3),(9,'2023-01-25',3,3);
 /*!40000 ALTER TABLE `inbound_order` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `purchase_order`
+--
+
+DROP TABLE IF EXISTS `purchase_order`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `purchase_order` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `buyer_id` bigint NOT NULL,
+  `date` datetime(6) NOT NULL,
+  `status` varchar(255) NOT NULL,
+  `total` decimal(19,2) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKnx7lx9kjhgwik0x63nyk1wnuo` (`buyer_id`),
+  CONSTRAINT `FKnx7lx9kjhgwik0x63nyk1wnuo` FOREIGN KEY (`buyer_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `purchase_order`
+--
+
+LOCK TABLES `purchase_order` WRITE;
+/*!40000 ALTER TABLE `purchase_order` DISABLE KEYS */;
+INSERT INTO `purchase_order` VALUES (1,1,'2022-12-30 00:00:00.000000','Pending',150.00),(2,1,'2022-12-30 00:00:00.000000','Approved',450.00),(3,1,'2022-12-30 00:00:00.000000','Approved',300.00),(4,2,'2022-12-30 00:00:00.000000','Approved',150.00),(5,2,'2022-12-30 00:00:00.000000','Approved',320.00),(6,1,'2022-12-30 00:00:00.000000','Approved',450.77),(7,2,'2022-12-30 00:00:00.000000','Approved',125.12),(8,1,'2022-12-30 00:00:00.000000','Approved',1000.55),(9,2,'2022-12-30 00:00:00.000000','Approved',150.88);
+/*!40000 ALTER TABLE `purchase_order` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `purchase_order_items`
+--
+
+DROP TABLE IF EXISTS `purchase_order_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `purchase_order_items` (
+  `id` bigint NOT NULL,
+  `announcement_id` bigint NOT NULL,
+  `product_price` double NOT NULL,
+  `product_quantity` int NOT NULL,
+  `purchase_order_id` bigint DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKh6o5mrr6xdv31e5vxkekur42m` (`announcement_id`),
+  KEY `FKe5vf73k1ouhsxpth3vp7rnfis` (`purchase_order_id`),
+  CONSTRAINT `FKe5vf73k1ouhsxpth3vp7rnfis` FOREIGN KEY (`purchase_order_id`) REFERENCES `purchase_order` (`id`),
+  CONSTRAINT `FKh6o5mrr6xdv31e5vxkekur42m` FOREIGN KEY (`announcement_id`) REFERENCES `announcement` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `purchase_order_items`
+--
+
+LOCK TABLES `purchase_order_items` WRITE;
+/*!40000 ALTER TABLE `purchase_order_items` DISABLE KEYS */;
+INSERT INTO `purchase_order_items` VALUES (1,1,807,10,1),(2,8,450.7,10,2),(3,7,185.5,10,3),(4,6,101.25,15,4),(5,5,27.75,5,5),(6,4,80,2,6),(7,3,20,1,7),(8,2,12,4,8),(9,1,5,2,9);
+/*!40000 ALTER TABLE `purchase_order_items` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -118,9 +180,11 @@ DROP TABLE IF EXISTS `section`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `section` (
   `id` bigint NOT NULL AUTO_INCREMENT,
+  `max_capacity` float NOT NULL,
   `type` varchar(50) NOT NULL,
+  `used_capacity` float NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -129,7 +193,7 @@ CREATE TABLE `section` (
 
 LOCK TABLES `section` WRITE;
 /*!40000 ALTER TABLE `section` DISABLE KEYS */;
-INSERT INTO `section` VALUES (1,'Fresco'),(2,'Fresco'),(3,'Refrigerado'),(4,'Refrigerado'),(5,'Congelado'),(6,'Congelado');
+INSERT INTO `section` VALUES (1,1000,'Fresh',800),(2,1500,'Refrigerated',1000),(3,2000,'Frozen',1200);
 /*!40000 ALTER TABLE `section` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -156,7 +220,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'JonatasBene','1234','jonatasbene@email.com','buyer'),(2,'BrunaCampos','1234','brunacampos@email.com','buyer'),(3,'RosySantos','5678','rosysantos@email.com','seller'),(4,'EstherPorto','5678','estherporto@email.com','seller'),(5,'MarcelloAlves','9090','marcelloalves@email.com','manager'),(6,'HugoCaxias','9090','hugocaxias@email.com','manager');
+INSERT INTO `user` VALUES (1,'jonatasbene@email.com','1234','buyer','JonatasBene'),(2,'brunacampos@email.com','1234','buyer','BrunaCampos'),(3,'rosysantos@email.com','5678','seller','RosySantos'),(4,'estherporto@email.com','5678','seller','EstherPorto'),(5,'marcelloalves@email.com','9090','manager','MarcelloAlves'),(6,'hugocaxias@email.com','9090','manager','HugoCaxias');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -169,11 +233,13 @@ DROP TABLE IF EXISTS `warehouse`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `warehouse` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `warehouse_name` varchar(50) NOT NULL,
-  `id_user` bigint DEFAULT NULL,
+  `address` varchar(100) NOT NULL,
+  `country_code` varchar(2) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `manager_id` bigint DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FKl0lq5qohv9c6yhr39nshhkp70` (`id_user`),
-  CONSTRAINT `FKl0lq5qohv9c6yhr39nshhkp70` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`)
+  KEY `FKmtyr26fo530xqjuttkatdh7xp` (`manager_id`),
+  CONSTRAINT `FKmtyr26fo530xqjuttkatdh7xp` FOREIGN KEY (`manager_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -183,7 +249,7 @@ CREATE TABLE `warehouse` (
 
 LOCK TABLES `warehouse` WRITE;
 /*!40000 ALTER TABLE `warehouse` DISABLE KEYS */;
-INSERT INTO `warehouse` VALUES (1,'MLBSP01',5),(2,'MLBSP02',5),(3,'MLARBA01',6);
+INSERT INTO `warehouse` VALUES (1,'Address A','BR','MLBSP01',5),(2,'Address B','BR','MLBSP02',5),(3,'AddressC','AR','MLARBA01',6);
 /*!40000 ALTER TABLE `warehouse` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -196,4 +262,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-11-09 12:18:43
+-- Dump completed on 2022-11-10 14:27:38
