@@ -13,6 +13,7 @@ import br.dh.meli.integratorprojectfresh.repository.BatchStockRepository;
 import br.dh.meli.integratorprojectfresh.repository.InboundOrderRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @ActiveProfiles("test")
 @SpringBootTest
@@ -129,19 +131,6 @@ public class InboundOrderControllerTestIT {
         assertThat(batchStockRepository.findAll().get(0)).isNotNull();
     }
 
-//    @Test
-//    void save_ReturnInboundOrderPostResponseDTO_NotSucess() throws Exception{
-//        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
-
-    //        response.andExpect(status().isBadRequest())
-//                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.message)))
-//                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
-//                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("roomName")));
-
-    //  .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.ROOM_NAME_SIZE_NOT_VALID)))
-//}
     @Test
     void update_ReturnInboundOrderPutResponseDTO_Sucess() throws Exception {
         LocalDate orderDate2 = LocalDate.parse("2022-07-07");
@@ -166,15 +155,554 @@ public class InboundOrderControllerTestIT {
 
     }
 
+    @Test
+    void save_ReturnExceptionFieldOrderDateNull_Fail() throws Exception {
+        inboundOrderDTO.setOrderDate(null);
+
+        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+               .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+               .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.orderDate")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.DATE_REQUIRED)));
+    }
+
+    @Test
+    void save_ReturnExceptionFieldOrderDateFuture_Fail() throws Exception {
+        LocalDate orderDate2 = LocalDate.parse("2023-07-07");
+        inboundOrderDTO.setOrderDate(orderDate2);
+
+        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.orderDate")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.DATE_PAST_OR_PRESENT)));
+    }
+
+    @Test
+    void save_ReturnExceptionManufacturingDateDateFuture_Fail() throws Exception {
+        LocalDate orderDate2 = LocalDate.parse("2023-07-07");
+        batchStockList.get(0).setManufacturingDate(orderDate2);
+
+
+        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].manufacturingDate")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.DATE_PAST_OR_PRESENT)));
+    }
+
+    @Test
+    void save_ReturnExceptionManufacturingDateNull_Fail() throws Exception {
+        batchStockList.get(0).setManufacturingDate(null);
+
+        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].manufacturingDate")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.DATE_REQUIRED)));
+    }
+
+    @Test
+    void save_ReturnExceptionDueDateDatePast_Fail() throws Exception {
+        LocalDate orderDate2 = LocalDate.parse("2019-02-01");
+        batchStockList.get(0).setDueDate(orderDate2);
+
+        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].dueDate")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.DATE_FUTURE)));
+    }
+
+    @Test
+    void save_ReturnExceptionDueDateNull_Fail() throws Exception {
+        batchStockList.get(0).setDueDate(null);
+
+
+        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].dueDate")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.DATE_REQUIRED)));
+    }
+    @Test
+    void save_ReturnExceptionSectionCodeNull_Fail() throws Exception {
+        inboundOrderDTO.setSectionCode(null);
+
+        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.sectionCode")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.SECTION_CODE_REQUIRED)));
+    }
+
+    @Test
+    void save_ReturnExceptionWarehouseCodeNull_Fail() throws Exception {
+        inboundOrderDTO.setWarehouseCode(null);
+
+        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.warehouseCode")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.WAREHOUSE_CODE_REQUIRED)));
+    }
+
+    @Test
+    void save_ReturnExceptionAnnouncementIdNull_Fail() throws Exception {
+        batchStockList.get(0).setAnnouncementId(null);
+
+        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].announcementId")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.ANNOUNCEMENT_ID_REQUIRED)));
+    }
+
+    @Test
+    void save_ReturnExceptionCurrentTemperatureNull_Fail() throws Exception {
+        batchStockList.get(0).setCurrentTemperature(null);
+
+        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].currentTemperature")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.TEMPERATURE_REQUIRED)));
+    }
+
+    @Test
+    void save_ReturnExceptionProductQuantitySmaller1_Fail() throws Exception {
+        batchStockList.get(0).setProductQuantity(0);
+
+        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].productQuantity")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.QUANTITY_MIN_VALUE)));
+    }
+
+    @Test
+    void save_ReturnExceptionManufacturingTimeDateFuture_Fail() throws Exception {
+        LocalDateTime orderDate2 = LocalDateTime.parse("2024-03-09 17:55:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        batchStockList.get(0).setManufacturingTime(orderDate2);
+
+
+        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].manufacturingTime")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.TIME_PAST_OR_PRESENT)));
+    }
 //    @Test
-//    void update_ReturnInboundOrderPutResponseDTO_NotSucess() throws Exception{
-//        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+//    void save_ReturnExceptionManufacturingTimeDateInvalidFormat_Fail() throws Exception {
+//        LocalDateTime orderDate2 = LocalDateTime.parse("2020-03-09 17:55", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+//        batchStockList.get(0).setManufacturingTime(orderDate2);
+//
+//
+//        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
 //                .contentType(MediaType.APPLICATION_JSON)
 //                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
-// response.andExpect(status().isBadRequest())
-    //        response.andExpect(status().isCreated())
-//                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.message)))
-//                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
-//                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("roomName")));
-//.andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.ROOM_NAME_SIZE_NOT_VALID)))
+//
+//        response.andExpect(status().isBadRequest());
+//    }
+
+    @Test
+    void save_ReturnExceptionManufacturingTimeNull_Fail() throws Exception {
+        batchStockList.get(0).setManufacturingTime(null);
+
+        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].manufacturingTime")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.TIME_REQUIRED)));
+    }
+
+    @Test
+    void save_ReturnExceptionVolumeNull_Fail() throws Exception {
+        batchStockList.get(0).setVolume(null);
+
+        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].volume")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.VOLUME_REQUIRED)));
+    }
+
+    @Test
+    void save_ReturnExceptionVolumeZero_Fail() throws Exception {
+        float num = 0;
+        batchStockList.get(0).setVolume(num);
+
+        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].volume")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.VOLUME_MIN_VALUE)));
+    }
+
+    @Test
+    void save_ReturnExceptionPriceNegative_Fail() throws Exception {
+        batchStockList.get(0).setPrice(BigDecimal.valueOf(-30.5));
+
+        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].price")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.FIELD_MIN_VALUE)));
+    }
+
+    @Test
+    void save_ReturnExceptionPriceNull_Fail() throws Exception {
+        batchStockList.get(0).setPrice(null);
+
+        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].price")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.PRICE_REQUIRED)));
+    }
+
+  //PUT - UPDATE --------------------------------
+
+    @Test
+    void update_ReturnExceptionFieldOrderDateNull_Fail() throws Exception {
+        inboundOrderDTO.setOrderDate(null);
+
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.orderDate")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.DATE_REQUIRED)));
+    }
+
+    @Test
+    void update_ReturnExceptionFieldOrderDateFuture_Fail() throws Exception {
+        LocalDate orderDate2 = LocalDate.parse("2023-07-07");
+        inboundOrderDTO.setOrderDate(orderDate2);
+
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.orderDate")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.DATE_PAST_OR_PRESENT)));
+    }
+
+    @Test
+    void update_ReturnExceptionManufacturingDateDateFuture_Fail() throws Exception {
+        LocalDate orderDate2 = LocalDate.parse("2023-07-07");
+        batchStockList.get(0).setManufacturingDate(orderDate2);
+
+
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].manufacturingDate")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.DATE_PAST_OR_PRESENT)));
+    }
+
+    @Test
+    void update_ReturnExceptionManufacturingDateNull_Fail() throws Exception {
+        batchStockList.get(0).setManufacturingDate(null);
+
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].manufacturingDate")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.DATE_REQUIRED)));
+    }
+
+    @Test
+    void update_ReturnExceptionDueDateDatePast_Fail() throws Exception {
+        LocalDate orderDate2 = LocalDate.parse("2019-02-01");
+        batchStockList.get(0).setDueDate(orderDate2);
+
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].dueDate")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.DATE_FUTURE)));
+    }
+
+    @Test
+    void update_ReturnExceptionDueDateNull_Fail() throws Exception {
+        batchStockList.get(0).setDueDate(null);
+
+
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].dueDate")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.DATE_REQUIRED)));
+    }
+    @Test
+    void update_ReturnExceptionSectionCodeNull_Fail() throws Exception {
+        inboundOrderDTO.setSectionCode(null);
+
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.sectionCode")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.SECTION_CODE_REQUIRED)));
+    }
+
+    @Test
+    void update_ReturnExceptionWarehouseCodeNull_Fail() throws Exception {
+        inboundOrderDTO.setWarehouseCode(null);
+
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.warehouseCode")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.WAREHOUSE_CODE_REQUIRED)));
+    }
+
+    @Test
+    void update_ReturnExceptionAnnouncementIdNull_Fail() throws Exception {
+        batchStockList.get(0).setAnnouncementId(null);
+
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].announcementId")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.ANNOUNCEMENT_ID_REQUIRED)));
+    }
+
+    @Test
+    void update_ReturnExceptionCurrentTemperatureNull_Fail() throws Exception {
+        batchStockList.get(0).setCurrentTemperature(null);
+
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].currentTemperature")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.TEMPERATURE_REQUIRED)));
+    }
+
+    @Test
+    void update_ReturnExceptionProductQuantitySmaller1_Fail() throws Exception {
+        batchStockList.get(0).setProductQuantity(0);
+
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].productQuantity")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.QUANTITY_MIN_VALUE)));
+    }
+
+    @Test
+    void update_ReturnExceptionManufacturingTimeDateFuture_Fail() throws Exception {
+        LocalDateTime orderDate2 = LocalDateTime.parse("2024-03-09 17:55:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        batchStockList.get(0).setManufacturingTime(orderDate2);
+
+
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].manufacturingTime")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.TIME_PAST_OR_PRESENT)));
+    }
+    @Test
+    void update_ReturnExceptionManufacturingTimeDateInvalidFormat_Fail() throws Exception {
+        LocalDateTime orderDate2 = LocalDateTime.parse("2024-03-09 17:55:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        batchStockList.get(0).setManufacturingTime(orderDate2);
+
+
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void update_ReturnExceptionManufacturingTimeNull_Fail() throws Exception {
+        batchStockList.get(0).setManufacturingTime(null);
+
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].manufacturingTime")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.TIME_REQUIRED)));
+    }
+
+    @Test
+    void update_ReturnExceptionVolumeNull_Fail() throws Exception {
+        batchStockList.get(0).setVolume(null);
+
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].volume")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.VOLUME_REQUIRED)));
+    }
+
+    @Test
+    void update_ReturnExceptionVolumeZero_Fail() throws Exception {
+        float num = 0;
+        batchStockList.get(0).setVolume(num);
+
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].volume")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.VOLUME_MIN_VALUE)));
+    }
+
+    @Test
+    void update_ReturnExceptionPriceNegative_Fail() throws Exception {
+        batchStockList.get(0).setPrice(BigDecimal.valueOf(-30.5));
+
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].price")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.FIELD_MIN_VALUE)));
+    }
+
+    @Test
+    void update_ReturnExceptionPriceNull_Fail() throws Exception {
+        batchStockList.get(0).setPrice(null);
+
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].price")))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.PRICE_REQUIRED)));
+    }
+
 }
