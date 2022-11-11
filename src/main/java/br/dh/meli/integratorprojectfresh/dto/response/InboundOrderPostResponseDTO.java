@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -14,7 +15,7 @@ import java.util.List;
 public class InboundOrderPostResponseDTO {
     private List<BatchStockDTO> batchStock;
 
-    public InboundOrderPostResponseDTO(List<BatchStockDTO> batchStock) {
-        this.batchStock = batchStock;
+    public InboundOrderPostResponseDTO(List<BatchStock> batchStock) {
+        this.batchStock = batchStock.stream().map(BatchStockDTO::new).collect(Collectors.toList());
     }
 }
