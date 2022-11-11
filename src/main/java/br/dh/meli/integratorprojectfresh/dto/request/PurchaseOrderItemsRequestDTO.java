@@ -1,0 +1,46 @@
+package br.dh.meli.integratorprojectfresh.dto.request;
+
+import br.dh.meli.integratorprojectfresh.enums.Msg;
+import br.dh.meli.integratorprojectfresh.model.PurchaseOrderItems;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import java.math.BigDecimal;
+
+/**
+ * PurchaseOrderItemsDTO
+ * Validate incoming Purchase Order Items data from the client
+ */
+public class PurchaseOrderItemsRequestDTO {
+  @NotNull(message = Msg.PURCHASE_ORDER_ID_NOT_NULL)
+  @Positive(message = Msg.PURCHASE_ORDER_ID_NOT_VALID)
+  private final Long purchaseOrderId;
+
+  @NotNull(message = Msg.ANNOUNCEMENT_ID_NOT_NULL)
+  @Positive(message = Msg.ANNOUNCEMENT_ID_NOT_VALID)
+  private final Long announcementId;
+
+  @NotNull(message = Msg.PRODUCT_QUANTITY_NOT_NULL)
+  @Positive(message = Msg.PRODUCT_QUANTITY_NOT_VALID)
+  private final Integer productQuantity;
+
+  @NotNull(message = Msg.PRODUCT_PRICE_NOT_NULL)
+  @Positive(message = Msg.PRODUCT_PRICE_NOT_VALID)
+  private final BigDecimal productPrice;
+
+  public PurchaseOrderItemsRequestDTO(PurchaseOrderItems purchaseOrderItems) {
+    this.purchaseOrderId = purchaseOrderItems.getPurchaseOrderId();
+    this.announcementId = purchaseOrderItems.getAnnouncementId();
+    this.productQuantity = purchaseOrderItems.getProductQuantity();
+    this.productPrice = purchaseOrderItems.getProductPrice();
+  }
+
+  /**
+   * toPurchaseOrderItems
+   * Convert DTO to Model
+   * @return PurchaseOrderItems
+   */
+  public PurchaseOrderItems toPurchaseOrderItems() {
+    return new PurchaseOrderItems(purchaseOrderId, announcementId, productQuantity, productPrice);
+  }
+}
