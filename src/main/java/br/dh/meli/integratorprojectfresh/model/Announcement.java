@@ -1,6 +1,7 @@
 package br.dh.meli.integratorprojectfresh.model;
 
 import br.dh.meli.integratorprojectfresh.enums.Sections;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,7 +37,12 @@ public class Announcement {
     private BigDecimal price;
 
     @Column(name = "section", nullable = false, length = 50)
-    private String section;
+    private Long sectionCode;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "section", insertable = false, updatable = false)
+    @JsonIgnoreProperties("announcement")
+    private Section section;
 
     @OneToMany(mappedBy = "announcement")
     @JsonIgnoreProperties("announcement")
@@ -44,10 +50,12 @@ public class Announcement {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id", insertable = false, updatable = false)
+    @JsonIgnore
     @JsonIgnoreProperties("announcement")
     private User seller;
 
     @OneToMany(mappedBy = "announcement")
+    @JsonIgnore
     @JsonIgnoreProperties("announcement")
     private List<PurchaseOrderItems> purchaseOrderItems;
 }

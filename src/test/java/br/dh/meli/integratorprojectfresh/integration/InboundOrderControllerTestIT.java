@@ -112,7 +112,6 @@ public class InboundOrderControllerTestIT {
     void save_ReturnInboundOrderPostResponseDTO_Sucess() throws Exception {
         LocalDate orderDate2 = LocalDate.parse("2022-08-08");
         inboundOrderDTO.setOrderDate(orderDate2);
-        inboundOrderDTO.setOrderDate(orderDate2);
         batchStockList.get(0).setOrderNumberId(1L);
         batchStockList.get(0).setBatchNumber(1L);
         batchStockList.get(0).setPrice(BigDecimal.valueOf(4000.00));
