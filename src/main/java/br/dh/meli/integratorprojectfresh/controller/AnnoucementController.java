@@ -1,6 +1,7 @@
 package br.dh.meli.integratorprojectfresh.controller;
 
 
+import br.dh.meli.integratorprojectfresh.dto.response.AnnoucementGetResponseDTO;
 import br.dh.meli.integratorprojectfresh.model.Announcement;
 import br.dh.meli.integratorprojectfresh.service.IAnnouncementService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,8 @@ public class AnnoucementController {
     private IAnnouncementService service;
 
     @GetMapping("/list")
-    ResponseEntity<Optional<Announcement>> getAnnouncementByAnnouncementId(@RequestParam Long id) {
-        Optional<Announcement> announcementList = service.getAnnouncementByAnnouncementId(id);
+    ResponseEntity<AnnoucementGetResponseDTO> getAnnouncementByAnnouncementId(@RequestParam Long id) {
+        AnnoucementGetResponseDTO announcementList = service.getAnnouncementByAnnouncementId(id);
         return new ResponseEntity<>(announcementList, HttpStatus.OK);
     }
 }
