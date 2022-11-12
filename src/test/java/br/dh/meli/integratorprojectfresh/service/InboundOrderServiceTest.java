@@ -6,11 +6,14 @@ import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderRequestDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPostResponseDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPutResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
+import br.dh.meli.integratorprojectfresh.exception.InvalidParamException;
 import br.dh.meli.integratorprojectfresh.exception.LimitCapacitySectionException;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.model.*;
 import br.dh.meli.integratorprojectfresh.repository.*;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -23,11 +26,12 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertThrows;;
-
-
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertAll;;
 
 @ExtendWith(MockitoExtension.class)
 class InboundOrderServiceTest {
@@ -96,8 +100,8 @@ class InboundOrderServiceTest {
     }
 
     @Test
-    void insert_returnNewInboundOrder_whenBatchStockIsCorrect() {
-
+    @DisplayName("Sucesso ao criar novo pedido de entrada")
+    void SaveMethod_ReturnNewInboundOrder_WhenParamsAreValid() {
         BDDMockito.when(inboundOrderRepo.save(ArgumentMatchers.any()))
                 .thenReturn(inboundOrder);
         BDDMockito.when(batchStockRepo.saveAll(ArgumentMatchers.any()))
@@ -115,7 +119,8 @@ class InboundOrderServiceTest {
     }
 
     @Test
-    void insert_returnException_whenWarehouseNotFound() throws NotFoundException {
+    @DisplayName("Erro ao encontrar warehouse")
+    void SaveMethod_ThrowsException_WhenWarehouseNotFound() throws NotFoundException {
         BDDMockito.given(warehouseRepository.findById(ArgumentMatchers.any())).willThrow(new NotFoundException(Msg.WAREHOUSE_NOT_FOUND));
 
         assertThrows(NotFoundException.class, () -> {
@@ -124,7 +129,8 @@ class InboundOrderServiceTest {
     }
 
     @Test
-    void insert_returnException_whenAnnouncementNotExists() throws NotFoundException {
+    @DisplayName("Erro ao encontrar anuncio")
+    void SaveMethod_ThrowsException_WhenAnnouncementNotExists() throws NotFoundException {
         BDDMockito.when(warehouseRepository.findById(1L))
                 .thenReturn(java.util.Optional.ofNullable(warehouseTest));
 
@@ -136,7 +142,8 @@ class InboundOrderServiceTest {
     }
 
     @Test
-    void insert_returnException_whenSectionIsEmpty() throws NotFoundException {
+    @DisplayName("Erro ao encontrar seção existente")
+    void SaveMethod_ThrowsException_WhenSectionIsEmpty() throws NotFoundException {
         BDDMockito.when(warehouseRepository.findById(1L))
                 .thenReturn(java.util.Optional.ofNullable(warehouseTest));
         BDDMockito.when(announcementRepository.findById(1L))
@@ -149,7 +156,8 @@ class InboundOrderServiceTest {
     }
 
     @Test
-    void insert_returnLimitCapacitySectionExeption_whenFilledInSection() throws LimitCapacitySectionException {
+    @DisplayName("Exceção quando limite da seção é ultrapassado")
+    void SaveMethod_ThrowsExeption_WhenSectionExceededLimit() throws LimitCapacitySectionException {
 
         batchStockList.get(0).setProductQuantity(3000);
 
@@ -164,49 +172,45 @@ class InboundOrderServiceTest {
             service.save(inboundOrderRequestDTO);
         });
     }
-//    @Test
-//    void update_returnUpdatedInboundOrder_whenBatchStockIsCorrect() {
-//
-//        inboundOrderDTO.setOrderNumber(1L);
-//        batchStockList.get(0).setBatchNumber(1L);
-//        batchStockList.get(1).setBatchNumber(2L);
-//
-//        BDDMockito.when(inboundOrderRepo.save(ArgumentMatchers.any()))
-//                .thenReturn(inboundOrder);
-//        BDDMockito.when(batchStockRepo.saveAll(ArgumentMatchers.any()))
-//                .thenReturn(batchStockList2);
-//
-//        InboundOrderPutResponseDTO inboundOrderPutResponseDTO = service.update(inboundOrderRequestDTO);
-//
-//        assertThat(inboundOrderPutResponseDTO).isNotNull();
-//        assertThat(inboundOrderPutResponseDTO.getBatchStock()).isNotNull();
-//        assertThat(inboundOrderPutResponseDTO.getOrderNumber()).isPositive();
-//
-//    }
-//
-//    @Test
-//    void insert_returnInvalidParamException_whenAnnouncementNotValid() {
-//
-//    }
-//
-//    @Test
-//    void insert_returnInvalidParamException_whenWarehouseNotValid() {
-//
-//    }
-//
-////    @Test
-////    void insert_returnInvalidParamException_whenManagerNotBelongToCorrectWarehouse() {
-////
-////    }
-//
-//    @Test
-//    void insert_returnInvalidParamException_whenSectionIsNotValid() {
-//
-//    }
-//
-//    @Test
-//    void insert_returnInvalidParamException_whenSectionNotBelongToCorrectProduct() {
-//
-//    }
+
+    @Test
+    @DisplayName("Testa mensagem da exceção quando warehouse não é encontrada")
+    void IsValidWarehouseMethod_ThrowsException_WhenIdIsInvalid() throws NotFoundException {
+        BDDMockito.when(warehouseRepository.findById(ArgumentMatchers.any())).thenReturn(Optional.empty());
+
+        final String expectedMessage = "Warehouse not found.";
+        final var actualException = assertThrows(
+                NotFoundException.class,
+                () -> service.validIfWarehouseExist(1L));
+            assertAll(
+                    () -> Assertions.assertEquals(expectedMessage, Msg.WAREHOUSE_NOT_FOUND)
+            );
+    }
+    @Test
+    @DisplayName("Testa mensagem da exceção quando anuncio não é encontrada")
+    void IsValidAnnouncementMethod_ThrowsException_WhenIdIsInvalid() throws NotFoundException {
+    BDDMockito.when(announcementRepository.findById(ArgumentMatchers.any())).thenReturn(Optional.empty());
+
+        final String expectedMessage = "Announcement not found.";
+        final var actualException = assertThrows(
+                NotFoundException.class,
+                () -> service.validIfAnnouncementExist(batchStockList));
+                    assertAll(
+                            () -> Assertions.assertEquals(expectedMessage, Msg.ANNOUNCEMENT_NOT_FOUND)
+                    );
+    }
+    @Test
+    @DisplayName("Testa mensagem da exceção quando seção não é encontrada")
+    void IsSectionMethodValid_ThrowsException_WhenIdIsInvalid() throws NotFoundException {
+        BDDMockito.when(sectionRepository.findById(ArgumentMatchers.any())).thenReturn(Optional.empty());
+
+        final String expectedMessage = "Section not found.";
+        final var actualException = assertThrows(
+                NotFoundException.class,
+                () -> service.validSection(1L, batchStockList));
+        assertAll(
+                () -> Assertions.assertEquals(expectedMessage, Msg.SECTION_NOT_FOUND)
+        );
+    }
 
 }
