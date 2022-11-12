@@ -33,7 +33,7 @@ public class InboundOrderService implements IInboundOrderService {
     private final AnnouncementRepository announcementRepo;
 
 
-    void validIfWarehouseExist(long warehouseCode) throws NotFoundException {
+    void validIfWarehouseExist(Long warehouseCode) throws NotFoundException {
         Optional<Warehouse> warehouseOptional = warehouseRepo.findById(warehouseCode);
         if (warehouseOptional.isEmpty()){
             throw new NotFoundException(Msg.WAREHOUSE_NOT_FOUND);
@@ -41,7 +41,7 @@ public class InboundOrderService implements IInboundOrderService {
 
         if (warehouseOptional.get().getManager() == null
                 || !Objects.equals(warehouseOptional.get().getManager().getRole(), "manager")){
-            throw new ManagerNotValidException("Warehouse does not have a valid manager");
+            throw new ManagerNotValidException(Msg.MANAGER_NOT_VALID);
         }
     }
     void validSection(long sectionCode, List<BatchStockDTO>batchStockList) {
@@ -60,11 +60,9 @@ public class InboundOrderService implements IInboundOrderService {
             if (totalSum > sectionMaxCapacity) {
                 throw new LimitCapacitySectionException(Msg.LIMIT_CAPACITY_SECTION);
             }
-            System.out.println(totalSum);
             sectionOptional.get().setUsedCapacity(totalSum);
             sectionRepo.save(sectionOptional.get());
         }
-
     }
 
     @Override
@@ -89,7 +87,7 @@ public class InboundOrderService implements IInboundOrderService {
             }
         }
     }
-    void validIfInboundOrderExist(long orderNumber) throws NotFoundException {
+    void validIfInboundOrderExist(Long orderNumber) throws NotFoundException {
         if (repo.findById(orderNumber).isEmpty()) {
             throw new NotFoundException(Msg.INBOUND_ORDER_NOT_FOUND);
         }
