@@ -1,6 +1,9 @@
 package br.dh.meli.integratorprojectfresh.service;
 
+import br.dh.meli.integratorprojectfresh.dto.request.BatchSotckAnnoucementDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.AnnoucementGetResponseDTO;
+import br.dh.meli.integratorprojectfresh.enums.Msg;
+import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.model.Announcement;
 import br.dh.meli.integratorprojectfresh.repository.AnnouncementRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +27,27 @@ public class AnnouncementService implements IAnnouncementService{
             AnnoucementGetResponseDTO responseDTO = new AnnoucementGetResponseDTO(announcement.get());
             return responseDTO;
         }
-        return  null;
+        else{
+            throw new NotFoundException(Msg.SECTION_NOT_FOUND);
+        }
     }
+
+    @Override
+    public AnnoucementGetResponseDTO findAnnouncementByBatchStockNumber(Long id, String letra) {
+        Optional<Announcement> announcement = repo.findById(id);
+
+        if(announcement.isEmpty()) {
+            throw new NotFoundException(Msg.SECTION_NOT_FOUND);
+        }
+            if(letra.equalsIgnoreCase("Q")|| letra.equalsIgnoreCase("L") || letra.equalsIgnoreCase("V")) {
+                AnnoucementGetResponseDTO responseDTO = new AnnoucementGetResponseDTO(announcement.get(), letra);
+                return responseDTO;
+            }
+            else {
+                throw new NotFoundException(Msg.SECTION_NOT_FOUND);
+            }
+    }
+
+
+
 }

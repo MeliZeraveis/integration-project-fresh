@@ -16,6 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class SectionDTO {
     private Long sectionCode;
 
@@ -23,6 +24,7 @@ public class SectionDTO {
 
     public SectionDTO(Section section, Announcement announcement) {
         this.sectionCode = section.getSectionCode();
-        this.warehouseCode = announcement.getBatchStock().stream().filter(p -> p.getInboundOrder().getWarehouseCode());
+      this.warehouseCode = announcement.getBatchStock().stream().findFirst().get().getInboundOrder().getWarehouse().getWarehouseCode();
+       // this.warehouseCode = announcement.getBatchStock().get(0).getInboundOrder().getWarehouseCode();
     }
 }

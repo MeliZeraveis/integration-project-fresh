@@ -9,4 +9,7 @@ import java.util.Optional;
 
 public interface IAnnouncementService {
     AnnoucementGetResponseDTO getAnnouncementByAnnouncementId(Long id);
+
+    AnnoucementGetResponseDTO  findAnnouncementByBatchStockNumber(Long id, String letra);
+
 }

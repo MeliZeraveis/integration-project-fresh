@@ -23,7 +23,13 @@ public class AnnoucementController {
 
     @GetMapping("/list")
     ResponseEntity<AnnoucementGetResponseDTO> getAnnouncementByAnnouncementId(@RequestParam Long id) {
-        AnnoucementGetResponseDTO announcementList = service.getAnnouncementByAnnouncementId(id);
-        return new ResponseEntity<>(announcementList, HttpStatus.OK);
+        AnnoucementGetResponseDTO announcement = service.getAnnouncementByAnnouncementId(id);
+        return new ResponseEntity<>(announcement, HttpStatus.OK);
+    }
+
+    @GetMapping("/list/batch")
+    ResponseEntity<AnnoucementGetResponseDTO> findAnnouncementByBatchStockNumber(@RequestParam Long id, @RequestParam String letra) {
+        AnnoucementGetResponseDTO announcement= service.findAnnouncementByBatchStockNumber(id, letra);
+        return new ResponseEntity<>(announcement, HttpStatus.OK);
     }
 }
