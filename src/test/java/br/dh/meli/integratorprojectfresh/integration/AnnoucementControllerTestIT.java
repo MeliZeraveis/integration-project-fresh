@@ -9,6 +9,7 @@ import br.dh.meli.integratorprojectfresh.repository.AnnouncementRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.tomcat.util.http.fileupload.impl.SizeException;
 import org.hamcrest.CoreMatchers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -48,32 +49,29 @@ public class AnnoucementControllerTestIT {
     @Autowired
     private ObjectMapper objectMapper;
 
+    Announcement announcement;
 
+    AnnoucementGetResponseDTO annoucementGetResponseDTO;
+
+
+    @BeforeEach
     void setup() {
+//        announcement = new Announcement(1L, "maça", "description")
+//        annoucementGetResponseDTO = new AnnoucementGetResponseDTO(announcement);
 
     }
 
     @Test
     void get_ReturnannoucementGetResponseDTO_Sucess() throws Exception {
-        Announcement announcement = repo.findById(1L).get();
-        System.out.println(announcement);
-//        AnnoucementGetResponseDTO annoucementGetResponseDTO = new AnnoucementGetResponseDTO(announcement);
-//            System.out.println("teste");
-//            System.out.println(annoucementGetResponseDTO.getProductId());
 
             ResultActions response = mockMvc.perform(get("/api/v1/fresh-products/list?id=1")
-                            .contentType(MediaType.APPLICATION_JSON))
-                    .andDo(print());
+                            .contentType(MediaType.APPLICATION_JSON));
 
 //            Long teste = announcement.getSection().getInboundOrder().get(0).getWarehouseCode();
 //            Long teste2 = announcement.getSection().getSectionCode();
 
-
             response.andExpect(status().isOk())
-                    .andExpect(jsonPath("$.productId", CoreMatchers.is(announcement.getAnnouncementId().intValue())));
-           //.andExpect(jsonPath("$.section", CoreMatchers());
-
-
+                    .andExpect(jsonPath("$.productId", CoreMatchers.is(1)));
 
     }
 
