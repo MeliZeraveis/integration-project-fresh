@@ -23,13 +23,12 @@ public class AnnouncementService implements IAnnouncementService{
     public AnnoucementGetResponseDTO getAnnouncementByAnnouncementId(Long id) {
 
         Optional<Announcement> announcement = repo.findById(id);
-        if(announcement.isPresent()) {
-            AnnoucementGetResponseDTO responseDTO = new AnnoucementGetResponseDTO(announcement.get());
-            return responseDTO;
-        }
-        else{
+        if(announcement.isEmpty()) {
             throw new NotFoundException(Msg.SECTION_NOT_FOUND);
+
         }
+        AnnoucementGetResponseDTO responseDTO = new AnnoucementGetResponseDTO(announcement.get());
+        return responseDTO;
     }
 
     @Override

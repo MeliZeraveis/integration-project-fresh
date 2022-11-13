@@ -5,6 +5,8 @@ import br.dh.meli.integratorprojectfresh.dto.request.BatchSotckAnnoucementDTO;
 import br.dh.meli.integratorprojectfresh.dto.request.BatchStockDTO;
 import br.dh.meli.integratorprojectfresh.dto.request.SectionDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.AnnoucementGetResponseDTO;
+import br.dh.meli.integratorprojectfresh.enums.ExceptionType;
+import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.repository.AnnouncementRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.tomcat.util.http.fileupload.impl.SizeException;
@@ -64,21 +66,33 @@ public class AnnoucementControllerTestIT {
     @Test
     void get_ReturnannoucementGetResponseDTO_Sucess() throws Exception {
 
-            ResultActions response = mockMvc.perform(get("/api/v1/fresh-products/list?id=1")
-                            .contentType(MediaType.APPLICATION_JSON));
-
-//            Long teste = announcement.getSection().getInboundOrder().get(0).getWarehouseCode();
-//            Long teste2 = announcement.getSection().getSectionCode();
+            ResultActions response = mockMvc
+                    .perform(get("/api/v1/fresh-products/list")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .param("id", "1"))
+                    .andDo(print());
 
             response.andExpect(status().isOk())
-                    .andExpect(jsonPath("$.productId", CoreMatchers.is(1)));
+                   .andExpect(jsonPath("$.productId", CoreMatchers.is(1)));
+
+    }
+
+    @Test
+    void get_ReturnExceptionNotFound_WhenProductNotExist() throws Exception {
+
+        ResultActions response = mockMvc
+                .perform(get("/api/v1/fresh-products/list")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("id", "77"))
+                .andDo(print());
+
+        response.andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.OBJECT_NOT_FOUND.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.SECTION_NOT_FOUND)))
+                .andExpect(jsonPath("$.status", CoreMatchers.is(HttpStatus.NOT_FOUND.value())));
 
     }
 
 
-//    @GetMapping("/list")
-//    ResponseEntity<AnnoucementGetResponseDTO> getAnnouncementByAnnouncementId(@RequestParam Long id) {
-//        AnnoucementGetResponseDTO announcementList = service.getAnnouncementByAnnouncementId(id);
-//        return new ResponseEntity<>(announcementList, HttpStatus.OK);
-//    }
+
 }
