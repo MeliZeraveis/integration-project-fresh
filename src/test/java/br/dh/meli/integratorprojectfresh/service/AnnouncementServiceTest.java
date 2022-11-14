@@ -6,12 +6,14 @@ import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.model.Announcement;
 import br.dh.meli.integratorprojectfresh.model.BatchStock;
+import br.dh.meli.integratorprojectfresh.model.Section;
 import br.dh.meli.integratorprojectfresh.model.User;
 import br.dh.meli.integratorprojectfresh.repository.AnnouncementRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -34,7 +36,7 @@ class AnnouncementServiceTest {
 
     AnnoucementGetResponseDTO responseDTO;
 
-    List<BatchSotckAnnoucementDTO> listBatchStock;
+    List<BatchSotckAnnoucementDTO> batchStockList;
 
     Announcement announcement;
 
@@ -42,24 +44,28 @@ class AnnouncementServiceTest {
 
     SectionDTO sectionDTO;
 
+    Section section;
+
     @BeforeEach
     void setUp() {
-        User user = new User(1L, "teste", "1234", "teste@email.com", "seller");
-        Announcement announcement = new Announcement(1L, "Camisa", "Camisa branca", 4L, BigDecimal.valueOf(100.0), 1L, null, new ArrayList<>(), null, new ArrayList<>());
         LocalDate dueDate1 = LocalDate.parse("2021-10-10");
         LocalDate dueDate2 = LocalDate.parse("2021-11-11");
-        SectionDTO sectionDTO = new SectionDTO(1L, 1L);
+
+        User user = new User(1L, "teste", "1234", "teste@email.com", "seller");
+        section = new Section(1L, "Fresh", 50.0f, 20.0f, null, null);
+        announcement = new Announcement(1L, "Camisa", "Camisa branca", 4L, BigDecimal.valueOf(100.0), 1L, section, new ArrayList<>(), null, new ArrayList<>());
+        sectionDTO = new SectionDTO(1L, 1L);
         BatchSotckAnnoucementDTO batchStockDTO1 = new BatchSotckAnnoucementDTO(1L, 10, dueDate1);
         BatchSotckAnnoucementDTO batchStockDTO2 = new BatchSotckAnnoucementDTO(2L, 12, dueDate2);
-        listBatchStock = List.of(batchStockDTO1, batchStockDTO2);
-        AnnoucementGetResponseDTO responseDTO = new AnnoucementGetResponseDTO(sectionDTO, 1L, listBatchStock);
+        batchStockList = List.of(batchStockDTO1, batchStockDTO2);
+        responseDTO = new AnnoucementGetResponseDTO(sectionDTO, 1L, batchStockList);
 
     }
 
     @Test
     void getAnnouncementByAnnouncementId() {
         BDDMockito.when(repository.findById(1L)).thenReturn(java.util.Optional.ofNullable(announcement));
-        AnnoucementGetResponseDTO responseDTO = service.getAnnouncementByAnnouncementId(1L);
+        responseDTO = service.getAnnouncementByAnnouncementId(1L);
         assertThat(responseDTO).isNotNull();
 
     }
@@ -70,8 +76,7 @@ class AnnouncementServiceTest {
 
     @Test
     void GetMethod_ThrowsException_WhenAnnoucementNotFound() {
-       // BDDMockito.given(repository.findById(1L)).willThrow(new NotFoundException(Msg.SECTION_NOT_FOUND));
-        //assertThrows(NotFoundException.class, () -> service.getAnnouncementByAnnouncementId(1L));
+
         final var actualException = assertThrows(
                 NotFoundException.class,
                 () -> service.getAnnouncementByAnnouncementId(1L));
