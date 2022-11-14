@@ -93,6 +93,36 @@ public class AnnoucementControllerTestIT {
 
     }
 
+    @Test
+    void get_ReturnannoucementGetResponseDTOByLetra_Sucess() throws Exception {
 
+        ResultActions response = mockMvc
+                .perform(get("/api/v1/fresh-products/list/batch")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("id", "1")
+                        .param("letra", "v"))
+                .andDo(print());
+
+        response.andExpect(status().isOk())
+                .andExpect(jsonPath("$.productId", CoreMatchers.is(1)));
+
+    }
+
+    @Test
+    void get_ReturnExceptionNotFound_WhenProductByLetraNotExist() throws Exception {
+
+        ResultActions response = mockMvc
+                .perform(get("/api/v1/fresh-products/list/batch")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("id", "1")
+                        .param("letra", "a"))
+                .andDo(print());
+
+        response.andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.OBJECT_NOT_FOUND.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.SECTION_NOT_FOUND)))
+                .andExpect(jsonPath("$.status", CoreMatchers.is(HttpStatus.NOT_FOUND.value())));
+
+    }
 
 }
