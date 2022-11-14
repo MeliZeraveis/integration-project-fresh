@@ -58,4 +58,5 @@ public class Announcement {
     @JsonIgnore
     @JsonIgnoreProperties("announcement")
     private List<PurchaseOrderItems> purchaseOrderItems;
+
 }
