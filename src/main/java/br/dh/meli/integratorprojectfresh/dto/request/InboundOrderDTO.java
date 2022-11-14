@@ -1,6 +1,8 @@
 package br.dh.meli.integratorprojectfresh.dto.request;
 
 import br.dh.meli.integratorprojectfresh.enums.Msg;
+import br.dh.meli.integratorprojectfresh.model.BatchStock;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,6 +19,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class InboundOrderDTO {
 
     private Long orderNumber;
@@ -40,4 +43,13 @@ public class InboundOrderDTO {
         this.sectionCode = inboundOrder.getSectionCode();
         this.warehouseCode = inboundOrder.getWarehouseCode();
     }
+
+    public InboundOrderDTO(LocalDate orderDate, long sectionCode, long warehouseCode, List<BatchStockDTO> batchStockList) {
+        this.orderDate = orderDate;
+        this.sectionCode = sectionCode;
+        this.warehouseCode = warehouseCode;
+        this.batchStock = batchStockList;
+    }
+
+
 }
