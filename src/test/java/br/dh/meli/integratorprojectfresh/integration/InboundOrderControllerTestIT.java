@@ -122,7 +122,7 @@ public class InboundOrderControllerTestIT {
         batchStockList.get(1).setVolume((float) 10);
         ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+                ´.content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
 
         response.andExpect(status().isCreated());
 
