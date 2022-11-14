@@ -159,17 +159,14 @@ class InboundOrderServiceTest {
     @DisplayName("Exceção quando limite da seção é ultrapassado")
     void SaveMethod_ThrowsExeption_WhenSectionExceededLimit() throws LimitCapacitySectionException {
 
-        batchStockList.get(0).setProductQuantity(3000);
+        batchStockList.get(0).setVolume(3000f);
+        batchStockList.get(1).setVolume(5000f);
 
-        BDDMockito.when(warehouseRepository.findById(1L))
-                .thenReturn(java.util.Optional.ofNullable(warehouseTest));
         BDDMockito.when(sectionRepository.findById(1L))
                 .thenReturn(java.util.Optional.ofNullable(sectionTest));
-        BDDMockito.when(announcementRepository.findById(1L))
-                .thenReturn(java.util.Optional.ofNullable(announcementTest));
 
         assertThrows(LimitCapacitySectionException.class, () -> {
-            service.save(inboundOrderRequestDTO);
+            service.validSection(1L, batchStockList);
         });
     }
 
