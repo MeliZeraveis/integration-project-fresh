@@ -34,7 +34,7 @@ public class InboundOrder {
     @Column(name = "warehouse_code", nullable = false )
     private Long warehouseCode;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER) //
     @JoinColumn(name = "warehouse_code", insertable = false, updatable = false)
     @JsonIgnoreProperties("inboundOrder")
     private Warehouse warehouse;

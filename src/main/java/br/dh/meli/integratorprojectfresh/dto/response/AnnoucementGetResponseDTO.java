@@ -47,8 +47,5 @@ public class AnnoucementGetResponseDTO {
         else if(letra.equalsIgnoreCase("V")) {
             this.batchStock = announcement.getBatchStock().stream().sorted((p1, p2) -> p1.getDueDate().compareTo(p2.getDueDate())).map(BatchSotckAnnoucementDTO::new).collect(Collectors.toList());
         }
-        else {
-            this.batchStock = announcement.getBatchStock().stream().map(BatchSotckAnnoucementDTO::new).collect(Collectors.toList());
-        }
     }
 }

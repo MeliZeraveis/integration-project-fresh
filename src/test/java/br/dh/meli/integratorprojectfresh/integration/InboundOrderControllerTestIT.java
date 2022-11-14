@@ -7,10 +7,12 @@ import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderRequestDTO;
 
 import br.dh.meli.integratorprojectfresh.enums.ExceptionType;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
-import br.dh.meli.integratorprojectfresh.model.BatchStock;
-import br.dh.meli.integratorprojectfresh.model.InboundOrder;
+import br.dh.meli.integratorprojectfresh.enums.Roles;
+import br.dh.meli.integratorprojectfresh.model.*;
 import br.dh.meli.integratorprojectfresh.repository.BatchStockRepository;
 import br.dh.meli.integratorprojectfresh.repository.InboundOrderRepository;
+import br.dh.meli.integratorprojectfresh.repository.UserRepository;
+import br.dh.meli.integratorprojectfresh.repository.WarehouseRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.hamcrest.CoreMatchers;
@@ -35,6 +37,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 ;
@@ -70,7 +73,11 @@ public class InboundOrderControllerTestIT {
 
     private InboundOrderDTO inboundOrderDTO;
 
-    private List<BatchStockDTO> batchStockList;
+     private List<BatchStockDTO> batchStockList;
+
+    private Warehouse warehouse;
+
+    private  List<InboundOrder> inboundOrderList = new ArrayList<>();
 
     @BeforeEach
     void setup() {
@@ -98,10 +105,11 @@ public class InboundOrderControllerTestIT {
 
         InboundOrder inboundOrder = new InboundOrder(inboundOrderDTO, 1L);
 
+       inboundOrderList.add(inboundOrder);
+
         List<BatchStock> batchStockList1 = batchStockList.stream()
                 .map(a -> new BatchStock(a, inboundOrder.getOrderNumber()))
                 .collect(Collectors.toList());
-
 
         inboundOrderRepository.save(inboundOrder);
         batchStockRepository.saveAll(batchStockList1);
@@ -169,8 +177,8 @@ public class InboundOrderControllerTestIT {
 
         response.andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.PARAMETER_NOT_VALID.name())))
-               .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
-               .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.orderDate")))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.FIELD_NOT_FOUND)))
+                .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.orderDate")))
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.DATE_REQUIRED)));
     }
 
@@ -436,7 +444,7 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.PRICE_REQUIRED)));
     }
 
-  //PUT - UPDATE --------------------------------
+    //PUT - UPDATE --------------------------------
 
     @Test
     void update_ReturnExceptionFieldOrderDateNull_Fail() throws Exception {
@@ -714,5 +722,42 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].price")))
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.PRICE_REQUIRED)));
     }
+
+    //Regras de negocio
+
+
+    //save
+
+    @Test
+    void SaveValidIfWarehouseExist_ReturnExceptionWarehouseNotExist_Fail() throws Exception {
+        inboundOrderDTO.setWarehouseCode(-1l);
+
+        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isNotFound())
+              .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.OBJECT_NOT_FOUND.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.WAREHOUSE_NOT_FOUND)));
+    }
+
+    @Test
+    void SaveValidIfWarehouseExist_ReturnExceptionManagerNull_Fail() throws Exception {
+
+              inboundOrderDTO.setWarehouseCode(4l);
+
+        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.title", CoreMatchers.is("Manager not valid")))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.MANAGER_NOT_VALID)));
+    }
+
+
+    //update
+
+
 
 }
