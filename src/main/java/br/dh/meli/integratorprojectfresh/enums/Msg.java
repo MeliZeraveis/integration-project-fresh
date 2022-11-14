@@ -37,4 +37,6 @@ public enum Msg {
   public  static  final String ANNOUNCEMENT_NOT_FOUND = "Announcement not found.";
 
   public  static  final String INSERT_BATCH_SECTION_INCORRET = "Insert batch in wrong section";
+
+  public static final String MANAGER_NOT_VALID = "Warehouse does not have a valid manager.";
 }

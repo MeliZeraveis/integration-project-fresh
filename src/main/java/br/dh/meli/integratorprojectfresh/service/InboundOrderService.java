@@ -6,14 +6,13 @@ import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPutResponseDTO
 import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderRequestDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPostResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
-import br.dh.meli.integratorprojectfresh.exception.LimitCapacitySectionExeption;
+import br.dh.meli.integratorprojectfresh.exception.LimitCapacitySectionException;
 import br.dh.meli.integratorprojectfresh.exception.ManagerNotValidException;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.exception.SectionTypeException;
 import br.dh.meli.integratorprojectfresh.model.*;
 import br.dh.meli.integratorprojectfresh.repository.*;
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,7 +33,7 @@ public class InboundOrderService implements IInboundOrderService {
     private final AnnouncementRepository announcementRepo;
 
 
-    void validIfWarehouseExist(long warehouseCode) throws NotFoundException {
+    void validIfWarehouseExist(Long warehouseCode) throws NotFoundException {
         Optional<Warehouse> warehouseOptional = warehouseRepo.findById(warehouseCode);
         if (warehouseOptional.isEmpty()){
             throw new NotFoundException(Msg.WAREHOUSE_NOT_FOUND);
@@ -42,7 +41,7 @@ public class InboundOrderService implements IInboundOrderService {
 
         if (warehouseOptional.get().getManager() == null
                 || !Objects.equals(warehouseOptional.get().getManager().getRole(), "manager")){
-            throw new ManagerNotValidException("Warehouse does not have a valid manager");
+            throw new ManagerNotValidException(Msg.MANAGER_NOT_VALID);
         }
     }
     void validSection(long sectionCode, List<BatchStockDTO>batchStockList) {
@@ -59,12 +58,11 @@ public class InboundOrderService implements IInboundOrderService {
             }
             float totalSum = sectionCapacityUsed + b.getVolume();
             if (totalSum > sectionMaxCapacity) {
-                throw new LimitCapacitySectionExeption(Msg.LIMIT_CAPACITY_SECTION);
+                throw new LimitCapacitySectionException(Msg.LIMIT_CAPACITY_SECTION);
             }
             sectionOptional.get().setUsedCapacity(totalSum);
             sectionRepo.save(sectionOptional.get());
         }
-
     }
 
     @Override
@@ -89,7 +87,7 @@ public class InboundOrderService implements IInboundOrderService {
             }
         }
     }
-    void validIfInboundOrderExist(long orderNumber) throws NotFoundException {
+    void validIfInboundOrderExist(Long orderNumber) throws NotFoundException {
         if (repo.findById(orderNumber).isEmpty()) {
             throw new NotFoundException(Msg.INBOUND_ORDER_NOT_FOUND);
         }
