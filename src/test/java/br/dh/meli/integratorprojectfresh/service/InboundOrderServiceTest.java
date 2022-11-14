@@ -322,9 +322,12 @@ class InboundOrderServiceTest {
         BDDMockito.when(batchStockRepo.findById(1L))
                 .thenReturn(Optional.ofNullable(batchStockList2.get(0)));
 
-        assertThrows(LimitCapacitySectionException.class, () -> {
-            service.validSectionBatchStockUpdate(sectionTest, batchStockList);
-        });
+        final var actualException = assertThrows(
+                LimitCapacitySectionException.class,
+                () -> service.validSectionBatchStockUpdate(sectionTest, batchStockList));
+        assertAll(
+                () -> Assertions.assertEquals(Msg.LIMIT_CAPACITY_SECTION, actualException.getMessage())
+        );
     }
 
     @Test
@@ -343,7 +346,5 @@ class InboundOrderServiceTest {
                 () -> Assertions.assertEquals(Msg.SECTION_NOT_FOUND, actualException.getMessage())
         );
     }
-
-
 }
 
