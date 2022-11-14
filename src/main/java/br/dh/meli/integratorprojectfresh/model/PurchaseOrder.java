@@ -26,8 +26,7 @@ public class PurchaseOrder {
   private LocalDateTime date;
 
   @Column(name = "status", nullable = false)
-  @Enumerated(EnumType.STRING)
-  private OrderStatus status;
+  private String status;
 
   @Column(name = "total", nullable = false)
   private BigDecimal total;
@@ -46,7 +45,7 @@ public class PurchaseOrder {
 
   public PurchaseOrder(LocalDateTime date, OrderStatus status, BigDecimal total, Long buyerId) {
     this.date = date;
-    this.status = status;
+    this.status = status.name();
     this.total = total;
     this.buyerId = buyerId;
   }
@@ -60,5 +59,18 @@ public class PurchaseOrder {
     return orderItem.stream()
       .map((item) -> item.getProductPrice().multiply(BigDecimal.valueOf(item.getProductQuantity())))
       .reduce(BigDecimal.ZERO, BigDecimal::add);
+  }
+
+  public OrderStatus getStatus() {
+    try {
+      return OrderStatus.valueOf(this.status);
+    } catch (IllegalArgumentException e) {
+      System.out.println("*** IllegalArgumentException*** Invalid status");
+      return null;
+    }
+  }
+
+  public void setStatus(OrderStatus status) {
+    this.status = status.name();
   }
 }

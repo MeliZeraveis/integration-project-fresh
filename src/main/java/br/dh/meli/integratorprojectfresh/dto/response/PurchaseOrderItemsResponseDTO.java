@@ -1,11 +1,17 @@
 package br.dh.meli.integratorprojectfresh.dto.response;
 
 import br.dh.meli.integratorprojectfresh.model.PurchaseOrderItems;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * PurchaseOrderItemsDTO
  * Format the order items response to the client
  */
+@Getter
+@Setter
+@NoArgsConstructor
 public class PurchaseOrderItemsResponseDTO {
     private Long productId;
     private Integer quantity;
