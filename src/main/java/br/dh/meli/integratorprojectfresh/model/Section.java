@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -39,4 +40,13 @@ public class Section {
     @OneToMany(mappedBy = "section")
     @JsonIgnoreProperties(value = {"section", "batchStock", "warehouse" })
     private List<InboundOrder> inboundOrder;
+
+    public <E> Section(long sectionCode, String type, float maxCapacity, float usedCapacity, ArrayList<Announcement> listAnnoucement) {
+    this.sectionCode = sectionCode;
+    this.type = type;
+    this.maxCapacity = maxCapacity;
+    this.usedCapacity = usedCapacity;
+    this.announcement = listAnnoucement;
+
+    }
 }

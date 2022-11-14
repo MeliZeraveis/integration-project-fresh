@@ -83,5 +83,4 @@ public class BatchStockDTO {
         this.dueDate = dueDate;
         this.price = price;
     }
-
 }
