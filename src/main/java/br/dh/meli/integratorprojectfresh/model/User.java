@@ -31,8 +31,7 @@ public class User {
     private String email;
 
     @Column(name = "role", nullable = false, length = 30)
-    @Enumerated(EnumType.STRING)
-    private Roles role;
+    private String role;
 
     @OneToOne(mappedBy = "manager")
     @JsonIgnoreProperties("user")
