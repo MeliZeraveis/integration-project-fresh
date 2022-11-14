@@ -34,5 +34,9 @@ public class Section {
 
     @OneToMany(mappedBy = "section")
     @JsonIgnoreProperties("section")
+    private List<Announcement> announcement;
+
+    @OneToMany(mappedBy = "section")
+    @JsonIgnoreProperties(value = {"section", "batchStock", "warehouse" })
     private List<InboundOrder> inboundOrder;
 }

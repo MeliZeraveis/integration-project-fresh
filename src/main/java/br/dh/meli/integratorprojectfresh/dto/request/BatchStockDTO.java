@@ -33,7 +33,7 @@ public class BatchStockDTO {
 
     @NotNull(message = Msg.QUANTITY_REQUIRED)
     @Min(value = 1, message = Msg.QUANTITY_MIN_VALUE)
-    private int productQuantity;
+    private Integer productQuantity;
 
     @NotNull(message = Msg.DATE_REQUIRED)
     @PastOrPresent(message = Msg.DATE_PAST_OR_PRESENT)
@@ -73,7 +73,8 @@ public class BatchStockDTO {
     }
 
 
-    public BatchStockDTO(String sectionType, int productQuantity, LocalDate manufacturingDate, LocalDateTime manufacturingTime, float volume, LocalDate dueDate, BigDecimal price) {
+    public BatchStockDTO(Long announcementId, String sectionType, int productQuantity, LocalDate manufacturingDate, LocalDateTime manufacturingTime, float volume, LocalDate dueDate, BigDecimal price) {
+        this.announcementId = announcementId;
         this.sectionType = sectionType;
         this.productQuantity = productQuantity;
         this.manufacturingDate = manufacturingDate;
@@ -82,4 +83,5 @@ public class BatchStockDTO {
         this.dueDate = dueDate;
         this.price = price;
     }
+
 }

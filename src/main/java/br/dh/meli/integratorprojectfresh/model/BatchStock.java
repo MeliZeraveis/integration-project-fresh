@@ -38,7 +38,7 @@ public class BatchStock {
         private LocalDate manufacturingDate;
 
         @Column(name = "manufacturing_time", nullable = false)
-        @JsonFormat(pattern = "HH:mm:ss")
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime manufacturingTime;
 
         @Column(name = "volume", nullable = false)
@@ -53,12 +53,14 @@ public class BatchStock {
         @Column(name = "order_number_id", nullable = false)
         private Long orderNumberId;
 
-        @ManyToOne(fetch = FetchType.LAZY)
+        @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "order_number_id", insertable = false, updatable = false)
-        @JsonIgnoreProperties("batchStock")
+        @JsonIgnore
+        @JsonIgnoreProperties(value = {"batchStock", "warehouse"})
         private InboundOrder inboundOrder;
 
         @ManyToOne(fetch = FetchType.LAZY)
+        @JsonIgnore
         @JoinColumn(name = "announcement_id", insertable = false, updatable = false)
         @JsonIgnoreProperties("batchStock")
         private Announcement announcement;

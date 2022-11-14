@@ -56,7 +56,7 @@ public class InboundOrderService implements IInboundOrderService {
             if(!Objects.equals(sectionOptional.get().getType(), b.getSectionType())){
                 throw new SectionTypeException(Msg.INSERT_BATCH_SECTION_INCORRET);
             }
-            float totalSum = sectionCapacityUsed + b.getProductQuantity();
+            float totalSum = sectionCapacityUsed + b.getVolume();
             if (totalSum > sectionMaxCapacity) {
                 throw new LimitCapacitySectionException(Msg.LIMIT_CAPACITY_SECTION);
             }

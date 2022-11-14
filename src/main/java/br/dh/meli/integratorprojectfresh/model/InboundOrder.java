@@ -34,17 +34,18 @@ public class InboundOrder {
     @Column(name = "warehouse_code", nullable = false )
     private Long warehouseCode;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "warehouse_code", insertable = false, updatable = false)
     @JsonIgnoreProperties("inboundOrder")
     private Warehouse warehouse;
 
 
     @OneToMany(mappedBy = "inboundOrder")
+
     @JsonIgnoreProperties("inboundOrder")
     private List<BatchStock> batchStock;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "section_code", insertable = false, updatable = false)
     @JsonIgnoreProperties("inboundOrder")
     private Section section;
