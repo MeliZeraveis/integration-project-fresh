@@ -31,7 +31,7 @@ public class BatchStockService implements IBatchStockService {
 
     @Override
     public List<BatchStockGetResponseDTO> findBatchStockByBatchStockNumber(Integer numberOfDays, String category) {
-        List<BatchStock> batchStock = repo.findAllByDueDateAndCategory(LocalDate.now().plusDays(numberOfDays), category);
+        List<BatchStock> batchStock = repo.findAllByDueDateBetweenAndSectionType(LocalDate.now(),LocalDate.now().plusDays(numberOfDays), category);
         if(batchStock.isEmpty()) {
             throw new NotFoundException(Msg.SECTION_NOT_FOUND);
         }
