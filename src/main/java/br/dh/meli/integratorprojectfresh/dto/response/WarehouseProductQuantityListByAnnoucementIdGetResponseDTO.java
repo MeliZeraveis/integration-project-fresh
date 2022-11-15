@@ -1,7 +1,6 @@
 package br.dh.meli.integratorprojectfresh.dto.response;
 
 
-import br.dh.meli.integratorprojectfresh.dto.request.BatchStockQuantityDTO;
 import br.dh.meli.integratorprojectfresh.model.Announcement;
 import br.dh.meli.integratorprojectfresh.model.BatchStock;
 import lombok.Getter;
@@ -18,15 +17,12 @@ import java.util.stream.Collectors;
 public class WarehouseProductQuantityListByAnnoucementIdGetResponseDTO {
 
     public Long productId;
-    public List<BatchStockQuantityDTO> batchStockList;
-
-
-
+    public List<BatchStockQuantityResponseDTO> warehouses;
 
     public WarehouseProductQuantityListByAnnoucementIdGetResponseDTO(Optional<Announcement> announcement, List<BatchStock> batchStockList) {
-        this.productId = announcement.get().getAnnouncementId();
-        this.batchStockList = batchStockList.stream()
-                .map(BatchStockQuantityDTO::new)
+        this.warehouses = batchStockList.stream()
+                .map(BatchStockQuantityResponseDTO::new)
                 .collect(Collectors.toList());
+        this.productId = announcement.get().getAnnouncementId();
     }
 }

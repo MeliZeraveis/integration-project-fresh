@@ -1,4 +1,4 @@
-package br.dh.meli.integratorprojectfresh.dto.request;
+package br.dh.meli.integratorprojectfresh.dto.response;
 
 import br.dh.meli.integratorprojectfresh.model.BatchStock;
 import lombok.Getter;
@@ -8,13 +8,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class BatchStockQuantityDTO {
+public class BatchStockQuantityResponseDTO {
 
-    private int productQuantity;
     private Long warehouseCode;
+    private int productQuantity;
 
-    public BatchStockQuantityDTO(BatchStock batchStock) {
-        this.productQuantity = batchStock.getProductQuantity();
+    public BatchStockQuantityResponseDTO(BatchStock batchStock) {
         this.warehouseCode = batchStock.getInboundOrder().getWarehouseCode();
+        this.productQuantity = batchStock.getProductQuantity();
     }
 }
