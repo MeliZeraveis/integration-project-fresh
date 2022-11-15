@@ -20,12 +20,11 @@ public class BatchStockService implements IBatchStockService {
     private final BatchStockRepository repo;
     @Override
     public List<BatchStockGetResponseDTO> getBatchStockByBatchStockId(Integer numberOfDays, String section) {
-        List<BatchStock> batchStock = repo.findAllByDueDateAndSectionType(LocalDate.now().plusDays(numberOfDays), section);
+        List<BatchStock> batchStock = repo.findAllByDueDateBetweenAndSectionType(LocalDate.now(),LocalDate.now().plusDays(numberOfDays), section);
         if(batchStock.isEmpty()) {
             throw new NotFoundException(Msg.BATCH_NOT_FOUND);
         }
-        List<BatchStockGetResponseDTO> responseDTO = batchStock.stream().map(BatchStockGetResponseDTO::new).collect(Collectors.toList());
-        return responseDTO;
+        return batchStock.stream().map(BatchStockGetResponseDTO::new).collect(Collectors.toList());
 
     }
 
