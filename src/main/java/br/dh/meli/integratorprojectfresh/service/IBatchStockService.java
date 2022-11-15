@@ -7,6 +7,6 @@ import java.util.List;
 public interface IBatchStockService {
     List<BatchStockGetResponseDTO> getBatchStockByBatchStockId(Integer numberOfDays, String section);
 
-    BatchStockGetResponseDTO findBatchStockByBatchStockNumber(Integer numberOfDays, String category);
+    List<BatchStockGetResponseDTO> findBatchStockByBatchStockNumber(Integer numberOfDays, String category);
 
 }

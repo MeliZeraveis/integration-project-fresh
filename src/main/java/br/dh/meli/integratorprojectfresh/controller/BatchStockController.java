@@ -25,8 +25,8 @@ public class BatchStockController {
 
     @GetMapping("/list")
     @ResponseBody
-    public ResponseEntity<BatchStockGetResponseDTO> findBatchStockByBatchStockNumber(@RequestParam Integer numberOfDays, @RequestParam String category) {
-         BatchStockGetResponseDTO batchStock = service.findBatchStockByBatchStockNumber(numberOfDays, category);
+    public ResponseEntity<List<BatchStockGetResponseDTO>> findBatchStockByBatchStockNumber(@RequestParam Integer numberOfDays, @RequestParam String category) {
+         List<BatchStockGetResponseDTO> batchStock = service.findBatchStockByBatchStockNumber(numberOfDays, category);
          return new ResponseEntity<>(batchStock, HttpStatus.OK);
     }
 }
