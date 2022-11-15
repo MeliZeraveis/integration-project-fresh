@@ -18,7 +18,7 @@ import java.util.List;
  * Controller to manage the Purchase Order requests
  */
 @RestController
-@RequestMapping("/api/v1/fresh-product")
+@RequestMapping(Routes.BASE_ROUTE)
 public class PurchaseOrderController {
   @Autowired
   private PurchaseOrderService purchaseOrderService;
@@ -31,7 +31,7 @@ public class PurchaseOrderController {
    * @param id - the id of the Purchase Order
    * @return ResponseEntity<List<PurchaseOrderItemsResponseDTO>> - the Purchase Order items
    */
-  @GetMapping("/orders")
+  @GetMapping(Routes.PURCHASE_ORDER)
   public ResponseEntity<List<PurchaseOrderItemsResponseDTO>> read(Long id) {
     return new ResponseEntity<>(purchaseOrderService.read(id), HttpStatus.OK);
   }
