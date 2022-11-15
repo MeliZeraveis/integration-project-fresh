@@ -102,7 +102,7 @@ public class AnnoucementControllerTestIT {
                 .perform(get("/api/v1/fresh-products/list/batch")
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("id", "1")
-                        .param("letra", "v"))
+                        .param("letra", "V"))
                 .andDo(print());
 
         response.andExpect(status().isOk())

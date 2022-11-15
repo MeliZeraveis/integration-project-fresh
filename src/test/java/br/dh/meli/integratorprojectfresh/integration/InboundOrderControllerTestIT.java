@@ -8,11 +8,9 @@ import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderRequestDTO;
 import br.dh.meli.integratorprojectfresh.enums.ExceptionType;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.enums.Roles;
+import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.model.*;
-import br.dh.meli.integratorprojectfresh.repository.BatchStockRepository;
-import br.dh.meli.integratorprojectfresh.repository.InboundOrderRepository;
-import br.dh.meli.integratorprojectfresh.repository.UserRepository;
-import br.dh.meli.integratorprojectfresh.repository.WarehouseRepository;
+import br.dh.meli.integratorprojectfresh.repository.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.hamcrest.CoreMatchers;
@@ -64,6 +62,12 @@ public class InboundOrderControllerTestIT {
     private BatchStockRepository batchStockRepository;
 
     @Autowired
+    private SectionRepository sectionRepository;
+
+    @Autowired
+    private AnnouncementRepository announcementRepository;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     @Autowired
@@ -74,8 +78,6 @@ public class InboundOrderControllerTestIT {
     private InboundOrderDTO inboundOrderDTO;
 
      private List<BatchStockDTO> batchStockList;
-
-    private Warehouse warehouse;
 
     private  List<InboundOrder> inboundOrderList = new ArrayList<>();
 
@@ -111,8 +113,11 @@ public class InboundOrderControllerTestIT {
                 .map(a -> new BatchStock(a, inboundOrder.getOrderNumber()))
                 .collect(Collectors.toList());
 
+        List<Announcement> announcementList = new ArrayList<>();
+
         inboundOrderRepository.save(inboundOrder);
         batchStockRepository.saveAll(batchStockList1);
+
 
     }
 
@@ -755,9 +760,202 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.MANAGER_NOT_VALID)));
     }
 
+    @Test
+    void SavevalidSection_ReturnExceptionWarehouseNotExist_Fail() throws Exception {
+
+        inboundOrderDTO.setSectionCode(500l);
+
+        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.OBJECT_NOT_FOUND.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.SECTION_NOT_FOUND)));
+    }
+
+    @Test
+    void SaveValidSection_ReturnExceptionSectionTypeIncorret_Fail() throws Exception {
+
+        Section section = sectionRepository.findById(1l).get();
+
+        String novaPalavra = section.getType() + "abrobinha";
+
+        inboundOrderDTO.getBatchStock().get(0).setSectionType(novaPalavra);
+
+        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.title", CoreMatchers.is("Section Type incorrect")))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.INSERT_BATCH_SECTION_INCORRET)));
+    }
+
+    @Test
+    void SaveValidSection_ReturnExceptionCapacityLimit_Fail() throws Exception {
+          Section section = sectionRepository.findById(1l).get();
+
+          float teste = section.getMaxCapacity() + section.getUsedCapacity();
+
+        inboundOrderDTO.getBatchStock().get(0).setVolume(teste);
+
+        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.title", CoreMatchers.is("Action not allowed")))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.LIMIT_CAPACITY_SECTION)));
+    }
 
     //update
 
+    @Test
+    void Update_ReturnExceptionNotFound_whenInboundOrderNotExist_Fail() throws Exception {
+
+        inboundOrderDTO.setOrderNumber(77L);
+
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.OBJECT_NOT_FOUND.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.INBOUND_ORDER_NOT_FOUND)));
+
+    }
+
+    @Test
+    void Update_ReturnExceptionNotFound_whenBatchNotExist_Fail() throws Exception {
+
+        inboundOrderDTO.setOrderNumber(1L);
+        batchStockList.get(0).setBatchNumber(77L);
+
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.OBJECT_NOT_FOUND.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.BATCH_NOT_FOUND)));
+
+    }
+
+    @Test
+    void Update_ReturnExceptionNotFound_whenWareHousehNotExist_Fail() throws Exception {
+
+        inboundOrderDTO.setOrderNumber(1L);
+        batchStockList.get(0).setBatchNumber(1L);
+        batchStockList.get(1).setBatchNumber(2L);
+        inboundOrderDTO.setWarehouseCode(-1l);
 
 
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.OBJECT_NOT_FOUND.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.WAREHOUSE_NOT_FOUND)));
+
+    }
+
+    @Test
+    void Update_ReturnExceptionNotFound_whenManagerNotExist_Fail() throws Exception {
+
+        inboundOrderDTO.setOrderNumber(1L);
+        batchStockList.get(0).setBatchNumber(1L);
+        batchStockList.get(1).setBatchNumber(2L);
+        inboundOrderDTO.setWarehouseCode(4l);
+
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.title", CoreMatchers.is("Manager not valid")))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.MANAGER_NOT_VALID)));
+
+    }
+
+    @Test
+    void Update_ReturnExceptionNotFound_whenAnnoucementNotExist_Fail() throws Exception {
+
+        inboundOrderDTO.setOrderNumber(1L);
+        batchStockList.get(0).setBatchNumber(1L);
+        batchStockList.get(1).setBatchNumber(2L);
+        inboundOrderDTO.setWarehouseCode(1l);
+        batchStockList.get(0).setAnnouncementId(44L);
+
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.OBJECT_NOT_FOUND.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.ANNOUNCEMENT_NOT_FOUND)));
+
+    }
+
+    @Test
+    void Update_ReturnExceptionNotFound_whenSectiontNotExist_Fail() throws Exception {
+
+        inboundOrderDTO.setOrderNumber(1L);
+        batchStockList.get(0).setBatchNumber(1L);
+        batchStockList.get(1).setBatchNumber(2L);
+        inboundOrderDTO.setWarehouseCode(1l);
+        batchStockList.get(0).setAnnouncementId(1L);
+        inboundOrderDTO.setSectionCode(44l);
+
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.OBJECT_NOT_FOUND.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.SECTION_NOT_FOUND)));
+
+    }
+
+    @Test
+    void Update_ReturnSectionTypeException_whenTypeSectionNotEquals_Fail() throws Exception {
+
+        inboundOrderDTO.setOrderNumber(1L);
+        batchStockList.get(0).setBatchNumber(1L);
+        batchStockList.get(1).setBatchNumber(2L);
+        inboundOrderDTO.setWarehouseCode(1l);
+        batchStockList.get(0).setAnnouncementId(1L);
+        inboundOrderDTO.setSectionCode(2L);
+
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.title", CoreMatchers.is("Section Type incorrect")))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.INSERT_BATCH_SECTION_INCORRET)));
+
+    }
+
+    @Test
+    void Update_ReturnExceptionNotFound_whenNotEquals_Fail() throws Exception {
+
+        inboundOrderDTO.setOrderNumber(1L);
+        batchStockList.get(0).setBatchNumber(1L);
+        batchStockList.get(1).setBatchNumber(2L);
+        inboundOrderDTO.setWarehouseCode(1l);
+        batchStockList.get(0).setAnnouncementId(1L);
+        inboundOrderDTO.setSectionCode(1L);
+        batchStockList.get(0).setVolume((float)30000);
+
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.title", CoreMatchers.is("Action not allowed")))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.LIMIT_CAPACITY_SECTION)));
+
+    }
 }

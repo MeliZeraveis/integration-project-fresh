@@ -37,13 +37,14 @@ public class AnnouncementService implements IAnnouncementService{
         if(announcement.isEmpty()) {
             throw new NotFoundException(Msg.ANNOUNCEMENT_NOT_FOUND);
         }
-            if(letra.equalsIgnoreCase("Q")|| letra.equalsIgnoreCase("L") || letra.equalsIgnoreCase("V")) {
+
+            if (letra.equalsIgnoreCase("Q") || letra.equalsIgnoreCase("L") || letra.equalsIgnoreCase("V")) {
                 AnnoucementGetResponseDTO responseDTO = new AnnoucementGetResponseDTO(announcement.get(), letra);
                 return responseDTO;
-            }
-            else {
+            } else {
                 throw new NotFoundException(Msg.LETTER_NOT_VALID);
             }
+
     }
 
 

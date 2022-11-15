@@ -38,11 +38,12 @@ public class AnnoucementGetResponseDTO {
     public AnnoucementGetResponseDTO(Announcement announcement, String letra) {
         this.section= new SectionDTO(announcement.getSection(), announcement);
         this.productId = announcement.getAnnouncementId();
+        System.out.println(letra);
         if(letra.equalsIgnoreCase("L")) {
-            this.batchStock = announcement.getBatchStock().stream().sorted((p1, p2) -> p2.getBatchNumber().compareTo(p1.getBatchNumber())).map(BatchSotckAnnoucementDTO::new).collect(Collectors.toList());
+            this.batchStock = announcement.getBatchStock().stream().sorted((p1, p2) -> p1.getBatchNumber().compareTo(p2.getBatchNumber())).map(BatchSotckAnnoucementDTO::new).collect(Collectors.toList());
         }
         else if(letra.equalsIgnoreCase("Q")) {
-            this.batchStock = announcement.getBatchStock().stream().sorted(Comparator.comparingInt(BatchStock::getProductQuantity).reversed()).map(BatchSotckAnnoucementDTO::new).collect(Collectors.toList());
+            this.batchStock = announcement.getBatchStock().stream().sorted(Comparator.comparingInt(BatchStock::getProductQuantity)).map(BatchSotckAnnoucementDTO::new).collect(Collectors.toList());
         }
         else if(letra.equalsIgnoreCase("V")) {
             this.batchStock = announcement.getBatchStock().stream().sorted((p1, p2) -> p1.getDueDate().compareTo(p2.getDueDate())).map(BatchSotckAnnoucementDTO::new).collect(Collectors.toList());
