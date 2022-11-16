@@ -41,4 +41,7 @@ public enum Msg {
   public static final String MANAGER_NOT_VALID = "Warehouse does not have a valid manager.";
     public static final String ANNOUNCEMENT_IS_EMPTY = "Announcement is empty.";
     public static final String FILTER_NOT_FOUND = "Filter not found.";
+  public static final String LETTER_NOT_VALID = "The letter must to be L, V or Q";
+
+
 }
