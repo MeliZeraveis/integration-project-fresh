@@ -37,7 +37,6 @@ public class BatchStockDTO {
 
     @NotNull(message = Msg.DATE_REQUIRED)
     @PastOrPresent(message = Msg.DATE_PAST_OR_PRESENT)
-
     private LocalDate manufacturingDate;
 
     @NotNull(message = Msg.TIME_REQUIRED)
