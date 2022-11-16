@@ -1,5 +1,6 @@
 package br.dh.meli.integratorprojectfresh.service;
 
+import br.dh.meli.integratorprojectfresh.dto.response.BatchStockQuantityResponseDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.WarehouseProductQuantityGetResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
@@ -12,7 +13,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -30,15 +33,16 @@ public class WarehouseService implements IWareshouseService {
             throw new NotFoundException(Msg.ANNOUNCEMENT_NOT_FOUND);
         }
 
-//        List<BatchStock> batchStockList = announcement.get().getBatchStock()
-//                .stream()
-//                .map((b,i) -> {
-//                    if (announcement.get().getBatchStock().get().getInboundOrder().getWarehouseCode() == ) {
-//
-//                    };
-//                } );
+        WarehouseProductQuantityGetResponseDTO warehouseProductQuantity = new WarehouseProductQuantityGetResponseDTO(announcement.get());
 
-        return new WarehouseProductQuantityGetResponseDTO(announcement.get());
+        Map<Long,Integer> results = warehouseProductQuantity.warehouses.stream()
+                .collect(Collectors.toMap(BatchStockQuantityResponseDTO::getWarehouseCode,
+                        BatchStockQuantityResponseDTO::getTotalQuantity,
+                        Integer::sum));
 
+        System.out.println(results.values());
+
+
+        return warehouseProductQuantity;
     }
 }

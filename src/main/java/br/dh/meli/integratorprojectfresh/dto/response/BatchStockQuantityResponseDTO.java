@@ -5,16 +5,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Getter
 @Setter
 @NoArgsConstructor
 public class BatchStockQuantityResponseDTO {
 
     private Long warehouseCode;
-    private int productQuantity;
+    private Integer totalQuantity;
 
     public BatchStockQuantityResponseDTO(BatchStock batchStock) {
         this.warehouseCode = batchStock.getInboundOrder().getWarehouseCode();
-        this.productQuantity = batchStock.getProductQuantity();
+        this.totalQuantity = batchStock.getProductQuantity();
     }
+
 }
