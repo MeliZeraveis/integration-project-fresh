@@ -5,6 +5,7 @@ import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.enums.OrderStatus;
 import br.dh.meli.integratorprojectfresh.model.PurchaseOrder;
 import br.dh.meli.integratorprojectfresh.model.PurchaseOrderItems;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 public class PurchaseOrderRequestDTO {
   @NotNull(message = Msg.PURCHASE_ORDER_DATE_NOT_NULL)
   @PastOrPresent(message = Msg.PURCHASE_ORDER_DATE_NOT_VALID)
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime date;
 
   @NotNull(message = Msg.BUYER_ID_NOT_NULL)
@@ -36,22 +38,18 @@ public class PurchaseOrderRequestDTO {
   private Long buyerId;
 
   @NotNull(message = Msg.PURCHASE_ORDER_STATUS_NOT_NULL)
-  @EnumNamePattern(regexp = "{OrderStatus.PENDING}|{OrderStatus.APPROVED}", message = Msg.PURCHASE_ORDER_STATUS_NOT_VALID)
+  // @EnumNamePattern(regexp = "Aberto|Finalizado", message = Msg.PURCHASE_ORDER_STATUS_NOT_VALID)
   private OrderStatus orderStatus;
 
   @NotEmpty(message = Msg.PURCHASE_ORDER_ITEMS_NOT_EMPTY)
   private List<@Valid PurchaseOrderItemsRequestDTO> products;
-
-  private BigDecimal total;
 
   public PurchaseOrderRequestDTO(LocalDateTime date, Long buyerId, OrderStatus orderStatus, List<PurchaseOrderItems> products) {
     this.date = date;
     this.buyerId = buyerId;
     this.orderStatus = orderStatus;
     this.products = products.stream().map(PurchaseOrderItemsRequestDTO::new).collect(Collectors.toList());
-    this.total = products.stream()
-            .map((item) -> item.getProductPrice().multiply(BigDecimal.valueOf(item.getProductQuantity())))
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
+    products.forEach(p -> System.out.println(p.getProductQuantity()));
   }
 
   /**
@@ -60,6 +58,6 @@ public class PurchaseOrderRequestDTO {
    * @return PurchaseOrder
    */
   public PurchaseOrder toPurchaseOrder() {
-    return new PurchaseOrder(this.date, this.orderStatus, this.total, this.buyerId);
+    return new PurchaseOrder(this.date, this.orderStatus, BigDecimal.ZERO, this.buyerId);
   }
 }
