@@ -80,6 +80,7 @@ public class AnnoucementControllerTestIT {
     }
 
     @Test
+    @DisplayName("Testa se o metodo retorna uma mensagem NOT FOUND quando é informado o ID de um anuncio que nao existe")
     void get_ReturnExceptionNotFound_WhenProductNotExist() throws Exception {
 
         ResultActions response = mockMvc
@@ -96,6 +97,7 @@ public class AnnoucementControllerTestIT {
     }
 
     @Test
+    @DisplayName("Testa se o metodo retorna o anuncio correto quando informado o ID e a categoria de ordenaçao em caso de sucesso")
     void get_ReturnannoucementGetResponseDTOByLetra_Sucess() throws Exception {
 
         ResultActions response = mockMvc
@@ -111,6 +113,7 @@ public class AnnoucementControllerTestIT {
     }
 
     @Test
+    @DisplayName("Testa se o metodo retorna uma mensagem NOT FOUND quando é informado o ID correto com uma categoria inexistente")
     void get_ReturnExceptionNotFound_WhenProductByLetraNotExist() throws Exception {
 
         ResultActions response = mockMvc
