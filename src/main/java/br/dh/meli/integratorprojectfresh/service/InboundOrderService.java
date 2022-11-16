@@ -46,7 +46,6 @@ public class InboundOrderService implements IInboundOrderService {
     }
     void validSection(long sectionCode, List<BatchStockDTO>batchStockList) {
         Optional<Section> sectionOptional = sectionRepo.findById(sectionCode);
-
         if (sectionOptional.isEmpty()){
             throw new NotFoundException(Msg.SECTION_NOT_FOUND);
         }
@@ -63,6 +62,34 @@ public class InboundOrderService implements IInboundOrderService {
             sectionOptional.get().setUsedCapacity(totalSum);
             sectionRepo.save(sectionOptional.get());
         }
+    }
+
+    void validSectionBatchStockUpdate(Section section, List<BatchStockDTO>batchStockList){
+        float sectionMaxCapacity = section.getMaxCapacity();
+        float sectionCapacityUsed = section.getUsedCapacity();
+        for (BatchStockDTO b : batchStockList) {
+            if(!Objects.equals(section.getType(), b.getSectionType())){
+                throw new SectionTypeException(Msg.INSERT_BATCH_SECTION_INCORRET);
+            }
+            BatchStock batchStock = batchStockRepo.findById(b.getBatchNumber()).get();
+            sectionCapacityUsed = sectionCapacityUsed - batchStock.getVolume();
+            float totalSum = sectionCapacityUsed + b.getVolume();
+            if (totalSum > sectionMaxCapacity) {
+                throw new LimitCapacitySectionException(Msg.LIMIT_CAPACITY_SECTION);
+            }
+            section.setUsedCapacity(totalSum);
+            sectionRepo.save(section);
+        }
+    }
+    void validSectionUpdate(long sectionCode, List<BatchStockDTO>batchStockList) {
+        Optional<Section> sectionOptional = sectionRepo.findById(sectionCode);
+
+        if (sectionOptional.isEmpty()){
+            throw new NotFoundException(Msg.SECTION_NOT_FOUND);
+        }
+
+        validSectionBatchStockUpdate(sectionOptional.get(), batchStockList);
+
     }
 
     @Override
@@ -115,7 +142,7 @@ public class InboundOrderService implements IInboundOrderService {
 
         validIfAnnouncementExist(inboundOrderResquest.getInboundOrder().getBatchStock());
 
-        validSection(inboundOrder.getSectionCode(), inboundOrderResquest.getInboundOrder().getBatchStock());
+        validSectionUpdate(inboundOrder.getSectionCode(), inboundOrderResquest.getInboundOrder().getBatchStock());
 
         InboundOrder inboundOrderUpdated = repo.save(inboundOrder);
 

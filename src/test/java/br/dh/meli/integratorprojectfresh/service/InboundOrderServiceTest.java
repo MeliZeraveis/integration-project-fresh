@@ -292,5 +292,59 @@ class InboundOrderServiceTest {
                 () -> Assertions.assertEquals(Msg.INSERT_BATCH_SECTION_INCORRET, actualException.getMessage())
         );
     }
+
+    @Test
+    @DisplayName("Testa mensagem da exceção quando seção é divergente")
+    void ValidSectionBatchStockUpdate_ThrowsException_WhenSectionTypeIsIncorrect() throws SectionTypeException {
+        batchStockList.get(0).setSectionType("Refrigerated");
+        batchStockList.get(0).setBatchNumber(1L);
+        batchStockList.get(1).setBatchNumber(2L);
+
+
+        final var actualException = assertThrows(
+                SectionTypeException.class,
+                () -> service.validSectionBatchStockUpdate(sectionTest, batchStockList));
+        assertAll(
+                () -> Assertions.assertEquals(Msg.INSERT_BATCH_SECTION_INCORRET, actualException.getMessage())
+        );
+    }
+
+    @Test
+    @DisplayName("Testa mensagem da exceção quando seção é divergente")
+    void ValidSectionBatchStockUpdate_ThrowsException_WhenVolumeLimitExceeded() throws LimitCapacitySectionException {
+
+        batchStockList.get(0).setVolume(3000f);
+        batchStockList.get(1).setVolume(5000f);
+        batchStockList.get(0).setBatchNumber(1L);
+        batchStockList.get(1).setBatchNumber(2L);
+
+
+        BDDMockito.when(batchStockRepo.findById(1L))
+                .thenReturn(Optional.ofNullable(batchStockList2.get(0)));
+
+        final var actualException = assertThrows(
+                LimitCapacitySectionException.class,
+                () -> service.validSectionBatchStockUpdate(sectionTest, batchStockList));
+        assertAll(
+                () -> Assertions.assertEquals(Msg.LIMIT_CAPACITY_SECTION, actualException.getMessage())
+        );
+    }
+
+    @Test
+    @DisplayName("Testa se a section existe")
+    void ValidSectionUpdate_ThrowsException_WhenSectionNotFound() throws NotFoundException {
+
+        batchStockList.get(0).setBatchNumber(1L);
+        batchStockList.get(1).setBatchNumber(2L);
+
+
+
+        final var actualException = assertThrows(
+                NotFoundException.class,
+                () -> service.validSectionUpdate(1L, batchStockList));
+        assertAll(
+                () -> Assertions.assertEquals(Msg.SECTION_NOT_FOUND, actualException.getMessage())
+        );
+    }
 }
 

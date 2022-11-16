@@ -4,6 +4,7 @@ import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,6 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "inbound_order")
 public class InboundOrder {
@@ -34,7 +36,7 @@ public class InboundOrder {
     @Column(name = "warehouse_code", nullable = false )
     private Long warehouseCode;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER) //
     @JoinColumn(name = "warehouse_code", insertable = false, updatable = false)
     @JsonIgnoreProperties("inboundOrder")
     private Warehouse warehouse;
