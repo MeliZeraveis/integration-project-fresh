@@ -2,9 +2,12 @@ package br.dh.meli.integratorprojectfresh.service;
 
 import br.dh.meli.integratorprojectfresh.dto.response.BatchStockDTOResponseDueDate;
 import br.dh.meli.integratorprojectfresh.dto.response.BatchStockGetResponseDTO;
+import br.dh.meli.integratorprojectfresh.enums.Msg;
+import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.model.*;
 import br.dh.meli.integratorprojectfresh.repository.BatchStockRepository;
 import br.dh.meli.integratorprojectfresh.service.BatchStockService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -73,7 +76,7 @@ class BatchStockServiceTest {
     }
 
     @Test
-    void getBatchStockByBatchStockId() {
+    void GetBatchStockDueDate_ReturnBatchStockFiltered_WhenParamsAreValid() {
         BDDMockito.when(repo.findAllByDueDateBetweenAndSectionType(LocalDate.now(), LocalDate.now().plusDays(45), "Fresh")).thenReturn(batchStockList);
         BatchStockGetResponseDTO batchStockGetResponseDTOList = service.getBatchStockByBatchStockId(45, "Fresh");
 assertAll(
@@ -83,6 +86,55 @@ assertAll(
     }
 
     @Test
-    void findBatchStockByBatchStockNumber() {
+    void GetBatchStockDueDate_ThrowException_WhenBatchStockListIsEmpty() throws NotFoundException {
+
+//        BDDMockito.given(repo.findAllByDueDateBetweenAndSectionType(LocalDate.now(), LocalDate.now().plusDays(45), "Fresh")).willThrow(new NotFoundException(Msg.BATCH_NOT_FOUND));
+
+        final var actualException = assertThrows(
+                NotFoundException.class,
+                () -> service.getBatchStockByBatchStockId(45, "Fresh"));
+        assertAll(
+                () -> Assertions.assertEquals(Msg.BATCH_NOT_FOUND, actualException.getMessage())
+        );
     }
+
+    @Test
+    void FindBatchFiltered_ReturnBatchStockFiltered_WhenParamsAreValid() {
+        BDDMockito.when(repo.findAllByDueDateBetween(LocalDate.now(), LocalDate.now().plusDays(45))).thenReturn(batchStockList);
+
+        BatchStockGetResponseDTO batchStockGetResponseDTOList = service.findBatchStockByBatchStockNumber(45, "FS");
+        assertAll(
+                () -> assertThat(batchStockGetResponseDTOList).isNotNull(),
+                () -> assertThat(batchStockGetResponseDTOList.getBatchStock()).isNotNull()
+        );
+    }
+
+    @Test
+    void FindBatchStockFiltered_ThrowException_WhenBatchStockListIsEmpty() throws NotFoundException {
+
+//        BDDMockito.given(repo.findAllByDueDateBetween(LocalDate.now(), LocalDate.now().plusDays(45))).willThrow(new NotFoundException(Msg.SECTION_NOT_FOUND));
+
+        final var actualException = assertThrows(
+                NotFoundException.class,
+                () -> service.findBatchStockByBatchStockNumber(45, "FS"));
+        assertAll(
+                () -> Assertions.assertEquals(Msg.SECTION_NOT_FOUND, actualException.getMessage())
+        );
+    }
+
+    @Test
+    void FindBatchStockFiltered_ThrowException_WhenBatchStockList() throws NotFoundException {
+
+        BDDMockito.given(repo.findAllByDueDateBetween(LocalDate.now(), LocalDate.now().plusDays(45))).willThrow(new NotFoundException(Msg.CATEGORY_NOT_FOUND));
+
+        final var actualException = assertThrows(
+                NotFoundException.class,
+                () -> service.findBatchStockByBatchStockNumber(45, "XX"));
+        assertAll(
+                () -> Assertions.assertEquals(Msg.CATEGORY_NOT_FOUND, actualException.getMessage())
+        );
+    }
+
+
+
 }
