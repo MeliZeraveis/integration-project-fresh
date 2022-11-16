@@ -30,16 +30,16 @@ public class WarehouseService implements IWareshouseService {
 
         WarehouseProductQuantityGetResponseDTO warehouseProductQuantity = new WarehouseProductQuantityGetResponseDTO(announcement.get());
 
-        Map<Long,Integer> results = warehouseProductQuantity.warehouses.stream()
+        Map<Long,Integer> mapResults = warehouseProductQuantity.warehouses.stream()
                 .collect(Collectors.toMap(BatchStockQuantityResponseDTO::getWarehouseCode,
                         BatchStockQuantityResponseDTO::getTotalQuantity,
                         Integer::sum));
 
-        List<Long> listLongs = new ArrayList<>(results.keySet());
-        List<Integer> listInteger = new ArrayList<>(results.values());
+        List<Long> listLongs = new ArrayList<>(mapResults.keySet());
+        List<Integer> listInteger = new ArrayList<>(mapResults.values());
 
-        WarehouseProductQuantityGetResponseDTO warehouseProductQuantity2 = new WarehouseProductQuantityGetResponseDTO(announcement.get(), listLongs, listInteger);
+        WarehouseProductQuantityGetResponseDTO warehouseProductQuantityFiltred = new WarehouseProductQuantityGetResponseDTO(announcement.get(), listLongs, listInteger);
 
-        return warehouseProductQuantity2;
+        return warehouseProductQuantityFiltred;
     }
 }
