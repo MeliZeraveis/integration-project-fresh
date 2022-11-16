@@ -26,6 +26,8 @@ public class AnnouncementService implements IAnnouncementService{
         if(announcement.isEmpty()) {
             throw new NotFoundException(Msg.ANNOUNCEMENT_NOT_FOUND);
         }
+
+        System.out.println(announcement);
         AnnoucementGetResponseDTO responseDTO = new AnnoucementGetResponseDTO(announcement.get());
         return responseDTO;
     }
