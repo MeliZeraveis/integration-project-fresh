@@ -20,24 +20,23 @@ public class BatchStockService implements IBatchStockService {
 
     private final BatchStockRepository repo;
     @Override
-    public List<BatchStockGetResponseDTO> getBatchStockByBatchStockId(Integer numberOfDays, String section) {
+    public BatchStockGetResponseDTO getBatchStockByBatchStockId(Integer numberOfDays, String section) {
         List<BatchStock> batchStock = repo.findAllByDueDateBetweenAndSectionType(LocalDate.now(),LocalDate.now().plusDays(numberOfDays), section);
         if(batchStock.isEmpty()) {
             throw new NotFoundException(Msg.BATCH_NOT_FOUND);
         }
-        return batchStock.stream().map(BatchStockGetResponseDTO::new).collect(Collectors.toList());
+        return new BatchStockGetResponseDTO(batchStock, "");
 
     }
 
     @Override
-    public List<BatchStockGetResponseDTO> findBatchStockByBatchStockNumber(Integer numberOfDays, String category) {
-        List<BatchStock> batchStock = repo.findAllByDueDateBetweenAndSectionType(LocalDate.now(),LocalDate.now().plusDays(numberOfDays), category);
+    public BatchStockGetResponseDTO findBatchStockByBatchStockNumber(Integer numberOfDays, String category) {
+        List<BatchStock> batchStock = repo.findAllByDueDateBetween(LocalDate.now(),LocalDate.now().plusDays(numberOfDays));
         if(batchStock.isEmpty()) {
             throw new NotFoundException(Msg.SECTION_NOT_FOUND);
         }
         if(category.equalsIgnoreCase("FS")|| category.equalsIgnoreCase("RF") || category.equalsIgnoreCase("FF")) {
-            List<BatchStockGetResponseDTO> responseDTO = batchStock.stream().map(BatchStockGetResponseDTO::new).collect(Collectors.toList());
-            return responseDTO;
+            return new BatchStockGetResponseDTO(batchStock, category);
         }
         else {
             throw new NotFoundException(Msg.SECTION_NOT_FOUND);

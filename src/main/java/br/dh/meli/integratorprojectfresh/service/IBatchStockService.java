@@ -5,8 +5,8 @@ import br.dh.meli.integratorprojectfresh.dto.response.BatchStockGetResponseDTO;
 import java.util.List;
 
 public interface IBatchStockService {
-    List<BatchStockGetResponseDTO> getBatchStockByBatchStockId(Integer numberOfDays, String section);
+    BatchStockGetResponseDTO getBatchStockByBatchStockId(Integer numberOfDays, String section);
 
-    List<BatchStockGetResponseDTO> findBatchStockByBatchStockNumber(Integer numberOfDays, String category);
+    BatchStockGetResponseDTO findBatchStockByBatchStockNumber(Integer numberOfDays, String category);
 
 }
