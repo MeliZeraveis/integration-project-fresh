@@ -2,16 +2,13 @@ package br.dh.meli.integratorprojectfresh.dto.response;
 
 
 import br.dh.meli.integratorprojectfresh.dto.request.BatchSotckAnnoucementDTO;
-import br.dh.meli.integratorprojectfresh.dto.request.BatchStockDTO;
 import br.dh.meli.integratorprojectfresh.dto.request.SectionDTO;
 import br.dh.meli.integratorprojectfresh.model.Announcement;
 import br.dh.meli.integratorprojectfresh.model.BatchStock;
-import br.dh.meli.integratorprojectfresh.model.Section;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.logging.log4j.util.PropertySource;
 
 import java.util.Comparator;
 import java.util.List;
