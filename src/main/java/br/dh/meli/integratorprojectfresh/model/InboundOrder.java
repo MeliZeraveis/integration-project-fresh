@@ -41,7 +41,6 @@ public class InboundOrder {
 
 
     @OneToMany(mappedBy = "inboundOrder")
-
     @JsonIgnoreProperties("inboundOrder")
     private List<BatchStock> batchStock;
 
