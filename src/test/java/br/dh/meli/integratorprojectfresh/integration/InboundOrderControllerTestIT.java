@@ -830,7 +830,7 @@ public class InboundOrderControllerTestIT {
                 .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
 
         response.andExpect(status().is4xxClientError())
-                .andExpect(jsonPath("$.title", CoreMatchers.is("Section Type incorrect")))
+                .andExpect(jsonPath("$.title", CoreMatchers.is("Action not allowed")))
                 .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.INSERT_BATCH_SECTION_INCORRET)));
     }
 

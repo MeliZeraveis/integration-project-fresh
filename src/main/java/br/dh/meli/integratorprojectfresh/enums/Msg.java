@@ -43,5 +43,7 @@ public enum Msg {
     public static final String FILTER_NOT_FOUND = "Filter not found.";
   public static final String LETTER_NOT_VALID = "The letter must to be L, V or Q";
 
+  public static final String SECTION_NOT_BELONG_WAREHOUSE =  "Section doesn't belong warehouse";
 
+  public static final String BATCH_EXPIRED =  "Batch contains product expired or shelf life of less than 3 weeks";
 }

@@ -6,7 +6,7 @@ import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPutResponseDTO
 import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderRequestDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPostResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
-import br.dh.meli.integratorprojectfresh.exception.LimitCapacitySectionException;
+import br.dh.meli.integratorprojectfresh.exception.ActionNotAllowedException;
 import br.dh.meli.integratorprojectfresh.exception.ManagerNotValidException;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.exception.SectionTypeException;
@@ -15,6 +15,7 @@ import br.dh.meli.integratorprojectfresh.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -44,20 +45,24 @@ public class InboundOrderService implements IInboundOrderService {
             throw new ManagerNotValidException(Msg.MANAGER_NOT_VALID);
         }
     }
-    void validSection(long sectionCode, List<BatchStockDTO>batchStockList) {
+    void validSection(long sectionCode, List<BatchStockDTO>batchStockList, Long warehouseCode) {
         Optional<Section> sectionOptional = sectionRepo.findById(sectionCode);
         if (sectionOptional.isEmpty()){
             throw new NotFoundException(Msg.SECTION_NOT_FOUND);
+        }
+
+        if(!Objects.equals(sectionOptional.get().getWarehouseCode(), warehouseCode)){
+            throw new ActionNotAllowedException(Msg.SECTION_NOT_BELONG_WAREHOUSE);
         }
         float sectionMaxCapacity = sectionOptional.get().getMaxCapacity();
         float sectionCapacityUsed = sectionOptional.get().getUsedCapacity();
         for (BatchStockDTO b : batchStockList) {
             if(!Objects.equals(sectionOptional.get().getType(), b.getSectionType())){
-                throw new SectionTypeException(Msg.INSERT_BATCH_SECTION_INCORRET);
+                throw new ActionNotAllowedException(Msg.INSERT_BATCH_SECTION_INCORRET);
             }
             float totalSum = sectionCapacityUsed + b.getVolume();
             if (totalSum > sectionMaxCapacity) {
-                throw new LimitCapacitySectionException(Msg.LIMIT_CAPACITY_SECTION);
+                throw new ActionNotAllowedException(Msg.LIMIT_CAPACITY_SECTION);
             }
             sectionOptional.get().setUsedCapacity(totalSum);
             sectionRepo.save(sectionOptional.get());
@@ -75,7 +80,7 @@ public class InboundOrderService implements IInboundOrderService {
             sectionCapacityUsed = sectionCapacityUsed - batchStock.getVolume();
             float totalSum = sectionCapacityUsed + b.getVolume();
             if (totalSum > sectionMaxCapacity) {
-                throw new LimitCapacitySectionException(Msg.LIMIT_CAPACITY_SECTION);
+                throw new ActionNotAllowedException(Msg.LIMIT_CAPACITY_SECTION);
             }
             section.setUsedCapacity(totalSum);
             sectionRepo.save(section);
@@ -91,13 +96,21 @@ public class InboundOrderService implements IInboundOrderService {
         validSectionBatchStockUpdate(sectionOptional.get(), batchStockList);
 
     }
+    void validBatchDueDate(List<BatchStockDTO>batchStockList){
+        for (BatchStockDTO b : batchStockList) {
+            if( b.getDueDate().isBefore(LocalDate.now()) || LocalDate.now().plusWeeks(3).isAfter(b.getDueDate())){
+                throw new ActionNotAllowedException(Msg.BATCH_EXPIRED);
+            }
+        }
+    }
 
     @Override
     public InboundOrderPostResponseDTO save(InboundOrderRequestDTO inboundOrderResquest) {
         InboundOrder inboundOrder = new InboundOrder(inboundOrderResquest.getInboundOrder());
         validIfWarehouseExist(inboundOrder.getWarehouseCode());
         validIfAnnouncementExist(inboundOrderResquest.getInboundOrder().getBatchStock());
-        validSection(inboundOrder.getSectionCode(), inboundOrderResquest.getInboundOrder().getBatchStock());
+        validSection(inboundOrder.getSectionCode(), inboundOrderResquest.getInboundOrder().getBatchStock(), inboundOrder.getWarehouseCode());
+        validBatchDueDate(inboundOrderResquest.getInboundOrder().getBatchStock());
         repo.save(inboundOrder);
         List<BatchStock> batchStockList =  inboundOrderResquest.getInboundOrder()
                 .getBatchStock().stream()
@@ -143,6 +156,8 @@ public class InboundOrderService implements IInboundOrderService {
         validIfAnnouncementExist(inboundOrderResquest.getInboundOrder().getBatchStock());
 
         validSectionUpdate(inboundOrder.getSectionCode(), inboundOrderResquest.getInboundOrder().getBatchStock());
+
+        validBatchDueDate(inboundOrderResquest.getInboundOrder().getBatchStock());
 
         InboundOrder inboundOrderUpdated = repo.save(inboundOrder);
 
