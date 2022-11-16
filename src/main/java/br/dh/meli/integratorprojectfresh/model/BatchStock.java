@@ -102,4 +102,17 @@ public class BatchStock {
                 this.dueDate = dueDate;
                 this.price = price;
         }
+
+        public BatchStock(long batchNumber, long announcementId, String sectionType, int productQuantity, LocalDate manufacturingDate, LocalDateTime manufacturingTime, float volume, LocalDate dueDate, BigDecimal price, InboundOrder inboundOrder) {
+                this.batchNumber = batchNumber;
+                this.announcementId = announcementId;
+                this.sectionType = sectionType;
+                this.productQuantity = productQuantity;
+                this.manufacturingDate = manufacturingDate;
+                this.manufacturingTime = manufacturingTime;
+                this.volume = volume;
+                this.dueDate = dueDate;
+                this.price = price;
+                this.inboundOrder = inboundOrder;
+        }
 }
