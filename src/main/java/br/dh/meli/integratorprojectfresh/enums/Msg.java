@@ -39,4 +39,7 @@ public enum Msg {
   public  static  final String INSERT_BATCH_SECTION_INCORRET = "Insert batch in wrong section";
 
   public static final String MANAGER_NOT_VALID = "Warehouse does not have a valid manager.";
+
+  public static final String LETTER_NOT_VALID = "The letter must to be L, V or Q";
+
 }

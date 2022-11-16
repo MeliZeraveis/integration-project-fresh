@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.tomcat.util.http.fileupload.impl.SizeException;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -64,6 +65,7 @@ public class AnnoucementControllerTestIT {
     }
 
     @Test
+    @DisplayName("Testa se o metodo retorna o anuncio correto em caso de sucesso")
     void get_ReturnannoucementGetResponseDTO_Sucess() throws Exception {
 
             ResultActions response = mockMvc
@@ -78,6 +80,7 @@ public class AnnoucementControllerTestIT {
     }
 
     @Test
+    @DisplayName("Testa se o metodo retorna uma mensagem NOT FOUND quando é informado o ID de um anuncio que nao existe")
     void get_ReturnExceptionNotFound_WhenProductNotExist() throws Exception {
 
         ResultActions response = mockMvc
@@ -88,19 +91,20 @@ public class AnnoucementControllerTestIT {
 
         response.andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.OBJECT_NOT_FOUND.name())))
-                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.SECTION_NOT_FOUND)))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.ANNOUNCEMENT_NOT_FOUND)))
                 .andExpect(jsonPath("$.status", CoreMatchers.is(HttpStatus.NOT_FOUND.value())));
 
     }
 
     @Test
+    @DisplayName("Testa se o metodo retorna o anuncio correto quando informado o ID e a categoria de ordenaçao em caso de sucesso")
     void get_ReturnannoucementGetResponseDTOByLetra_Sucess() throws Exception {
 
         ResultActions response = mockMvc
                 .perform(get("/api/v1/fresh-products/list/batch")
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("id", "1")
-                        .param("letra", "v"))
+                        .param("letra", "V"))
                 .andDo(print());
 
         response.andExpect(status().isOk())
@@ -109,6 +113,7 @@ public class AnnoucementControllerTestIT {
     }
 
     @Test
+    @DisplayName("Testa se o metodo retorna uma mensagem NOT FOUND quando é informado o ID correto com uma categoria inexistente")
     void get_ReturnExceptionNotFound_WhenProductByLetraNotExist() throws Exception {
 
         ResultActions response = mockMvc
@@ -120,7 +125,7 @@ public class AnnoucementControllerTestIT {
 
         response.andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.OBJECT_NOT_FOUND.name())))
-                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.SECTION_NOT_FOUND)))
+                    .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.LETTER_NOT_VALID)))
                 .andExpect(jsonPath("$.status", CoreMatchers.is(HttpStatus.NOT_FOUND.value())));
 
     }
