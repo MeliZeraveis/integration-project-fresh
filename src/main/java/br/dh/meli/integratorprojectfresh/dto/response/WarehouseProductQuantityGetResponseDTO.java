@@ -8,21 +8,31 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class WarehouseProductQuantityListByAnnoucementIdGetResponseDTO {
+public class WarehouseProductQuantityGetResponseDTO {
 
     public Long productId;
     public List<BatchStockQuantityResponseDTO> warehouses;
 
-    public WarehouseProductQuantityListByAnnoucementIdGetResponseDTO(Optional<Announcement> announcement, List<BatchStock> batchStockList) {
-        this.warehouses = batchStockList.stream()
+    public WarehouseProductQuantityGetResponseDTO(Announcement announcement) {
+        this.warehouses = announcement.getBatchStock().stream()
                 .map(BatchStockQuantityResponseDTO::new)
                 .collect(Collectors.toList());
-        this.productId = announcement.get().getAnnouncementId();
+        this.productId = announcement.getAnnouncementId();
     }
+
+//    Map<Long, Integer> results = items.stream().collect(
+//            Collectors.toMap(
+//                    Item::getId,
+//                    Item::getUnits,
+//                    Integer::sum
+//            )
+//    )
+
 }

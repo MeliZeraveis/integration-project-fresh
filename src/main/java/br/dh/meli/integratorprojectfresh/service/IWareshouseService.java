@@ -1,10 +1,10 @@
 package br.dh.meli.integratorprojectfresh.service;
 
 
-import br.dh.meli.integratorprojectfresh.dto.response.WarehouseProductQuantityListByAnnoucementIdGetResponseDTO;
+import br.dh.meli.integratorprojectfresh.dto.response.WarehouseProductQuantityGetResponseDTO;
 
 public interface IWareshouseService {
 
-    WarehouseProductQuantityListByAnnoucementIdGetResponseDTO getWarehouseProductsQuantityListByAnnoucementId (Long announcementId);
+    WarehouseProductQuantityGetResponseDTO getWarehouseProductsQuantityListByAnnoucementId (Long announcementId);
 
 }

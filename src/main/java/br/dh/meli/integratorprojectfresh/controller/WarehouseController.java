@@ -1,6 +1,6 @@
 package br.dh.meli.integratorprojectfresh.controller;
 
-import br.dh.meli.integratorprojectfresh.dto.response.WarehouseProductQuantityListByAnnoucementIdGetResponseDTO;
+import br.dh.meli.integratorprojectfresh.dto.response.WarehouseProductQuantityGetResponseDTO;
 import br.dh.meli.integratorprojectfresh.service.IWareshouseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,9 +16,9 @@ public class WarehouseController {
     @Autowired
     private IWareshouseService service;
 
-    @GetMapping("/{product_id}")
-    ResponseEntity<WarehouseProductQuantityListByAnnoucementIdGetResponseDTO> getAnnouncementByAnnouncementId(@PathVariable Long product_id) {
-        WarehouseProductQuantityListByAnnoucementIdGetResponseDTO warehouseProductQuantityList = service.getWarehouseProductsQuantityListByAnnoucementId(product_id);
+    @GetMapping("/query_type")
+    ResponseEntity<WarehouseProductQuantityGetResponseDTO> getAnnouncementByAnnouncementId(@RequestParam Long product_id) {
+        WarehouseProductQuantityGetResponseDTO warehouseProductQuantityList = service.getWarehouseProductsQuantityListByAnnoucementId(product_id);
         return new ResponseEntity<>(warehouseProductQuantityList , HttpStatus.OK);
     }
 
