@@ -23,8 +23,10 @@ public class AnnouncementService implements IAnnouncementService{
     public AnnoucementGetResponseDTO getAnnouncementByAnnouncementId(Long id) {
 
         Optional<Announcement> announcement = repo.findById(id);
+
         if(announcement.isEmpty()) {
-            throw new NotFoundException(Msg.ANNOUNCEMENT_NOT_FOUND);
+
+            throw new NotFoundException(Msg.ANNOUNCEMENT_IS_EMPTY);
         }
 
         System.out.println(announcement);
@@ -37,7 +39,7 @@ public class AnnouncementService implements IAnnouncementService{
         Optional<Announcement> announcement = repo.findById(id);
 
         if(announcement.isEmpty()) {
-            throw new NotFoundException(Msg.ANNOUNCEMENT_NOT_FOUND);
+            throw new NotFoundException(Msg.ANNOUNCEMENT_IS_EMPTY);
         }
 
             if (letra.equalsIgnoreCase("Q") || letra.equalsIgnoreCase("L") || letra.equalsIgnoreCase("V")) {
@@ -46,9 +48,8 @@ public class AnnouncementService implements IAnnouncementService{
             } else {
                 throw new NotFoundException(Msg.LETTER_NOT_VALID);
             }
-
+            else {
+                throw new NotFoundException(Msg.FILTER_NOT_FOUND);
+            }
     }
-
-
-
 }
