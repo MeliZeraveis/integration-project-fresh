@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -19,6 +20,11 @@ public class BatchStockQuantityResponseDTO {
     public BatchStockQuantityResponseDTO(BatchStock batchStock) {
         this.warehouseCode = batchStock.getInboundOrder().getWarehouseCode();
         this.totalQuantity = batchStock.getProductQuantity();
+    }
+
+    public BatchStockQuantityResponseDTO(Long id, Integer num) {
+       this.warehouseCode = id;
+       this.totalQuantity = num;
     }
 
 }
