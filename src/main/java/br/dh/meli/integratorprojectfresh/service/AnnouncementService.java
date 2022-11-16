@@ -48,8 +48,5 @@ public class AnnouncementService implements IAnnouncementService{
             } else {
                 throw new NotFoundException(Msg.LETTER_NOT_VALID);
             }
-            else {
-                throw new NotFoundException(Msg.FILTER_NOT_FOUND);
-            }
     }
 }

@@ -113,7 +113,7 @@ class AnnouncementServiceTest {
                 NotFoundException.class,
                 () -> service.findAnnouncementByBatchStockNumber(1L,"A"));
         assertAll(
-                () -> Assertions.assertEquals(Msg.FILTER_NOT_FOUND, actualException.getMessage())
+                () -> Assertions.assertEquals(Msg.LETTER_NOT_VALID, actualException.getMessage())
         );
     }
 
