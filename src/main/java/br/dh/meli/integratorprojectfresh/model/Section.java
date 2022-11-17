@@ -34,6 +34,7 @@ public class Section {
     private Float usedCapacity;
 
     @Column(name = "warehouse_code", nullable = false)
+    private Long warehouseCode;
 
     @OneToMany(mappedBy = "section")
     @JsonIgnoreProperties("section")

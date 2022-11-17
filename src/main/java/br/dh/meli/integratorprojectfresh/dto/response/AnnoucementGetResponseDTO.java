@@ -20,21 +20,17 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class AnnoucementGetResponseDTO {
 
-    private SectionDTO section;
-
-    private Long productId;
+    private Long announcementId;
 
     private List<BatchSotckAnnoucementDTO> batchStock;
 
     public AnnoucementGetResponseDTO(Announcement announcement) {
-        this.section= new SectionDTO(announcement.getSection(), announcement);
-        this.productId = announcement.getAnnouncementId();
+        this.announcementId = announcement.getAnnouncementId();
         this.batchStock = announcement.getBatchStock().stream().map(BatchSotckAnnoucementDTO::new).collect(Collectors.toList());
     }
 
     public AnnoucementGetResponseDTO(Announcement announcement, String letra) {
-        this.section= new SectionDTO(announcement.getSection(), announcement);
-        this.productId = announcement.getAnnouncementId();
+        this.announcementId = announcement.getAnnouncementId();
         System.out.println(letra);
         if(letra.equalsIgnoreCase("L")) {
             this.batchStock = announcement.getBatchStock().stream().sorted((p1, p2) -> p1.getBatchNumber().compareTo(p2.getBatchNumber())).map(BatchSotckAnnoucementDTO::new).collect(Collectors.toList());
