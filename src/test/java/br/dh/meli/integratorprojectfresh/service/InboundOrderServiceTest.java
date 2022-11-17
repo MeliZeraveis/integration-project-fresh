@@ -92,12 +92,12 @@ class InboundOrderServiceTest {
 
         batchStockList.get(0).setAnnouncementId(1L);
         batchStockList.get(1).setAnnouncementId(1L);
-        sectionTest = new Section(1L, "Fresh", (float) 100.0, (float) 80.0, new ArrayList<>(), 1L);
-        List<Section> sectionList = new ArrayList<>();
-        sectionList.add(sectionTest);
+
         User user = new User(5L, "Test", "1234", "test@email.com", "manager");
-        warehouseTest = new Warehouse(1L, "Test", "Address Test", "BR-Test", new ArrayList<>(), sectionList, user);
-        announcementTest = new Announcement(1L, "Alface Test", "description", 3L, BigDecimal.valueOf(1.80), 1L, sectionTest, new ArrayList<>(), null, new ArrayList<>());
+
+        sectionTest = new Section(1L, "Fresh", (float) 100.0, (float) 80.0, new ArrayList<>());
+        warehouseTest = new Warehouse(1L, "Test", "Address Test", "BR-Test", new ArrayList<>(), new ArrayList<>(),user);
+        announcementTest = new Announcement(1L, "Alface Test", "description", 3L, BigDecimal.valueOf(1.80), 1L, null, new ArrayList<>(), null, new ArrayList<>());
     }
 
     @Test
@@ -158,7 +158,7 @@ class InboundOrderServiceTest {
 
     @Test
     @DisplayName("Exceção quando limite da seção é ultrapassado")
-    void SaveMethod_ThrowsExeption_WhenSectionExceededLimit() throws ActionNotAllowedException {
+    void SaveMethod_ThrowsExeption_WhenSectionExceededLimit() throws LimitCapacitySectionException {
 
         batchStockList.get(0).setVolume(3000f);
         batchStockList.get(1).setVolume(5000f);
@@ -166,8 +166,8 @@ class InboundOrderServiceTest {
         BDDMockito.when(sectionRepository.findById(1L))
                 .thenReturn(java.util.Optional.ofNullable(sectionTest));
 
-        assertThrows(ActionNotAllowedException.class, () -> {
-            service.validSection(1L, batchStockList, 1L);
+        assertThrows(LimitCapacitySectionException.class, () -> {
+            service.validSection(1L, batchStockList);
         });
     }
 
@@ -187,7 +187,7 @@ class InboundOrderServiceTest {
     void IsValidAnnouncementMethod_ThrowsException_WhenIdIsInvalid() throws NotFoundException {
         final var actualException = assertThrows(
                 NotFoundException.class,
-                () -> service.validAnnouncement(batchStockList));
+                () -> service.validIfAnnouncementExist(batchStockList));
         assertAll(
                 () -> Assertions.assertEquals( Msg.ANNOUNCEMENT_NOT_FOUND, actualException.getMessage())
         );
@@ -199,7 +199,7 @@ class InboundOrderServiceTest {
 
         final var actualException = assertThrows(
                 NotFoundException.class,
-                () -> service.validSection(1L, batchStockList, 1L));
+                () -> service.validSection(1L, batchStockList));
         assertAll(
                 () -> Assertions.assertEquals(Msg.SECTION_NOT_FOUND, actualException.getMessage())
         );
@@ -287,8 +287,8 @@ class InboundOrderServiceTest {
                 .thenReturn(java.util.Optional.ofNullable(sectionTest));
 
         final var actualException = assertThrows(
-                ActionNotAllowedException.class,
-                () -> service.validSection(1L, batchStockList, 1L));
+                SectionTypeException.class,
+                () -> service.validSection(1L, batchStockList));
         assertAll(
                 () -> Assertions.assertEquals(Msg.INSERT_BATCH_SECTION_INCORRET, actualException.getMessage())
         );
@@ -312,7 +312,7 @@ class InboundOrderServiceTest {
 
     @Test
     @DisplayName("Testa mensagem da exceção quando seção é divergente")
-    void ValidSectionBatchStockUpdate_ThrowsException_WhenVolumeLimitExceeded() throws ActionNotAllowedException {
+    void ValidSectionBatchStockUpdate_ThrowsException_WhenVolumeLimitExceeded() throws LimitCapacitySectionException {
 
         batchStockList.get(0).setVolume(3000f);
         batchStockList.get(1).setVolume(5000f);
@@ -324,7 +324,7 @@ class InboundOrderServiceTest {
                 .thenReturn(Optional.ofNullable(batchStockList2.get(0)));
 
         final var actualException = assertThrows(
-                ActionNotAllowedException.class,
+                LimitCapacitySectionException.class,
                 () -> service.validSectionBatchStockUpdate(sectionTest, batchStockList));
         assertAll(
                 () -> Assertions.assertEquals(Msg.LIMIT_CAPACITY_SECTION, actualException.getMessage())
@@ -337,6 +337,8 @@ class InboundOrderServiceTest {
 
         batchStockList.get(0).setBatchNumber(1L);
         batchStockList.get(1).setBatchNumber(2L);
+
+
 
         final var actualException = assertThrows(
                 NotFoundException.class,

@@ -34,27 +34,26 @@ public class Section {
     private Float usedCapacity;
 
     @Column(name = "warehouse_code", nullable = false)
-    private Long warehouseCode;
 
     @OneToMany(mappedBy = "section")
     @JsonIgnoreProperties("section")
     private List<Announcement> announcement;
+
+    @OneToMany(mappedBy = "section")
+    @JsonIgnoreProperties(value = {"section", "batchStock", "warehouse" })
+    private List<InboundOrder> inboundOrder;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "warehouse_code", insertable = false, updatable = false)
     @JsonIgnoreProperties("section")
     private Warehouse warehouse;
 
-    @OneToMany(mappedBy = "section")
-    @JsonIgnoreProperties(value = {"section", "batchStock", "warehouse" })
-    private List<InboundOrder> inboundOrder;
-
-    public  Section(long sectionCode, String type, float maxCapacity, float usedCapacity, ArrayList<Announcement> listAnnoucement, Long warehouseCode) {
+    public Section(long sectionCode, String type, float maxCapacity, float usedCapacity, ArrayList<Announcement> listAnnoucement) {
     this.sectionCode = sectionCode;
     this.type = type;
     this.maxCapacity = maxCapacity;
     this.usedCapacity = usedCapacity;
     this.announcement = listAnnoucement;
-    this.warehouseCode =  warehouseCode;
+
     }
 }
