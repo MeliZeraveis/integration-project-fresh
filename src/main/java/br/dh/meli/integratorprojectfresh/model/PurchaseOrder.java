@@ -1,6 +1,7 @@
 package br.dh.meli.integratorprojectfresh.model;
 
 import br.dh.meli.integratorprojectfresh.enums.OrderStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,11 +24,11 @@ public class PurchaseOrder {
   private Long id;
 
   @Column(name = "date", nullable = false)
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime date;
 
   @Column(name = "status", nullable = false)
-  @Enumerated(EnumType.STRING)
-  private OrderStatus status;
+  private String status;
 
   @Column(name = "total", nullable = false)
   private BigDecimal total;
@@ -43,4 +44,33 @@ public class PurchaseOrder {
   @OneToMany(mappedBy = "purchaseOrder")
   @JsonIgnoreProperties("purchaseOrder")
   private List<PurchaseOrderItems> orderItem;
+
+  public PurchaseOrder(LocalDateTime date, OrderStatus status, BigDecimal total, Long buyerId) {
+    this.date = date;
+    this.status = status.name();
+    this.total = total;
+    this.buyerId = buyerId;
+  }
+
+  /**
+   * getStatus
+   * Getter method - Get the status of the purchase order
+   * @return OrderStatus - Status of the purchase order or null
+   */
+  public OrderStatus getStatus() {
+    try {
+      return OrderStatus.valueOf(this.status);
+    } catch (IllegalArgumentException e) {
+      return null;
+    }
+  }
+
+  /**
+   * setStatus
+   * Setter method - Set the status of the purchase order
+   * @param status - Status of the purchase order
+   */
+  public void setStatus(OrderStatus status) {
+    this.status = status.name();
+  }
 }
