@@ -51,7 +51,7 @@ public class BatchStockControllerTestIT {
                 .perform(get("/api/v1/fresh-products/due-date")
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("numberOfDays", "1000")
-                        .param("section", "Fresh"))
+                        .param("sectionCode", "1"))
                 .andDo(print());
 
         response.andExpect(status().isOk());
@@ -65,7 +65,7 @@ public class BatchStockControllerTestIT {
                 .perform(get("/api/v1/fresh-products/due-date")
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("numberOfDays", "1")
-                        .param("section", "Fresh"))
+                        .param("sectionCode", "1"))
                 .andDo(print());
 
         response.andExpect(status().isNotFound())
