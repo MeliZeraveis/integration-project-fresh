@@ -28,10 +28,7 @@ public class AnnouncementService implements IAnnouncementService{
 
             throw new NotFoundException(Msg.ANNOUNCEMENT_IS_EMPTY);
         }
-
-        System.out.println(announcement);
-        AnnoucementGetResponseDTO responseDTO = new AnnoucementGetResponseDTO(announcement.get());
-        return responseDTO;
+        return new AnnoucementGetResponseDTO(announcement.get());
     }
 
     @Override
@@ -41,7 +38,6 @@ public class AnnouncementService implements IAnnouncementService{
         if(announcement.isEmpty()) {
             throw new NotFoundException(Msg.ANNOUNCEMENT_IS_EMPTY);
         }
-
             if (letra.equalsIgnoreCase("Q") || letra.equalsIgnoreCase("L") || letra.equalsIgnoreCase("V")) {
                 AnnoucementGetResponseDTO responseDTO = new AnnoucementGetResponseDTO(announcement.get(), letra);
                 return responseDTO;
