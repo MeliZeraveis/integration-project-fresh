@@ -19,6 +19,7 @@ import br.dh.meli.integratorprojectfresh.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -62,9 +63,13 @@ public class PurchaseOrderService implements IPurchaseOrderService {
    * @return PurchaseOrderResponseDTO - the saved PurchaseOrder.
    */
   @Override
+  @Transactional
   public PurchaseOrderResponseDTO save(PurchaseOrderRequestDTO purchaseOrder) {
+    // Validate the user
     User buyer = userRepo.findById(purchaseOrder.getBuyerId())
             .orElseThrow(() -> new NotFoundException(Msg.BUYER_ID_NOT_FOUND));
+
+    // convert the product list back to model objects, fetch the price from the database and calculate the total
     List<PurchaseOrderItems> products = purchaseOrder.getProducts().stream()
             .map(PurchaseOrderItemsRequestDTO::toPurchaseOrderItems)
             .collect(Collectors.toList());
@@ -75,11 +80,14 @@ public class PurchaseOrderService implements IPurchaseOrderService {
             (sum, prod) -> sum.add(prod.getProductPrice().multiply(BigDecimal.valueOf(prod.getProductQuantity()))),
             BigDecimal::add);
 
+    // save the purchase order, fetch the newly created id, add it to the items and save the items
     PurchaseOrder order = new PurchaseOrder(purchaseOrder.getDate(), purchaseOrder.getOrderStatus(), totalPrice, buyer.getUserId());
     PurchaseOrder savedOrder = orderRepo.save(order);
     Long purchaseOrderId = savedOrder.getId();
     products.forEach(product -> product.setPurchaseOrderId(purchaseOrderId));
     itemsRepo.saveAll(products);
+
+    // return the response back to the controller
     return new PurchaseOrderResponseDTO(order, products);
   }
 
@@ -91,15 +99,20 @@ public class PurchaseOrderService implements IPurchaseOrderService {
    * @throws NotFoundException - if the purchase order is not found.
    */
   @Override
+  @Transactional
   public PurchaseOrderResponseDTO update(Long id) {
+    // check if purchase order exists and is not already approved
     PurchaseOrder order = orderRepo.findById(id)
             .orElseThrow(() -> new NotFoundException(ExceptionType.PURCHASE_ORDER_NOT_FOUND.name()));
     if (order.getStatus().equals(OrderStatus.APPROVED)) {
       throw new InvalidParamException(Msg.PURCHASE_ORDER_ALREADY_APPROVED);
-    } 
+    }
+
+    // set status to approved and update purchase order in the database
     order.setStatus(OrderStatus.APPROVED);
     orderRepo.save(order);
 
+    // return the response back to the controller
     return new PurchaseOrderResponseDTO(order, itemsRepo.findByPurchaseOrderId(id));
   }
 }
