@@ -140,7 +140,7 @@ public class InboundOrderService implements IInboundOrderService {
 
       validIfAnnouncementExist(inboundOrderResquest.getInboundOrder().getBatchStock());
 
-      validSection(inboundOrder.getSectionCode(), inboundOrderResquest.getInboundOrder().getBatchStock());
+      validSectionUpdate(inboundOrder.getSectionCode(), inboundOrderResquest.getInboundOrder().getBatchStock());
 
       InboundOrder inboundOrderUpdated = repo.save(inboundOrder);
 
