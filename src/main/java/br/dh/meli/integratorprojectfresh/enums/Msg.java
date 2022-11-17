@@ -55,24 +55,7 @@ public enum Msg {
   public static final String VOLUME_REQUIRED = "Volume is required.";
   public static final String WAREHOUSE_CODE_REQUIRED = "Warehouse code is required.";
   public static final String WAREHOUSE_NOT_FOUND =  "Warehouse not found.";
-
-  public static final String SECTION_NOT_FOUND = "Section not found.";
-
-  public  static  final String LIMIT_CAPACITY_SECTION = "Total sector capacity limit exceeded.";
-
-  public  static  final String ANNOUNCEMENT_NOT_FOUND = "Announcement not found.";
-
-  public  static  final String INSERT_BATCH_SECTION_INCORRET = "Insert batch in wrong section";
-
-  public static final String MANAGER_NOT_VALID = "Warehouse does not have a valid manager.";
-
-
   public static final String CATEGORY_NOT_FOUND = "Category must be FS, RS or FF.";
-
-    public static final String ANNOUNCEMENT_IS_EMPTY = "Announcement is empty.";
-    public static final String FILTER_NOT_FOUND = "Filter not found.";
-  public static final String LETTER_NOT_VALID = "The letter must to be L, V or Q";
-
 
 
 }
