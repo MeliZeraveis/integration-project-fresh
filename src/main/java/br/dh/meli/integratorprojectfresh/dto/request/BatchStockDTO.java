@@ -2,16 +2,12 @@ package br.dh.meli.integratorprojectfresh.dto.request;
 
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.model.BatchStock;
-import br.dh.meli.integratorprojectfresh.model.InboundOrder;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -37,7 +33,6 @@ public class BatchStockDTO {
 
     @NotNull(message = Msg.DATE_REQUIRED)
     @PastOrPresent(message = Msg.DATE_PAST_OR_PRESENT)
-
     private LocalDate manufacturingDate;
 
     @NotNull(message = Msg.TIME_REQUIRED)

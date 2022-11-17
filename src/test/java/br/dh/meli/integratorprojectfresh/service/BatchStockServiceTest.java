@@ -1,3 +1,4 @@
+
 package br.dh.meli.integratorprojectfresh.service;
 
 import br.dh.meli.integratorprojectfresh.dto.response.BatchStockDTOResponseDueDate;
@@ -138,7 +139,4 @@ assertAll(
                 () -> Assertions.assertEquals(Msg.CATEGORY_NOT_FOUND, actualException.getMessage())
         );
     }
-
-
-
 }

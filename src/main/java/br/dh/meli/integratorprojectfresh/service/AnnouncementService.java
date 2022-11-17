@@ -1,6 +1,5 @@
 package br.dh.meli.integratorprojectfresh.service;
 
-import br.dh.meli.integratorprojectfresh.dto.request.BatchSotckAnnoucementDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.AnnoucementGetResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
@@ -9,9 +8,7 @@ import br.dh.meli.integratorprojectfresh.repository.AnnouncementRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -23,10 +20,13 @@ public class AnnouncementService implements IAnnouncementService{
     public AnnoucementGetResponseDTO getAnnouncementByAnnouncementId(Long id) {
 
         Optional<Announcement> announcement = repo.findById(id);
-        if(announcement.isEmpty()) {
-            throw new NotFoundException(Msg.SECTION_NOT_FOUND);
 
+        if(announcement.isEmpty()) {
+
+            throw new NotFoundException(Msg.ANNOUNCEMENT_IS_EMPTY);
         }
+
+        System.out.println(announcement);
         AnnoucementGetResponseDTO responseDTO = new AnnoucementGetResponseDTO(announcement.get());
         return responseDTO;
     }
@@ -36,17 +36,15 @@ public class AnnouncementService implements IAnnouncementService{
         Optional<Announcement> announcement = repo.findById(id);
 
         if(announcement.isEmpty()) {
-            throw new NotFoundException(Msg.SECTION_NOT_FOUND);
+            throw new NotFoundException(Msg.ANNOUNCEMENT_IS_EMPTY);
         }
-            if(letra.equalsIgnoreCase("Q")|| letra.equalsIgnoreCase("L") || letra.equalsIgnoreCase("V")) {
+
+            if (letra.equalsIgnoreCase("Q") || letra.equalsIgnoreCase("L") || letra.equalsIgnoreCase("V")) {
                 AnnoucementGetResponseDTO responseDTO = new AnnoucementGetResponseDTO(announcement.get(), letra);
                 return responseDTO;
-            }
-            else {
-                throw new NotFoundException(Msg.SECTION_NOT_FOUND);
+            } else {
+                throw new NotFoundException(Msg.LETTER_NOT_VALID);
             }
     }
-
-
 
 }
