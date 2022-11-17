@@ -17,7 +17,6 @@ public enum ExceptionType {
    * The Parameter is not valid.
    */
   PARAMETER_NOT_VALID("Parameter not valid"),
-
   /**
    * The Purchase Order was not found.
    */

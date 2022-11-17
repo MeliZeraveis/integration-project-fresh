@@ -44,6 +44,8 @@ public class PurchaseOrderRequestDTO {
   @NotEmpty(message = Msg.PURCHASE_ORDER_ITEMS_NOT_EMPTY)
   private List<@Valid PurchaseOrderItemsRequestDTO> products;
 
+  private BigDecimal total;
+
   public PurchaseOrderRequestDTO(LocalDateTime date, Long buyerId, OrderStatus orderStatus, List<PurchaseOrderItems> products) {
     this.date = date;
     this.buyerId = buyerId;
