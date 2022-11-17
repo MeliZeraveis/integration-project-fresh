@@ -1,6 +1,5 @@
 package br.dh.meli.integratorprojectfresh.model;
 
-import br.dh.meli.integratorprojectfresh.enums.Sections;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -12,6 +11,10 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 
+
+/**
+ * The type Announcement.
+ */
 @Getter
 @Setter
 @NoArgsConstructor

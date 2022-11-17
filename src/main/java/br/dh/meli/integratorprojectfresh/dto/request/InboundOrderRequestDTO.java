@@ -17,11 +17,17 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The type Inbound order request dto.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class InboundOrderRequestDTO {
-     @NotNull(message = Msg.DATE_REQUIRED)
+    /**
+     * The Inbound order.
+     */
+    @NotNull(message = Msg.DATE_REQUIRED)
      @Valid InboundOrderDTO inboundOrder;
 }

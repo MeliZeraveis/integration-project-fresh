@@ -38,6 +38,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * The type Annoucement controller test it.
+ */
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -52,11 +55,20 @@ public class AnnoucementControllerTestIT {
     @Autowired
     private ObjectMapper objectMapper;
 
+    /**
+     * The Announcement.
+     */
     Announcement announcement;
 
+    /**
+     * The Annoucement get response dto.
+     */
     AnnoucementGetResponseDTO annoucementGetResponseDTO;
 
 
+    /**
+     * Sets .
+     */
     @BeforeEach
     void setup() {
 //        announcement = new Announcement(1L, "maça", "description")
@@ -64,6 +76,11 @@ public class AnnoucementControllerTestIT {
 
     }
 
+    /**
+     * Gets returnannoucement get response dto sucess.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo retorna o anuncio correto em caso de sucesso")
     void get_ReturnannoucementGetResponseDTO_Sucess() throws Exception {
@@ -79,6 +96,11 @@ public class AnnoucementControllerTestIT {
 
     }
 
+    /**
+     * Gets return exception not found when product not exist.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo retorna uma mensagem NOT FOUND quando é informado o ID de um anuncio que nao existe")
     void get_ReturnExceptionNotFound_WhenProductNotExist() throws Exception {
@@ -96,6 +118,11 @@ public class AnnoucementControllerTestIT {
 
     }
 
+    /**
+     * Gets returnannoucement get response dto by letra sucess.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo retorna o anuncio correto quando informado o ID e a categoria de ordenaçao em caso de sucesso")
     void get_ReturnannoucementGetResponseDTOByLetra_Sucess() throws Exception {
@@ -112,6 +139,11 @@ public class AnnoucementControllerTestIT {
 
     }
 
+    /**
+     * Gets return exception not found when product by letra not exist.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo retorna uma mensagem NOT FOUND quando é informado o ID correto com uma categoria inexistente")
     void get_ReturnExceptionNotFound_WhenProductByLetraNotExist() throws Exception {

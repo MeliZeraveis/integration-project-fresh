@@ -47,6 +47,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+/**
+ * The type Inbound order controller test it.
+ */
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -81,6 +84,9 @@ public class InboundOrderControllerTestIT {
 
     private  List<InboundOrder> inboundOrderList = new ArrayList<>();
 
+    /**
+     * Sets .
+     */
     @BeforeEach
     void setup() {
         batchStockRepository.deleteAll();
@@ -121,6 +127,11 @@ public class InboundOrderControllerTestIT {
 
     }
 
+    /**
+     * Save return inbound order post response dto sucess.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo post armazena os dados corretamente em caso de sucesso")
     void save_ReturnInboundOrderPostResponseDTO_Sucess() throws Exception {
@@ -146,6 +157,11 @@ public class InboundOrderControllerTestIT {
         assertThat(batchStockRepository.findAll().get(0)).isNotNull();
     }
 
+    /**
+     * Update return inbound order put response dto sucess.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo put atualiza os dados corretamente em caso de sucesso")
     void update_ReturnInboundOrderPutResponseDTO_Sucess() throws Exception {
@@ -174,6 +190,11 @@ public class InboundOrderControllerTestIT {
 
     }
 
+    /**
+     * Save return exception field order date null fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo post retorna uma exceçao quando o ORDERDATE é nulo")
     void save_ReturnExceptionFieldOrderDateNull_Fail() throws Exception {
@@ -190,6 +211,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.DATE_REQUIRED)));
     }
 
+    /**
+     * Save return exception field order date future fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo post retorna uma exceçao quando o ORDERDATE informado está incorreta")
     void save_ReturnExceptionFieldOrderDateFuture_Fail() throws Exception {
@@ -207,6 +233,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.DATE_PAST_OR_PRESENT)));
     }
 
+    /**
+     * Save return exception manufacturing date date future fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo post retorna uma exceçao quando a data de fabricaçao está incorreta")
     void save_ReturnExceptionManufacturingDateDateFuture_Fail() throws Exception {
@@ -225,6 +256,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.DATE_PAST_OR_PRESENT)));
     }
 
+    /**
+     * Save return exception manufacturing date null fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo post retorna uma exceçao quandoa data de fabricaçao é nula")
     void save_ReturnExceptionManufacturingDateNull_Fail() throws Exception {
@@ -241,6 +277,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.DATE_REQUIRED)));
     }
 
+    /**
+     * Save return exception due date date past fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo post retorna uma exceçao quando o DUEDATE está incorreto")
     void save_ReturnExceptionDueDateDatePast_Fail() throws Exception {
@@ -258,6 +299,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.DATE_FUTURE)));
     }
 
+    /**
+     * Save return exception due date null fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo post retorna uma exceçao quando o DUEDATE é nulo")
     void save_ReturnExceptionDueDateNull_Fail() throws Exception {
@@ -274,6 +320,12 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].dueDate")))
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.DATE_REQUIRED)));
     }
+
+    /**
+     * Save return exception section code null fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo post retorna uma exceçao quando o SectionCode é nulo")
     void save_ReturnExceptionSectionCodeNull_Fail() throws Exception {
@@ -290,6 +342,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.SECTION_CODE_REQUIRED)));
     }
 
+    /**
+     * Save return exception warehouse code null fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo post retorna uma exceçao quando o WarehouseCode é nulo")
     void save_ReturnExceptionWarehouseCodeNull_Fail() throws Exception {
@@ -306,6 +363,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.WAREHOUSE_CODE_REQUIRED)));
     }
 
+    /**
+     * Save return exception announcement id null fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo post retorna uma exceçao quando o AnnouncementID e é nulo")
     void save_ReturnExceptionAnnouncementIdNull_Fail() throws Exception {
@@ -322,6 +384,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.ANNOUNCEMENT_ID_REQUIRED)));
     }
 
+    /**
+     * Save return exception current temperature null fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo post retorna uma exceçao quando o SectionType é nulo")
     void save_ReturnExceptionCurrentTemperatureNull_Fail() throws Exception {
@@ -338,6 +405,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.TEMPERATURE_REQUIRED)));
     }
 
+    /**
+     * Save return exception product quantity smaller 1 fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo post retorna uma exceçao quando o ProductQuantity informado nao atinge o valor minimo")
     void save_ReturnExceptionProductQuantitySmaller1_Fail() throws Exception {
@@ -355,6 +427,11 @@ public class InboundOrderControllerTestIT {
     }
 
 
+    /**
+     * Save return exception product quantity is null fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo post retorna uma exceçao quando o ProductQuantity é nulo")
     void save_ReturnExceptionProductQuantityIsNull_Fail() throws Exception {
@@ -370,6 +447,12 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].productQuantity")))
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.QUANTITY_REQUIRED)));
     }
+
+    /**
+     * Save return exception manufacturing time date future fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo post retorna uma exceçao quando o ManufacturinTime recebe um time com formato invalido")
     void save_ReturnExceptionManufacturingTimeDateFuture_Fail() throws Exception {
@@ -388,6 +471,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.TIME_PAST_OR_PRESENT)));
     }
 
+    /**
+     * Save return exception manufacturing time null fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo post retorna uma exceçao quando o ManufacturingTime é nulo")
     void save_ReturnExceptionManufacturingTimeNull_Fail() throws Exception {
@@ -404,6 +492,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.TIME_REQUIRED)));
     }
 
+    /**
+     * Save return exception volume null fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo post retorna uma exceçao quando o Volume é nulo")
     void save_ReturnExceptionVolumeNull_Fail() throws Exception {
@@ -420,6 +513,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.VOLUME_REQUIRED)));
     }
 
+    /**
+     * Save return exception volume zero fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo post retorna uma exceçao quando o Volume menor que 1")
     void save_ReturnExceptionVolumeZero_Fail() throws Exception {
@@ -437,6 +535,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.VOLUME_MIN_VALUE)));
     }
 
+    /**
+     * Save return exception price negative fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo post retorna uma exceçao quando o Price é negativo")
     void save_ReturnExceptionPriceNegative_Fail() throws Exception {
@@ -453,6 +556,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.FIELD_MIN_VALUE)));
     }
 
+    /**
+     * Save return exception price null fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo post retorna uma exceçao quando o PRICE é nulo")
     void save_ReturnExceptionPriceNull_Fail() throws Exception {
@@ -471,6 +579,11 @@ public class InboundOrderControllerTestIT {
 
     //PUT - UPDATE --------------------------------
 
+    /**
+     * Update return exception field order date null fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo put retorna uma exceçao quando o ORDERDATE é nulo")
     void update_ReturnExceptionFieldOrderDateNull_Fail() throws Exception {
@@ -487,6 +600,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.DATE_REQUIRED)));
     }
 
+    /**
+     * Update return exception field order date future fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo put retorna uma exceçao quando o ORDERDATE recebe uma data invalida")
     void update_ReturnExceptionFieldOrderDateFuture_Fail() throws Exception {
@@ -504,6 +622,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.DATE_PAST_OR_PRESENT)));
     }
 
+    /**
+     * Update return exception manufacturing date date future fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo put retorna uma exceçao quando o ManufacturingDate recebe uma data invalida")
     void update_ReturnExceptionManufacturingDateDateFuture_Fail() throws Exception {
@@ -522,6 +645,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.DATE_PAST_OR_PRESENT)));
     }
 
+    /**
+     * Update return exception manufacturing date null fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo put retorna uma exceçao quando o ManufacturingDate é nulo")
     void update_ReturnExceptionManufacturingDateNull_Fail() throws Exception {
@@ -538,6 +666,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.DATE_REQUIRED)));
     }
 
+    /**
+     * Update return exception due date date past fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo put retorna uma exceçao quando o DueDate recebe uma data invalida")
     void update_ReturnExceptionDueDateDatePast_Fail() throws Exception {
@@ -555,6 +688,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.DATE_FUTURE)));
     }
 
+    /**
+     * Update return exception due date null fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo put retorna uma exceçao quando o DueDate é nulo")
     void update_ReturnExceptionDueDateNull_Fail() throws Exception {
@@ -571,6 +709,12 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].dueDate")))
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.DATE_REQUIRED)));
     }
+
+    /**
+     * Update return exception section code null fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo put retorna uma exceçao quando o SectionCode é nulo")
     void update_ReturnExceptionSectionCodeNull_Fail() throws Exception {
@@ -587,6 +731,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.SECTION_CODE_REQUIRED)));
     }
 
+    /**
+     * Update return exception warehouse code null fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo put retorna uma exceçao quando o WarehouseCode é nulo")
     void update_ReturnExceptionWarehouseCodeNull_Fail() throws Exception {
@@ -603,6 +752,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.WAREHOUSE_CODE_REQUIRED)));
     }
 
+    /**
+     * Update return exception announcement id null fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo put retorna uma exceçao quando o AnnouncementId é nulo")
     void update_ReturnExceptionAnnouncementIdNull_Fail() throws Exception {
@@ -619,6 +773,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.ANNOUNCEMENT_ID_REQUIRED)));
     }
 
+    /**
+     * Update return exception current temperature null fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo put retorna uma exceçao quando o SectionType é nulo")
     void update_ReturnExceptionCurrentTemperatureNull_Fail() throws Exception {
@@ -635,6 +794,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.TEMPERATURE_REQUIRED)));
     }
 
+    /**
+     * Update return exception product quantity smaller 1 fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo put retorna uma exceçao quando o ProductQuantity declarado nao atinge o valor minimo")
     void update_ReturnExceptionProductQuantitySmaller1_Fail() throws Exception {
@@ -651,6 +815,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.QUANTITY_MIN_VALUE)));
     }
 
+    /**
+     * Update return exception product quantity is null fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo put retorna uma exceçao quando o ProductQuantity é nulo")
     void update_ReturnExceptionProductQuantityIsNull_Fail() throws Exception {
@@ -667,6 +836,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.QUANTITY_REQUIRED)));
     }
 
+    /**
+     * Update return exception manufacturing time date future fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo put retorna uma exceçao quando o ManufacturingTime recebe um time num formato invalido")
     void update_ReturnExceptionManufacturingTimeDateFuture_Fail() throws Exception {
@@ -685,6 +859,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.TIME_PAST_OR_PRESENT)));
     }
 
+    /**
+     * Update return exception manufacturing time null fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo put retorna uma exceçao quando o ManufacturingTime é nulo")
     void update_ReturnExceptionManufacturingTimeNull_Fail() throws Exception {
@@ -701,6 +880,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.TIME_REQUIRED)));
     }
 
+    /**
+     * Update return exception volume null fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo put retorna uma exceçao quando o Volume é nulo")
     void update_ReturnExceptionVolumeNull_Fail() throws Exception {
@@ -717,6 +901,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.VOLUME_REQUIRED)));
     }
 
+    /**
+     * Update return exception volume zero fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo put retorna uma exceçao quando o Volume é menor que 1")
     void update_ReturnExceptionVolumeZero_Fail() throws Exception {
@@ -734,6 +923,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.VOLUME_MIN_VALUE)));
     }
 
+    /**
+     * Update return exception price negative fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo put retorna uma exceçao quando o Price é negativo")
     void update_ReturnExceptionPriceNegative_Fail() throws Exception {
@@ -750,6 +944,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.FIELD_MIN_VALUE)));
     }
 
+    /**
+     * Update return exception price null fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo put retorna uma exceçao quando o Price é nulo")
     void update_ReturnExceptionPriceNull_Fail() throws Exception {
@@ -771,6 +970,11 @@ public class InboundOrderControllerTestIT {
 
     //save
 
+    /**
+     * Save valid if warehouse exist return exception warehouse not exist fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo post retorna uma exceçao WAREHOUSE_NOT_ FOUND quando o WarehouseCode é invalido")
     void SaveValidIfWarehouseExist_ReturnExceptionWarehouseNotExist_Fail() throws Exception {
@@ -785,6 +989,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.WAREHOUSE_NOT_FOUND)));
     }
 
+    /**
+     * Save valid if warehouse exist return exception manager null fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo post retorna uma exceçao MANAGER_NOT_VALID quando o Manager nao é valido")
     void SaveValidIfWarehouseExist_ReturnExceptionManagerNull_Fail() throws Exception {
@@ -800,6 +1009,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.MANAGER_NOT_VALID)));
     }
 
+    /**
+     * Savevalid section return exception warehouse not exist fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo post retorna uma exceçao SECTION_NOT_FOUND quando o Section é invalido")
     void SavevalidSection_ReturnExceptionWarehouseNotExist_Fail() throws Exception {
@@ -815,6 +1029,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.SECTION_NOT_FOUND)));
     }
 
+    /**
+     * Save valid section return exception section type incorret fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo post retorna uma exceçao INSERT_BATCH_SECTION_INCORRET quando o SectionType é incorreto")
     void SaveValidSection_ReturnExceptionSectionTypeIncorret_Fail() throws Exception {
@@ -834,6 +1053,11 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.INSERT_BATCH_SECTION_INCORRET)));
     }
 
+    /**
+     * Save valid section return exception capacity limit fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo post retorna uma exceçao LIMIT_CAPACITY_SECTION quando a capacidade maxima de estoque é atingida")
     void SaveValidSection_ReturnExceptionCapacityLimit_Fail() throws Exception {
@@ -854,6 +1078,11 @@ public class InboundOrderControllerTestIT {
 
     //update
 
+    /**
+     * Update return exception not found when inbound order not exist fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo put retorna uma exceçao INBOUND_ORDER_NOT_FOUND quando o OrderNumber é invalido")
     void Update_ReturnExceptionNotFound_whenInboundOrderNotExist_Fail() throws Exception {
@@ -870,6 +1099,11 @@ public class InboundOrderControllerTestIT {
 
     }
 
+    /**
+     * Update return exception not found when batch not exist fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo put retorna uma exceçao BATCH_NOT_FOUND quando o BatchNumber é invalido")
     void Update_ReturnExceptionNotFound_whenBatchNotExist_Fail() throws Exception {
@@ -887,6 +1121,11 @@ public class InboundOrderControllerTestIT {
 
     }
 
+    /**
+     * Update return exception not found when ware househ not exist fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo put retorna uma exceçao WAREHOUSE_NOT_FOUND quando o WareHouseNumber é invalido")
     void Update_ReturnExceptionNotFound_whenWareHousehNotExist_Fail() throws Exception {
@@ -907,6 +1146,11 @@ public class InboundOrderControllerTestIT {
 
     }
 
+    /**
+     * Update return exception not found when manager not exist fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo put retorna uma exceçao MANAGER_NOT_FOUND quando o User nao é gerente")
     void Update_ReturnExceptionNotFound_whenManagerNotExist_Fail() throws Exception {
@@ -926,6 +1170,11 @@ public class InboundOrderControllerTestIT {
 
     }
 
+    /**
+     * Update return exception not found when annoucement not exist fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo put retorna uma exceçao ANNOUNCCEMENT_NOT_FOUND quando o Announcement nao esta registrado")
     void Update_ReturnExceptionNotFound_whenAnnoucementNotExist_Fail() throws Exception {
@@ -946,6 +1195,11 @@ public class InboundOrderControllerTestIT {
 
     }
 
+    /**
+     * Update return exception not found when sectiont not exist fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo put retorna uma exceçao SECTOPM_NOT_FOUND quando a Section nao esta registrado")
     void Update_ReturnExceptionNotFound_whenSectiontNotExist_Fail() throws Exception {
@@ -967,6 +1221,11 @@ public class InboundOrderControllerTestIT {
 
     }
 
+    /**
+     * Update return section type exception when type section not equals fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo put retorna uma exceçao INSERT_BATCH_SECTION_INCORRET quando o Section tybe está incorreto")
     void Update_ReturnSectionTypeException_whenTypeSectionNotEquals_Fail() throws Exception {
@@ -988,6 +1247,11 @@ public class InboundOrderControllerTestIT {
 
     }
 
+    /**
+     * Update return exception not found when not equals fail.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo put retorna uma exceçao LIMIT_CAPACITY_SECTION quando o Volume ultrapassa o limite de capacidade")
     void Update_ReturnExceptionNotFound_whenNotEquals_Fail() throws Exception {

@@ -11,6 +11,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * The type Purchase order.
+ */
 @Getter
 @Setter
 @NoArgsConstructor

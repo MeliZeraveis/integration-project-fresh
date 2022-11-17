@@ -13,6 +13,9 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 
+/**
+ * The type Batch sotck annoucement dto.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,6 +25,11 @@ public class BatchSotckAnnoucementDTO {
     private int productQuantity;
     private LocalDate dueDate;
 
+    /**
+     * Instantiates a new Batch sotck annoucement dto.
+     *
+     * @param batchStock the batch stock
+     */
     public BatchSotckAnnoucementDTO(BatchStock batchStock) {
         this.batchNumber = batchStock.getBatchNumber();
         this.productQuantity = batchStock.getProductQuantity();

@@ -11,6 +11,9 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.List;
 
+/**
+ * The type User.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -44,6 +47,15 @@ public class User {
     @JsonIgnoreProperties("seller")
     private List<Announcement> announcement;
 
+    /**
+     * Instantiates a new User.
+     *
+     * @param id       the id
+     * @param username the username
+     * @param password the password
+     * @param email    the email
+     * @param role     the role
+     */
     public User(long id, String username, String password, String email, String role) {
         this.userId = id;
         this.username = username;

@@ -20,6 +20,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * The type Inbound order service.
+ */
 @Service
 @RequiredArgsConstructor
 public class InboundOrderService implements IInboundOrderService {
@@ -33,6 +36,12 @@ public class InboundOrderService implements IInboundOrderService {
     private final AnnouncementRepository announcementRepo;
 
 
+    /**
+     * Valid if warehouse exist.
+     *
+     * @param warehouseCode the warehouse code
+     * @throws NotFoundException the not found exception
+     */
     void validIfWarehouseExist(Long warehouseCode) throws NotFoundException {
         Optional<Warehouse> warehouseOptional = warehouseRepo.findById(warehouseCode);
         if (warehouseOptional.isEmpty()){
@@ -44,6 +53,13 @@ public class InboundOrderService implements IInboundOrderService {
             throw new ManagerNotValidException(Msg.MANAGER_NOT_VALID);
         }
     }
+
+    /**
+     * Valid section.
+     *
+     * @param sectionCode    the section code
+     * @param batchStockList the batch stock list
+     */
     void validSection(long sectionCode, List<BatchStockDTO>batchStockList) {
         Optional<Section> sectionOptional = sectionRepo.findById(sectionCode);
         if (sectionOptional.isEmpty()){
@@ -64,6 +80,12 @@ public class InboundOrderService implements IInboundOrderService {
         }
     }
 
+    /**
+     * Valid section batch stock update.
+     *
+     * @param section        the section
+     * @param batchStockList the batch stock list
+     */
     void validSectionBatchStockUpdate(Section section, List<BatchStockDTO>batchStockList){
         float sectionMaxCapacity = section.getMaxCapacity();
         float sectionCapacityUsed = section.getUsedCapacity();
@@ -81,6 +103,13 @@ public class InboundOrderService implements IInboundOrderService {
             sectionRepo.save(section);
         }
     }
+
+    /**
+     * Valid section update.
+     *
+     * @param sectionCode    the section code
+     * @param batchStockList the batch stock list
+     */
     void validSectionUpdate(long sectionCode, List<BatchStockDTO>batchStockList) {
         Optional<Section> sectionOptional = sectionRepo.findById(sectionCode);
 
@@ -106,6 +135,12 @@ public class InboundOrderService implements IInboundOrderService {
         return new InboundOrderPostResponseDTO( batchStockRepo.saveAll(batchStockList));
     }
 
+    /**
+     * Valid if announcement exist.
+     *
+     * @param batchStockDTOList the batch stock dto list
+     * @throws NotFoundException the not found exception
+     */
     void validIfAnnouncementExist(List<BatchStockDTO> batchStockDTOList) throws NotFoundException {
         for (BatchStockDTO batchStockDTO : batchStockDTOList) {
             Optional<Announcement> announcementOptional = announcementRepo.findById(batchStockDTO.getAnnouncementId());
@@ -114,12 +149,25 @@ public class InboundOrderService implements IInboundOrderService {
             }
         }
     }
+
+    /**
+     * Valid if inbound order exist.
+     *
+     * @param orderNumber the order number
+     * @throws NotFoundException the not found exception
+     */
     void validIfInboundOrderExist(Long orderNumber) throws NotFoundException {
         if (repo.findById(orderNumber).isEmpty()) {
             throw new NotFoundException(Msg.INBOUND_ORDER_NOT_FOUND);
         }
     }
 
+    /**
+     * Valid batch.
+     *
+     * @param batchStockDTOList the batch stock dto list
+     * @throws NotFoundException the not found exception
+     */
     void validBatch(List<BatchStockDTO> batchStockDTOList) throws NotFoundException {
         for (BatchStockDTO batchStockDTO : batchStockDTOList) {
             Optional<BatchStock> batchStock = batchStockRepo.findById(batchStockDTO.getBatchNumber());

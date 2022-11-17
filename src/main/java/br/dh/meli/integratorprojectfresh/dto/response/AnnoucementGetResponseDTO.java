@@ -14,6 +14,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The type Annoucement get response dto.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -26,12 +29,23 @@ public class AnnoucementGetResponseDTO {
 
     private List<BatchSotckAnnoucementDTO> batchStock;
 
+    /**
+     * Instantiates a new Annoucement get response dto.
+     *
+     * @param announcement the announcement
+     */
     public AnnoucementGetResponseDTO(Announcement announcement) {
         this.section= new SectionDTO(announcement.getSection(), announcement);
         this.productId = announcement.getAnnouncementId();
         this.batchStock = announcement.getBatchStock().stream().map(BatchSotckAnnoucementDTO::new).collect(Collectors.toList());
     }
 
+    /**
+     * Instantiates a new Annoucement get response dto.
+     *
+     * @param announcement the announcement
+     * @param letra        the letra
+     */
     public AnnoucementGetResponseDTO(Announcement announcement, String letra) {
         this.section= new SectionDTO(announcement.getSection(), announcement);
         this.productId = announcement.getAnnouncementId();

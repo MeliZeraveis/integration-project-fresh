@@ -11,6 +11,9 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Section.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -41,6 +44,15 @@ public class Section {
     @JsonIgnoreProperties(value = {"section", "batchStock", "warehouse" })
     private List<InboundOrder> inboundOrder;
 
+    /**
+     * Instantiates a new Section.
+     *
+     * @param sectionCode     the section code
+     * @param type            the type
+     * @param maxCapacity     the max capacity
+     * @param usedCapacity    the used capacity
+     * @param listAnnoucement the list annoucement
+     */
     public <E> Section(long sectionCode, String type, float maxCapacity, float usedCapacity, ArrayList<Announcement> listAnnoucement) {
     this.sectionCode = sectionCode;
     this.type = type;

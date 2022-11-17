@@ -2,6 +2,9 @@ package br.dh.meli.integratorprojectfresh.model;
 
 import javax.persistence.*;
 
+/**
+ * The type Purchase order items.
+ */
 @Entity
 @Table(name = "purchase_order_items")
 public class PurchaseOrderItems {

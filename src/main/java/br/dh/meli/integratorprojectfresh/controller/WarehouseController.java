@@ -8,7 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-
+/**
+ * The type Warehouse controller.
+ */
 @RestController
 @RequestMapping("/api/v1/fresh-products/warehouse")
 public class WarehouseController {
@@ -16,6 +18,12 @@ public class WarehouseController {
     @Autowired
     private IWareshouseService service;
 
+    /**
+     * Gets announcement by announcement id.
+     *
+     * @param product_id the product id
+     * @return the announcement by announcement id
+     */
     @GetMapping("/query_type")
     ResponseEntity<WarehouseProductQuantityGetResponseDTO> getAnnouncementByAnnouncementId(@RequestParam Long product_id) {
         WarehouseProductQuantityGetResponseDTO warehouseProductQuantityList = service.getWarehouseProductsQuantityListByAnnoucementId(product_id);

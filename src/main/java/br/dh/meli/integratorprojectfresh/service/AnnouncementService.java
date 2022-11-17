@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 
+/**
+ * The type Announcement service.
+ */
 @Service
 @RequiredArgsConstructor
 public class AnnouncementService implements IAnnouncementService{
