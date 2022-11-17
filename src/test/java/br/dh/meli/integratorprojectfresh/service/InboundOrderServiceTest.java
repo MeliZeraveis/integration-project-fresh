@@ -92,7 +92,7 @@ class InboundOrderServiceTest {
 
         batchStockList.get(0).setAnnouncementId(1L);
         batchStockList.get(1).setAnnouncementId(1L);
-        sectionTest = new Section(1L, "Fresh", (float) 100.0, (float) 80.0, new ArrayList<>(), 1L);
+        sectionTest = new Section(1L, "Fresh", (float) 100.0, (float) 80.0,1L ,new ArrayList<>(), new ArrayList<>(), null);
         List<Section> sectionList = new ArrayList<>();
         sectionList.add(sectionTest);
         User user = new User(5L, "Test", "1234", "test@email.com", "manager");

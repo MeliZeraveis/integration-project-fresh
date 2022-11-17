@@ -55,7 +55,7 @@ class AnnouncementServiceTest {
         List<BatchStock> batchStockList2 = new ArrayList<>();
         batchStockList2.add(batchStock);
 
-        section = new Section(1L, "Fresh", 50.0f, 20.0f, null, List.of(inboundOrder), null );
+        section = new Section(1L, "Fresh", 50.0f, 20.0f, 1L, new ArrayList<>(), List.of(inboundOrder), null );
         announcement = new Announcement(1L, "Camisa", "Camisa branca", 4L, BigDecimal.valueOf(100.0), 1L, section, batchStockList2, null, new ArrayList<>());
 
         responseDTO = new AnnoucementGetResponseDTO(announcement);
