@@ -8,6 +8,7 @@ import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderRequestDTO;
 import br.dh.meli.integratorprojectfresh.enums.ExceptionType;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.enums.Roles;
+import br.dh.meli.integratorprojectfresh.exception.ActionNotAllowedException;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.model.*;
 import br.dh.meli.integratorprojectfresh.repository.*;
@@ -36,6 +37,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -274,6 +276,7 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].dueDate")))
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.DATE_REQUIRED)));
     }
+
     @Test
     @DisplayName("Testa se o metodo post retorna uma exceçao quando o SectionCode é nulo")
     void save_ReturnExceptionSectionCodeNull_Fail() throws Exception {
@@ -852,6 +855,40 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.LIMIT_CAPACITY_SECTION)));
     }
 
+    @Test
+    @DisplayName("Testa se o metodo post retorna uma exceçao SECTION_NOT_BELONG_WAREHOUSE o section nao pertence a wahehouse")
+    void SaveValidSection_ReturnExceptionSectionNotBelongWarehouse_Fail() throws Exception {
+        Section section = sectionRepository.findById(1l).get();
+
+        inboundOrderDTO.setWarehouseCode(2l);
+        section.setWarehouseCode(1l);
+
+        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.title", CoreMatchers.is("Action not allowed")))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.SECTION_NOT_BELONG_WAREHOUSE)));
+    }
+
+    @Test
+    @DisplayName("Testa o metodo SAVE se retorna uma EXCEPTION se o DUEDATE tiver menos de 3 semanas")
+    void Save_validBatchDueDateReturnException_Fail() throws Exception {
+
+        LocalDate orderDate2 = LocalDate.now().plusWeeks(2);
+        batchStockList.get(0).setDueDate(orderDate2);
+
+        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.title", CoreMatchers.is("Action not allowed")))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.BATCH_EXPIRED)));
+    }
+
+
     //update
 
     @Test
@@ -1007,6 +1044,27 @@ public class InboundOrderControllerTestIT {
         response.andExpect(status().is4xxClientError())
                 .andExpect(jsonPath("$.title", CoreMatchers.is("Action not allowed")))
                 .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.LIMIT_CAPACITY_SECTION)));
+
+    }
+
+    @Test
+    @DisplayName(("Testa o metodo UPDATE se retorna uma EXCEPTION se o DUEDATE tiver menos de 3 semanas"))
+    void Update_validBatchDueDateReturnException_Fail() throws Exception {
+
+        inboundOrderDTO.setOrderNumber(1L);
+        batchStockList.get(0).setBatchNumber(1L);
+        batchStockList.get(1).setBatchNumber(2L);
+
+        LocalDate orderDate2 = LocalDate.now().plusWeeks(2);
+        batchStockList.get(0).setDueDate(orderDate2);
+
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/inboundorder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+
+        response.andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.title", CoreMatchers.is("Action not allowed")))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.BATCH_EXPIRED)));
 
     }
 }

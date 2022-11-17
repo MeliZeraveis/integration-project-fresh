@@ -338,8 +338,6 @@ class InboundOrderServiceTest {
         batchStockList.get(0).setBatchNumber(1L);
         batchStockList.get(1).setBatchNumber(2L);
 
-
-
         final var actualException = assertThrows(
                 NotFoundException.class,
                 () -> service.validSectionUpdate(1L, batchStockList));
