@@ -39,7 +39,7 @@ public class BatchStockService implements IBatchStockService {
             return new BatchStockGetResponseDTO(batchStock, category);
         }
         else {
-            throw new NotFoundException(Msg.SECTION_NOT_FOUND);
+            throw new NotFoundException(Msg.CATEGORY_NOT_FOUND);
         }
     }
 }

@@ -33,6 +33,8 @@ public class Section {
     @Column(name = "used_capacity", nullable = false)
     private Float usedCapacity;
 
+    @Column(name = "warehouse_code", nullable = false)
+
     @OneToMany(mappedBy = "section")
     @JsonIgnoreProperties("section")
     private List<Announcement> announcement;
@@ -40,6 +42,11 @@ public class Section {
     @OneToMany(mappedBy = "section")
     @JsonIgnoreProperties(value = {"section", "batchStock", "warehouse" })
     private List<InboundOrder> inboundOrder;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "warehouse_code", insertable = false, updatable = false)
+    @JsonIgnoreProperties("section")
+    private Warehouse warehouse;
 
     public <E> Section(long sectionCode, String type, float maxCapacity, float usedCapacity, ArrayList<Announcement> listAnnoucement) {
     this.sectionCode = sectionCode;
