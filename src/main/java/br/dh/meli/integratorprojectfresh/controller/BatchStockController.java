@@ -18,15 +18,15 @@ public class BatchStockController {
 
    @GetMapping
    @ResponseBody
-    public ResponseEntity<BatchStockGetResponseDTO> getBatchStockByBatchStockId(@RequestParam Integer numberOfDays, @RequestParam String section) {
-         BatchStockGetResponseDTO batchStock = service.getBatchStockByBatchStockId(numberOfDays, section);
+    public ResponseEntity<BatchStockGetResponseDTO> getBatchStockByBatchStockId(@RequestParam Integer numberOfDays, @RequestParam Long sectionCode) {
+         BatchStockGetResponseDTO batchStock = service.getBatchStockByBatchStockId(numberOfDays, sectionCode);
          return new ResponseEntity<>(batchStock, HttpStatus.OK);
     }
 
     @GetMapping("/list")
     @ResponseBody
     public ResponseEntity<BatchStockGetResponseDTO> findBatchStockByBatchStockNumber(@RequestParam Integer numberOfDays, @RequestParam String category, @RequestParam String order) {
-         BatchStockGetResponseDTO batchStock = service.findBatchStockByBatchStockNumber(numberOfDays, category);
+         BatchStockGetResponseDTO batchStock = service.findBatchStockByBatchStockNumber(numberOfDays, category, order);
          return new ResponseEntity<>(batchStock, HttpStatus.OK);
     }
 }

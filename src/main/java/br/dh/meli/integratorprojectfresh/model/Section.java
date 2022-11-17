@@ -48,7 +48,7 @@ public class Section {
     @JsonIgnoreProperties("section")
     private Warehouse warehouse;
 
-    public <E> Section(long sectionCode, String type, float maxCapacity, float usedCapacity, ArrayList<Announcement> listAnnoucement) {
+    public Section(long sectionCode, String type, float maxCapacity, float usedCapacity, ArrayList<Announcement> listAnnoucement) {
     this.sectionCode = sectionCode;
     this.type = type;
     this.maxCapacity = maxCapacity;

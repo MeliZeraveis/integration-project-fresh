@@ -7,8 +7,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface BatchStockRepository extends JpaRepository<BatchStock, Long> {
-    List<BatchStock> findAllByDueDateBetweenAndSectionType(LocalDate today, LocalDate dueDate, String section );
-
     List<BatchStock> findAllByDueDateBetween(LocalDate today, LocalDate dueDate);
 
 }
