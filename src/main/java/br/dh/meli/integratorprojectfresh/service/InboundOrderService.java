@@ -108,7 +108,7 @@ public class InboundOrderService implements IInboundOrderService {
     public InboundOrderPostResponseDTO save(InboundOrderRequestDTO inboundOrderResquest) {
         InboundOrder inboundOrder = new InboundOrder(inboundOrderResquest.getInboundOrder());
         validIfWarehouseExist(inboundOrder.getWarehouseCode());
-        validIfAnnouncementExist(inboundOrderResquest.getInboundOrder().getBatchStock());
+        validAnnouncement(inboundOrderResquest.getInboundOrder().getBatchStock());
         validSection(inboundOrder.getSectionCode(), inboundOrderResquest.getInboundOrder().getBatchStock(), inboundOrder.getWarehouseCode());
         validBatchDueDate(inboundOrderResquest.getInboundOrder().getBatchStock());
         repo.save(inboundOrder);
@@ -119,11 +119,14 @@ public class InboundOrderService implements IInboundOrderService {
         return new InboundOrderPostResponseDTO( batchStockRepo.saveAll(batchStockList));
     }
 
-    void validIfAnnouncementExist(List<BatchStockDTO> batchStockDTOList) throws NotFoundException {
-        for (BatchStockDTO batchStockDTO : batchStockDTOList) {
-            Optional<Announcement> announcementOptional = announcementRepo.findById(batchStockDTO.getAnnouncementId());
+    void validAnnouncement(List<BatchStockDTO> batchStockDTOList) throws NotFoundException {
+        for (BatchStockDTO b : batchStockDTOList) {
+            Optional<Announcement> announcementOptional = announcementRepo.findById(b.getAnnouncementId());
             if (announcementOptional.isEmpty()){
                 throw new NotFoundException(Msg.ANNOUNCEMENT_NOT_FOUND);
+            }
+            if(!Objects.equals(announcementOptional.get().getSection().getType(), b.getSectionType())){
+                throw new ActionNotAllowedException(Msg.PRODUCT_BATCH_INCORRECT);
             }
         }
     }
@@ -153,7 +156,7 @@ public class InboundOrderService implements IInboundOrderService {
 
         validIfWarehouseExist(inboundOrder.getWarehouseCode());
 
-        validIfAnnouncementExist(inboundOrderResquest.getInboundOrder().getBatchStock());
+        validAnnouncement(inboundOrderResquest.getInboundOrder().getBatchStock());
 
         validSectionUpdate(inboundOrder.getSectionCode(), inboundOrderResquest.getInboundOrder().getBatchStock());
 

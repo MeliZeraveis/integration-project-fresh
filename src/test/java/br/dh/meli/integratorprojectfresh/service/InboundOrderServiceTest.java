@@ -97,7 +97,7 @@ class InboundOrderServiceTest {
         sectionList.add(sectionTest);
         User user = new User(5L, "Test", "1234", "test@email.com", "manager");
         warehouseTest = new Warehouse(1L, "Test", "Address Test", "BR-Test", new ArrayList<>(), sectionList, user);
-        announcementTest = new Announcement(1L, "Alface Test", "description", 3L, BigDecimal.valueOf(1.80), 1L, null, new ArrayList<>(), null, new ArrayList<>());
+        announcementTest = new Announcement(1L, "Alface Test", "description", 3L, BigDecimal.valueOf(1.80), 1L, sectionTest, new ArrayList<>(), null, new ArrayList<>());
     }
 
     @Test
@@ -187,7 +187,7 @@ class InboundOrderServiceTest {
     void IsValidAnnouncementMethod_ThrowsException_WhenIdIsInvalid() throws NotFoundException {
         final var actualException = assertThrows(
                 NotFoundException.class,
-                () -> service.validIfAnnouncementExist(batchStockList));
+                () -> service.validAnnouncement(batchStockList));
         assertAll(
                 () -> Assertions.assertEquals( Msg.ANNOUNCEMENT_NOT_FOUND, actualException.getMessage())
         );
