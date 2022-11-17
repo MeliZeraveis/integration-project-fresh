@@ -10,10 +10,7 @@ import br.dh.meli.integratorprojectfresh.enums.OrderStatus;
 import br.dh.meli.integratorprojectfresh.exception.BusinessRuleException;
 import br.dh.meli.integratorprojectfresh.exception.InvalidParamException;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
-import br.dh.meli.integratorprojectfresh.model.BatchStock;
-import br.dh.meli.integratorprojectfresh.model.PurchaseOrder;
-import br.dh.meli.integratorprojectfresh.model.PurchaseOrderItems;
-import br.dh.meli.integratorprojectfresh.model.User;
+import br.dh.meli.integratorprojectfresh.model.*;
 import br.dh.meli.integratorprojectfresh.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,6 +33,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
   private final BatchStockRepository batchStockRepo;
   private final PurchaseOrderRepository orderRepo;
   private final PurchaseOrderItemsRepository itemsRepo;
+  private final SectionRepository sectionRepo;
   private final UserRepository userRepo;
 
   /**
@@ -138,10 +136,13 @@ public class PurchaseOrderService implements IPurchaseOrderService {
           } else {
             productQuantity.set(productsToFulfill - batchQuantity);
             batchStockRepo.delete(batch);
+            // when removing a batch, free up space in the section and the warehouse
+            Section section = batch.getInboundOrder().getSection();
+            section.setUsedCapacity(section.getUsedCapacity() - batch.getVolume());
+            sectionRepo.save(section);
           }
         }
       });
-      // TODO: update section and warehouse tables!
     });
 
     // set status to approved and update purchase order in the database
