@@ -24,15 +24,11 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class InboundOrderService implements IInboundOrderService {
-
-
     private final InboundOrderRepository repo;
     private  final BatchStockRepository batchStockRepo;
     private final WarehouseRepository warehouseRepo;
     private final SectionRepository sectionRepo;
-
     private final AnnouncementRepository announcementRepo;
-
 
     void validIfWarehouseExist(Long warehouseCode) throws NotFoundException {
         Optional<Warehouse> warehouseOptional = warehouseRepo.findById(warehouseCode);
@@ -130,31 +126,32 @@ public class InboundOrderService implements IInboundOrderService {
             }
         }
     }
+
     void validIfInboundOrderExist(Long orderNumber) throws NotFoundException {
-        if (repo.findById(orderNumber).isEmpty()) {
-            throw new NotFoundException(Msg.INBOUND_ORDER_NOT_FOUND);
-        }
+      if (repo.findById(orderNumber).isEmpty()) {
+        throw new NotFoundException(Msg.INBOUND_ORDER_NOT_FOUND);
+      }
     }
 
     void validBatch(List<BatchStockDTO> batchStockDTOList) throws NotFoundException {
-        for (BatchStockDTO batchStockDTO : batchStockDTOList) {
-            Optional<BatchStock> batchStock = batchStockRepo.findById(batchStockDTO.getBatchNumber());
-            if (batchStock.isEmpty()) {
-                throw new NotFoundException(Msg.BATCH_NOT_FOUND);
-            }
+      for (BatchStockDTO batchStockDTO : batchStockDTOList) {
+        Optional<BatchStock> batchStock = batchStockRepo.findById(batchStockDTO.getBatchNumber());
+        if (batchStock.isEmpty()) {
+          throw new NotFoundException(Msg.BATCH_NOT_FOUND);
         }
+      }
     }
 
     @Override
     public InboundOrderPutResponseDTO update(InboundOrderRequestDTO inboundOrderResquest) {
-        InboundOrderDTO inboundOrderDTO = inboundOrderResquest.getInboundOrder();
+      InboundOrderDTO inboundOrderDTO = inboundOrderResquest.getInboundOrder();
 
-        validIfInboundOrderExist(inboundOrderDTO.getOrderNumber());
-        InboundOrder inboundOrder = new InboundOrder(inboundOrderDTO, inboundOrderDTO.getOrderNumber());
+      validIfInboundOrderExist(inboundOrderDTO.getOrderNumber());
+      InboundOrder inboundOrder = new InboundOrder(inboundOrderDTO, inboundOrderDTO.getOrderNumber());
 
-        validBatch(inboundOrderDTO.getBatchStock());
+      validBatch(inboundOrderDTO.getBatchStock());
 
-        validIfWarehouseExist(inboundOrder.getWarehouseCode());
+      validIfWarehouseExist(inboundOrder.getWarehouseCode());
 
         validAnnouncement(inboundOrderResquest.getInboundOrder().getBatchStock());
 
@@ -162,14 +159,14 @@ public class InboundOrderService implements IInboundOrderService {
 
         validBatchDueDate(inboundOrderResquest.getInboundOrder().getBatchStock());
 
-        InboundOrder inboundOrderUpdated = repo.save(inboundOrder);
+      InboundOrder inboundOrderUpdated = repo.save(inboundOrder);
 
-        List<BatchStock> batchStockList = inboundOrderResquest.getInboundOrder()
-                .getBatchStock().stream()
-                .map(a -> new BatchStock(a, inboundOrder.getOrderNumber(), a.getBatchNumber()))
-                .collect(Collectors.toList());
-         List<BatchStock> batchStockListUpdated = batchStockRepo.saveAll(batchStockList);
-        return new InboundOrderPutResponseDTO(inboundOrderUpdated, batchStockListUpdated);
+      List<BatchStock> batchStockList = inboundOrderResquest.getInboundOrder()
+              .getBatchStock().stream()
+              .map(a -> new BatchStock(a, inboundOrder.getOrderNumber(), a.getBatchNumber()))
+              .collect(Collectors.toList());
+      List<BatchStock> batchStockListUpdated = batchStockRepo.saveAll(batchStockList);
+      return new InboundOrderPutResponseDTO(inboundOrderUpdated, batchStockListUpdated);
     }
 }
 

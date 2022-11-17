@@ -62,4 +62,7 @@ public enum Msg {
   public static final String BATCH_EXPIRED =  "Batch contains product expired or shelf life of less than 3 weeks.";
 
   public static final String PRODUCT_BATCH_INCORRECT =  "Product is in an incorrect batch.";
+  public static final String CATEGORY_NOT_FOUND = "Category must be FS, RS or FF.";
+
+
 }
