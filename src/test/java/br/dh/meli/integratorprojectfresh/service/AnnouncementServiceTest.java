@@ -63,7 +63,7 @@ class AnnouncementServiceTest {
     }
 
     @Test
-    @DisplayName("Sucesso retornar uma lista de anúncios")
+    @DisplayName("Sucesso ao retornar uma lista de anúncios")
     void GetAnnouncementByAnnouncementId_ReturnNewAnnouncement_WhenIdIsValid() {
         BDDMockito.when(repository.findById(1L)).thenReturn(java.util.Optional.ofNullable(announcement));
         responseDTO = service.getAnnouncementByAnnouncementId(1L);
