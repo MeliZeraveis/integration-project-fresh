@@ -822,11 +822,10 @@ public class InboundOrderControllerTestIT {
     @DisplayName("Testa se o metodo post retorna uma exceçao INSERT_BATCH_SECTION_INCORRET quando o SectionType é incorreto")
     void SaveValidSection_ReturnExceptionSectionTypeIncorret_Fail() throws Exception {
 
-        Section section = sectionRepository.findById(1l).get();
 
-        String novaPalavra = section.getType() + "abrobinha";
+        inboundOrderDTO.setSectionCode(2L);
 
-        inboundOrderDTO.getBatchStock().get(0).setSectionType(novaPalavra);
+        inboundOrderDTO.getBatchStock().get(0).setSectionType("Fresh");
 
         ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
                 .contentType(MediaType.APPLICATION_JSON)
