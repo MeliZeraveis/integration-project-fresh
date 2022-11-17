@@ -1,6 +1,5 @@
 package br.dh.meli.integratorprojectfresh.service;
 
-import br.dh.meli.integratorprojectfresh.dto.request.BatchSotckAnnoucementDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.AnnoucementGetResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
@@ -9,9 +8,7 @@ import br.dh.meli.integratorprojectfresh.repository.AnnouncementRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -45,4 +42,5 @@ public class AnnouncementService implements IAnnouncementService{
                 throw new NotFoundException(Msg.LETTER_NOT_VALID);
             }
     }
+
 }
