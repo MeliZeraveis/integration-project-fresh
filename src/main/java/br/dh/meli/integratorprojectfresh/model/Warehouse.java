@@ -35,6 +35,10 @@ public class Warehouse {
     @JsonIgnoreProperties("warehouse")
     private List<InboundOrder> inboundOrder;
 
+    @OneToMany(mappedBy = "warehouse")
+    @JsonIgnoreProperties("warehouse")
+    private List<Section> section;
+
     @OneToOne
     @JsonIgnoreProperties("warehouse")
     @JoinColumn(name = "manager_id")

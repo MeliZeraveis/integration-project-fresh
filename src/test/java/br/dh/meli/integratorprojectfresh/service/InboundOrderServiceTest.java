@@ -94,8 +94,9 @@ class InboundOrderServiceTest {
         batchStockList.get(1).setAnnouncementId(1L);
 
         User user = new User(5L, "Test", "1234", "test@email.com", "manager");
-        warehouseTest = new Warehouse(1L, "Test", "Address Test", "BR-Test", new ArrayList<>(), user);
+
         sectionTest = new Section(1L, "Fresh", (float) 100.0, (float) 80.0, new ArrayList<>());
+        warehouseTest = new Warehouse(1L, "Test", "Address Test", "BR-Test", new ArrayList<>(), new ArrayList<>(),user);
         announcementTest = new Announcement(1L, "Alface Test", "description", 3L, BigDecimal.valueOf(1.80), 1L, null, new ArrayList<>(), null, new ArrayList<>());
     }
 

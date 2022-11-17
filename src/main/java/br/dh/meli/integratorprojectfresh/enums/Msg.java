@@ -55,4 +55,7 @@ public enum Msg {
   public static final String VOLUME_REQUIRED = "Volume is required.";
   public static final String WAREHOUSE_CODE_REQUIRED = "Warehouse code is required.";
   public static final String WAREHOUSE_NOT_FOUND =  "Warehouse not found.";
+  public static final String CATEGORY_NOT_FOUND = "Category must be FS, RS or FF.";
+
+
 }

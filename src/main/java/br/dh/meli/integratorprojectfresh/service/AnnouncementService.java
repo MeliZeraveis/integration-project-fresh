@@ -27,8 +27,7 @@ public class AnnouncementService implements IAnnouncementService{
         }
 
         System.out.println(announcement);
-        AnnoucementGetResponseDTO responseDTO = new AnnoucementGetResponseDTO(announcement.get());
-        return responseDTO;
+        return new AnnoucementGetResponseDTO(announcement.get());
     }
 
     @Override
@@ -40,8 +39,7 @@ public class AnnouncementService implements IAnnouncementService{
         }
 
             if (letra.equalsIgnoreCase("Q") || letra.equalsIgnoreCase("L") || letra.equalsIgnoreCase("V")) {
-                AnnoucementGetResponseDTO responseDTO = new AnnoucementGetResponseDTO(announcement.get(), letra);
-                return responseDTO;
+                return new AnnoucementGetResponseDTO(announcement.get(), letra);
             } else {
                 throw new NotFoundException(Msg.LETTER_NOT_VALID);
             }
