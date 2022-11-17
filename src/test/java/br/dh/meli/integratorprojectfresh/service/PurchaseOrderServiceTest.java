@@ -17,6 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -94,12 +95,13 @@ public class PurchaseOrderServiceTest {
     @Test
     @DisplayName("Erro ao procurar uma lista de items")
     void GetPurchaseItemsListById_ThrowsException_WhenPurchaseOrderIdNotExists() throws NotFoundException {
-        final var actualException = assertThrows(
-                NotFoundException.class,
-                () -> service.read(1L));
-        assertAll(
-                () -> Assertions.assertEquals(Msg.PURCHASE_ORDER_ITEMS_NOT_FOUND, actualException.getMessage())
-        );
+        Long purchaseOrderInexistent = 99l;
+
+        BDDMockito.given(itemsRepo.findByPurchaseOrderId(ArgumentMatchers.any())).willThrow(new NotFoundException(Msg.PURCHASE_ORDER_ITEMS_NOT_FOUND));
+
+        assertThrows(NotFoundException.class, () -> {
+            itemsRepo.findByPurchaseOrderId(purchaseOrderInexistent);
+        });
 
     }
 
