@@ -6,15 +6,22 @@ import br.dh.meli.integratorprojectfresh.dto.response.PurchaseOrderResponseDTO;
 import br.dh.meli.integratorprojectfresh.dto.request.PurchaseOrderRequestDTO;
 import br.dh.meli.integratorprojectfresh.enums.ExceptionType;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
+import br.dh.meli.integratorprojectfresh.enums.OrderStatus;
+import br.dh.meli.integratorprojectfresh.exception.InvalidParamException;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.model.PurchaseOrder;
 import br.dh.meli.integratorprojectfresh.model.PurchaseOrderItems;
+import br.dh.meli.integratorprojectfresh.model.User;
+import br.dh.meli.integratorprojectfresh.repository.AnnouncementRepository;
 import br.dh.meli.integratorprojectfresh.repository.PurchaseOrderItemsRepository;
 import br.dh.meli.integratorprojectfresh.repository.PurchaseOrderRepository;
+import br.dh.meli.integratorprojectfresh.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -24,8 +31,10 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class PurchaseOrderService implements IPurchaseOrderService {
+  private final AnnouncementRepository announcementRepo;
   private final PurchaseOrderRepository orderRepo;
   private final PurchaseOrderItemsRepository itemsRepo;
+  private final UserRepository userRepo;
 
   /**
    * read
@@ -55,30 +64,43 @@ public class PurchaseOrderService implements IPurchaseOrderService {
    */
   @Override
   public PurchaseOrderResponseDTO save(PurchaseOrderRequestDTO purchaseOrder) {
-    PurchaseOrder order = purchaseOrder.toPurchaseOrder();
+    User buyer = userRepo.findById(purchaseOrder.getBuyerId())
+            .orElseThrow(() -> new NotFoundException(Msg.BUYER_ID_NOT_FOUND));
     List<PurchaseOrderItems> products = purchaseOrder.getProducts().stream()
             .map(PurchaseOrderItemsRequestDTO::toPurchaseOrderItems)
             .collect(Collectors.toList());
+    products.forEach(product -> product.setProductPrice(announcementRepo.findById(product.getAnnouncementId())
+                      .orElseThrow(() -> new NotFoundException(Msg.ANNOUNCEMENT_NOT_FOUND))
+                      .getPrice()));
+    BigDecimal totalPrice = products.stream().reduce(BigDecimal.ZERO,
+            (sum, prod) -> sum.add(prod.getProductPrice().multiply(BigDecimal.valueOf(prod.getProductQuantity()))),
+            BigDecimal::add);
 
-    orderRepo.save(order);
+    PurchaseOrder order = new PurchaseOrder(purchaseOrder.getDate(), purchaseOrder.getOrderStatus(), totalPrice, buyer.getUserId());
+    PurchaseOrder savedOrder = orderRepo.save(order);
+    Long purchaseOrderId = savedOrder.getId();
+    products.forEach(product -> product.setPurchaseOrderId(purchaseOrderId));
     itemsRepo.saveAll(products);
     return new PurchaseOrderResponseDTO(order, products);
   }
 
   /**
    * update
-   * Read and update the PurchaseOrder in the database. Returns a PurchaseOrderResponseDTO.
-   * @param purchaseOrder - the PurchaseOrderRequestDTO to be updated.
+   * Change the PurchaseOrder status in the database to approved. Returns a PurchaseOrderResponseDTO.
+   * @param id - the PurchaseOrder to be updated.
    * @return PurchaseOrderResponseDTO - the updated PurchaseOrder.
    * @throws NotFoundException - if the purchase order is not found.
    */
   @Override
-  public PurchaseOrderResponseDTO update(PurchaseOrderRequestDTO purchaseOrder) {
-    Long id = purchaseOrder.toPurchaseOrder().getId();
+  public PurchaseOrderResponseDTO update(Long id) {
+    PurchaseOrder order = orderRepo.findById(id)
+            .orElseThrow(() -> new NotFoundException(ExceptionType.PURCHASE_ORDER_NOT_FOUND.name()));
+    if (order.getStatus().equals(OrderStatus.APPROVED)) {
+      throw new InvalidParamException(Msg.PURCHASE_ORDER_ALREADY_APPROVED);
+    } 
+    order.setStatus(OrderStatus.APPROVED);
+    orderRepo.save(order);
 
-    orderRepo.findById(id).orElseThrow(() -> new NotFoundException(ExceptionType.PURCHASE_ORDER_NOT_FOUND.name()));
-    orderRepo.deleteById(id);
-    itemsRepo.deleteByPurchaseOrderId(id);
-    return this.save(purchaseOrder);
+    return new PurchaseOrderResponseDTO(order, itemsRepo.findByPurchaseOrderId(id));
   }
 }

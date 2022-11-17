@@ -13,5 +13,5 @@ import java.util.List;
 public interface IPurchaseOrderService {
     List<PurchaseOrderItemsResponseDTO> read(Long id);
     PurchaseOrderResponseDTO save(PurchaseOrderRequestDTO purchaseOrder);
-    PurchaseOrderResponseDTO update(PurchaseOrderRequestDTO purchaseOrder);
+    PurchaseOrderResponseDTO update(Long id);
 }

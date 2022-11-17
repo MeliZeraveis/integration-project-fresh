@@ -52,11 +52,11 @@ public class PurchaseOrderController {
    * update
    * Replace an existing Purchase Order in the database, and return the Purchase Order data
    * The request must be a PUT with a PurchaseOrderRequestDTO object in the request body
-   * @param purchaseOrder - the Purchase Order data to be replaced
+   * @param id - the Purchase Order id data to be replaced
    * @return ResponseEntity<PurchaseOrderResponseDTO>
    */
   @PutMapping(Routes.PURCHASE_ORDER)
-  public ResponseEntity<PurchaseOrderResponseDTO> update(@RequestBody @Valid PurchaseOrderRequestDTO purchaseOrder) {
-    return new ResponseEntity<>(purchaseOrderService.update(purchaseOrder), HttpStatus.CREATED);
+  public ResponseEntity<PurchaseOrderResponseDTO> update(Long id) {
+    return new ResponseEntity<>(purchaseOrderService.update(id), HttpStatus.CREATED);
   }
 }
