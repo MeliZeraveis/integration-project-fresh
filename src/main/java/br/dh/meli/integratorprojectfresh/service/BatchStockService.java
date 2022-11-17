@@ -33,7 +33,7 @@ public class BatchStockService implements IBatchStockService {
     public BatchStockGetResponseDTO findBatchStockByBatchStockNumber(Integer numberOfDays, String category) {
         List<BatchStock> batchStock = repo.findAllByDueDateBetween(LocalDate.now(),LocalDate.now().plusDays(numberOfDays));
         if(batchStock.isEmpty()) {
-            throw new NotFoundException(Msg.SECTION_NOT_FOUND);
+            throw new NotFoundException(Msg.BATCH_NOT_FOUND);
         }
         if(category.equalsIgnoreCase("FS")|| category.equalsIgnoreCase("RF") || category.equalsIgnoreCase("FF")) {
             return new BatchStockGetResponseDTO(batchStock, category);

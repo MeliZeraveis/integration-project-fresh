@@ -54,8 +54,8 @@ public class BatchStockControllerTestIT {
                         .param("section", "Fresh"))
                 .andDo(print());
 
-        response.andExpect(status().isOk())
-                .andExpect(jsonPath("$.batchStockDueDate", CoreMatchers.is("2022-12-01")));
+        response.andExpect(status().isOk());
+
     }
 
     @Test
@@ -64,8 +64,39 @@ public class BatchStockControllerTestIT {
         ResultActions response = mockMvc
                 .perform(get("/api/v1/fresh-products/due-date")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .param("numbersOfDays", "10")
+                        .param("numberOfDays", "1")
                         .param("section", "Fresh"))
+                .andDo(print());
+
+        response.andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.OBJECT_NOT_FOUND.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.BATCH_NOT_FOUND)))
+                .andExpect(jsonPath("$.status", CoreMatchers.is(HttpStatus.NOT_FOUND.value())));
+    }
+
+    @Test
+    void get_ReturnBatchStockGetResponseDTOByAscOrder_WhenSuccessful() throws Exception {
+        ResultActions response = mockMvc
+                .perform(get("/api/v1/fresh-products/due-date/list")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("numberOfDays", "1000")
+                        .param("category", "FS")
+                        .param("order", "asc"))
+                .andDo(print());
+
+        response.andExpect(status().isOk());
+
+    }
+
+    @Test
+    void get_ReturnExceptionNotFound_WhenBatchStockByAscOrderNotExist() throws Exception {
+
+        ResultActions response = mockMvc
+                .perform(get("/api/v1/fresh-products/due-date/list")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("numberOfDays", "1")
+                        .param("category", "FS")
+                        .param("order", "asc"))
                 .andDo(print());
 
         response.andExpect(status().isNotFound())
