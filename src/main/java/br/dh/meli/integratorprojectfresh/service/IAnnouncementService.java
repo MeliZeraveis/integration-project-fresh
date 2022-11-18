@@ -1,15 +1,14 @@
 package br.dh.meli.integratorprojectfresh.service;
 
 //import br.dh.meli.integratorprojectfresh.dto.request.AnnouncementDTO;
-import br.dh.meli.integratorprojectfresh.dto.response.AnnoucementGetResponseDTO;
-import br.dh.meli.integratorprojectfresh.model.Announcement;
+import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementGetResponseDTO;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IAnnouncementService {
-    AnnoucementGetResponseDTO getAnnouncementByAnnouncementId(Long id);
-
-    AnnoucementGetResponseDTO  findAnnouncementByBatchStockNumber(Long id, String letra);
+    List<AnnouncementGetResponseDTO> getAllAnnouncements();
+    List<AnnouncementGetResponseDTO> getAnnouncementsByCategory(String category);
+    AnnouncementGetResponseDTO getAnnouncementByAnnouncementId(Long id);
+    AnnouncementGetResponseDTO findAnnouncementByBatchStockNumber(Long id, Character sortBy);
 
 }

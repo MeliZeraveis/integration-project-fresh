@@ -129,7 +129,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         Integer batchQuantity = batch.getProductQuantity();
 
         if (productsToFulfill > 0) {
-          if (batchQuantity >= productsToFulfill) {
+          if (batchQuantity > productsToFulfill) {
             batch.setProductQuantity(batchQuantity - productsToFulfill);
             productQuantity.set(0);
             batchStockRepo.save(batch);

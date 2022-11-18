@@ -1,7 +1,5 @@
 package br.dh.meli.integratorprojectfresh.service;
 
-import br.dh.meli.integratorprojectfresh.dto.response.AnnoucementGetResponseDTO;
-import br.dh.meli.integratorprojectfresh.dto.response.BatchStockDTOResponseDueDate;
 import br.dh.meli.integratorprojectfresh.dto.response.BatchStockGetResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;

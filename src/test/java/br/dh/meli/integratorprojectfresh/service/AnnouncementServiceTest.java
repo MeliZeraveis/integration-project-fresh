@@ -1,5 +1,5 @@
 package br.dh.meli.integratorprojectfresh.service;
-import br.dh.meli.integratorprojectfresh.dto.response.AnnoucementGetResponseDTO;
+import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementGetResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.model.*;
@@ -32,7 +32,7 @@ class AnnouncementServiceTest {
     @Mock
     private AnnouncementRepository repository;
 
-    AnnoucementGetResponseDTO responseDTO;
+    AnnouncementGetResponseDTO responseDTO;
     InboundOrder inboundOrder;
     Announcement announcement;
     BatchStock batchStock;
@@ -58,7 +58,7 @@ class AnnouncementServiceTest {
         section = new Section(1L, "Fresh", 50.0f, 20.0f, null, List.of(inboundOrder), null );
         announcement = new Announcement(1L, "Camisa", "Camisa branca", 4L, BigDecimal.valueOf(100.0), 1L, section, batchStockList2, null, new ArrayList<>());
 
-        responseDTO = new AnnoucementGetResponseDTO(announcement);
+        responseDTO = new AnnouncementGetResponseDTO(announcement);
 
     }
 

@@ -1,15 +1,11 @@
 package br.dh.meli.integratorprojectfresh.integration;
 
 
-import br.dh.meli.integratorprojectfresh.dto.request.BatchSotckAnnoucementDTO;
-import br.dh.meli.integratorprojectfresh.dto.request.BatchStockDTO;
-import br.dh.meli.integratorprojectfresh.dto.request.SectionDTO;
-import br.dh.meli.integratorprojectfresh.dto.response.AnnoucementGetResponseDTO;
+import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementGetResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.ExceptionType;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.repository.AnnouncementRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.tomcat.util.http.fileupload.impl.SizeException;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,18 +15,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import br.dh.meli.integratorprojectfresh.model.Announcement;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -54,7 +42,7 @@ public class AnnoucementControllerTestIT {
 
     Announcement announcement;
 
-    AnnoucementGetResponseDTO annoucementGetResponseDTO;
+    AnnouncementGetResponseDTO annoucementGetResponseDTO;
 
 
     @BeforeEach
