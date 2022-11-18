@@ -27,7 +27,7 @@ public class PurchaseOrderResponseDTO {
   public PurchaseOrderResponseDTO(PurchaseOrder purchaseOrder, List<PurchaseOrderItems> products) {
     this.id = purchaseOrder.getId();
     this.date = purchaseOrder.getDate().toString();
-    this.orderStatus = purchaseOrder.getStatus().name();
+    this.orderStatus = purchaseOrder.getStatus();
     this.totalPrice = purchaseOrder.getTotal();
     this.products = products.stream().map(PurchaseOrderItemsResponseDTO::new).collect(Collectors.toList());
   }
