@@ -75,7 +75,7 @@ class AnnouncementServiceTest {
     @DisplayName("Sucesso ao retornar BatchStockNumber")
     void FindAnnouncementByBatchStockNumber_ReturnBatchStockNumberFilter_WhenIdAndLetterAreValid() {
         BDDMockito.when(repository.findById(1L)).thenReturn(java.util.Optional.ofNullable(announcement));
-        responseDTO = service.findAnnouncementByBatchStockNumber(1L,"Q");
+        responseDTO = service.findAnnouncementByBatchStockNumber(1L,'Q');
         assertThat(responseDTO).isNotNull();
     }
 
@@ -97,7 +97,7 @@ class AnnouncementServiceTest {
 
         final var actualException = assertThrows(
                 NotFoundException.class,
-                () -> service.findAnnouncementByBatchStockNumber(1L,"Q"));
+                () -> service.findAnnouncementByBatchStockNumber(1L,'Q'));
         assertAll(
                 () -> Assertions.assertEquals(Msg.ANNOUNCEMENT_IS_EMPTY, actualException.getMessage())
         );
@@ -109,7 +109,7 @@ class AnnouncementServiceTest {
         BDDMockito.when(repository.findById(1L)).thenReturn(java.util.Optional.ofNullable(announcement));
         final var actualException = assertThrows(
                 NotFoundException.class,
-                () -> service.findAnnouncementByBatchStockNumber(1L,"A"));
+                () -> service.findAnnouncementByBatchStockNumber(1L,'A'));
         assertAll(
                 () -> Assertions.assertEquals(Msg.LETTER_NOT_VALID, actualException.getMessage())
         );
