@@ -31,6 +31,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -123,6 +124,7 @@ public class PurchaseOrderServiceTest {
         warehouseTest = new Warehouse(1L, "Test", "Address Test", "BR-Test", new ArrayList<>(), sectionList, userTest);
 
         purchaseOrderItemsTest = new PurchaseOrderItems(1L, 1L, 10, BigDecimal.valueOf(20.00));
+        PurchaseOrderItems purchaseOrderItemsTest2 = new PurchaseOrderItems(1L, 1L, 10, BigDecimal.valueOf(20.00));
         purchaseOrderItemsResponseTest = new PurchaseOrderItemsResponseDTO(purchaseOrderItemsTest);
 
         purchaseOrderItemsResponseTestList = new ArrayList<>();
@@ -130,6 +132,8 @@ public class PurchaseOrderServiceTest {
 
         purchaseOrderItemsList = new ArrayList<>();
         purchaseOrderItemsList.add(purchaseOrderItemsTest);
+        purchaseOrderItemsList.add(purchaseOrderItemsTest);
+
 
         purchaseOrder = new PurchaseOrder(date, "Finalizado", BigDecimal.valueOf(100.00), 1L);
         purchaseOrderPending = new PurchaseOrder(date, "Aberto", BigDecimal.valueOf(100.00), 1L);
@@ -139,7 +143,7 @@ public class PurchaseOrderServiceTest {
         purchaseOrderItemsRequestTestList.add(purchaseOrderItemsRequestTest);
 
 
-        purchaseOrderRequestTest = new PurchaseOrderRequestDTO(date, 1l, "Finalizado", purchaseOrderItemsRequestTestList, BigDecimal.valueOf(100.00));
+        purchaseOrderRequestTest = new PurchaseOrderRequestDTO(date, 1L, "Finalizado", purchaseOrderItemsRequestTestList, BigDecimal.valueOf(100.00));
 
         purchaseOrderResponseTest = new PurchaseOrderResponseDTO(purchaseOrder, purchaseOrderItemsList);
 
@@ -201,8 +205,8 @@ public class PurchaseOrderServiceTest {
     @Test
     @DisplayName("Sucesso ao atualizar um novo pedido de compra")
     void UpdateMethod_ReturnNewPurchaseOrderResponseDTO_WhenParamsAreValid() {
-        BDDMockito.when(inboundOrderRepo.findById(ArgumentMatchers.any()))
-                        .thenReturn(java.util.Optional.ofNullable(inboundOrder));
+        Long id = 1L;
+
         BDDMockito.when(orderRepo.findById(ArgumentMatchers.any()))
                 .thenReturn(java.util.Optional.ofNullable(purchaseOrderPending));
         BDDMockito.when(itemsRepo.findByPurchaseOrderId(ArgumentMatchers.any()))
@@ -217,7 +221,7 @@ public class PurchaseOrderServiceTest {
                 .thenReturn(purchaseOrderPending);
 
 
-        PurchaseOrderResponseDTO purchaseOrderResponseDTO = service.update(purchaseOrderPending.getId());
+        PurchaseOrderResponseDTO purchaseOrderResponseDTO = service.update(id);
 
         assertThat(purchaseOrderResponseDTO).isNotNull();
     }
