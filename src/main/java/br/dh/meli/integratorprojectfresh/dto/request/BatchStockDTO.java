@@ -1,5 +1,6 @@
 package br.dh.meli.integratorprojectfresh.dto.request;
 
+import br.dh.meli.integratorprojectfresh.annotations.OneOf;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.model.BatchStock;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -25,6 +26,7 @@ public class BatchStockDTO {
     private Long announcementId;
 
     @NotNull(message = Msg.TEMPERATURE_REQUIRED)
+    @OneOf(value = {"Fresh", "Frozen", "Refrigerated"}, message = Msg.SECTION_NOT_VALID)
     private String sectionType;
 
     @NotNull(message = Msg.QUANTITY_REQUIRED)

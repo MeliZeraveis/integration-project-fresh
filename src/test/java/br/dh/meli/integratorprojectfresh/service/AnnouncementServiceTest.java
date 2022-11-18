@@ -1,5 +1,5 @@
 package br.dh.meli.integratorprojectfresh.service;
-import br.dh.meli.integratorprojectfresh.dto.response.AnnoucementGetResponseDTO;
+import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementGetResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.model.*;
@@ -32,7 +32,7 @@ class AnnouncementServiceTest {
     @Mock
     private AnnouncementRepository repository;
 
-    AnnoucementGetResponseDTO responseDTO;
+    AnnouncementGetResponseDTO responseDTO;
     InboundOrder inboundOrder;
     Announcement announcement;
     BatchStock batchStock;
@@ -58,7 +58,7 @@ class AnnouncementServiceTest {
         section = new Section(1L, "Fresh", 50.0f, 20.0f, 1L, new ArrayList<>(), List.of(inboundOrder), null );
         announcement = new Announcement(1L, "Camisa", "Camisa branca", 4L, BigDecimal.valueOf(100.0), 1L, section, batchStockList2, null, new ArrayList<>());
 
-        responseDTO = new AnnoucementGetResponseDTO(announcement);
+        responseDTO = new AnnouncementGetResponseDTO(announcement);
 
     }
 
@@ -75,7 +75,7 @@ class AnnouncementServiceTest {
     @DisplayName("Sucesso ao retornar BatchStockNumber")
     void FindAnnouncementByBatchStockNumber_ReturnBatchStockNumberFilter_WhenIdAndLetterAreValid() {
         BDDMockito.when(repository.findById(1L)).thenReturn(java.util.Optional.ofNullable(announcement));
-        responseDTO = service.findAnnouncementByBatchStockNumber(1L,"Q");
+        responseDTO = service.findAnnouncementByBatchStockNumber(1L,'Q');
         assertThat(responseDTO).isNotNull();
     }
 
@@ -87,7 +87,7 @@ class AnnouncementServiceTest {
                 NotFoundException.class,
                 () -> service.getAnnouncementByAnnouncementId(1L));
         assertAll(
-                () -> Assertions.assertEquals(Msg.ANNOUNCEMENT_IS_EMPTY, actualException.getMessage())
+                () -> Assertions.assertEquals(Msg.ANNOUNCEMENT_NOT_FOUND, actualException.getMessage())
         );
     }
 
@@ -97,7 +97,7 @@ class AnnouncementServiceTest {
 
         final var actualException = assertThrows(
                 NotFoundException.class,
-                () -> service.findAnnouncementByBatchStockNumber(1L,"Q"));
+                () -> service.findAnnouncementByBatchStockNumber(1L,'Q'));
         assertAll(
                 () -> Assertions.assertEquals(Msg.ANNOUNCEMENT_IS_EMPTY, actualException.getMessage())
         );
@@ -109,7 +109,7 @@ class AnnouncementServiceTest {
         BDDMockito.when(repository.findById(1L)).thenReturn(java.util.Optional.ofNullable(announcement));
         final var actualException = assertThrows(
                 NotFoundException.class,
-                () -> service.findAnnouncementByBatchStockNumber(1L,"A"));
+                () -> service.findAnnouncementByBatchStockNumber(1L,'A'));
         assertAll(
                 () -> Assertions.assertEquals(Msg.LETTER_NOT_VALID, actualException.getMessage())
         );

@@ -172,6 +172,22 @@ class InboundOrderServiceTest {
     }
 
     @Test
+    @DisplayName("Exceção quando seção não pertence ao armazém")
+    void SaveMethod_ThrowsExeption_WhenSectionDoesntBelongToWareHouse() throws ActionNotAllowedException {
+
+        sectionTest.setWarehouseCode(2L);
+
+        BDDMockito.when(sectionRepository.findById(ArgumentMatchers.any()))
+                .thenReturn(java.util.Optional.ofNullable(sectionTest));
+
+        final var actualException = assertThrows(
+                ActionNotAllowedException.class,
+                () -> service.validSection(8L, batchStockList, 1L));
+        assertAll(
+                () -> Assertions.assertEquals(Msg.SECTION_NOT_BELONG_WAREHOUSE, actualException.getMessage()));
+    }
+
+    @Test
     @DisplayName("Testa mensagem da exceção quando warehouse não é encontrada")
     void IsValidWarehouseMethod_ThrowsException_WhenIdIsInvalid() throws NotFoundException {
         final var actualException = assertThrows(
@@ -345,5 +361,19 @@ class InboundOrderServiceTest {
                 () -> Assertions.assertEquals(Msg.SECTION_NOT_FOUND, actualException.getMessage())
         );
     }
+
+    @Test
+    @DisplayName("Exceção quando seção não pertence ao armazém")
+    void SaveMethod_ThrowsExeption_WhenValidBatchDueDateIsInvalid() throws ActionNotAllowedException {
+
+        batchStockList.get(0).setDueDate(LocalDate.now().plusDays(1));
+
+        final var actualException = assertThrows(
+                ActionNotAllowedException.class,
+                () -> service.validBatchDueDate(batchStockList));
+        assertAll(
+                () -> Assertions.assertEquals(Msg.BATCH_EXPIRED, actualException.getMessage()));
+    }
+
 }
 

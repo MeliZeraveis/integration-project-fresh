@@ -1,24 +1,19 @@
 package br.dh.meli.integratorprojectfresh.dto.request;
 
-import br.dh.meli.integratorprojectfresh.annotations.EnumNamePattern;
+import br.dh.meli.integratorprojectfresh.annotations.OneOf;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
-import br.dh.meli.integratorprojectfresh.enums.OrderStatus;
 import br.dh.meli.integratorprojectfresh.model.PurchaseOrder;
-import br.dh.meli.integratorprojectfresh.model.PurchaseOrderItems;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PastOrPresent;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * PurchaseOrderRequestDTO
@@ -27,6 +22,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class PurchaseOrderRequestDTO {
   @NotNull(message = Msg.PURCHASE_ORDER_DATE_NOT_NULL)
   @PastOrPresent(message = Msg.PURCHASE_ORDER_DATE_NOT_VALID)
@@ -38,21 +34,13 @@ public class PurchaseOrderRequestDTO {
   private Long buyerId;
 
   @NotNull(message = Msg.PURCHASE_ORDER_STATUS_NOT_NULL)
-  // @EnumNamePattern(regexp = "Aberto|Finalizado", message = Msg.PURCHASE_ORDER_STATUS_NOT_VALID)
-  private OrderStatus orderStatus;
+  @OneOf(value = {"Aberto", "Finalizado"}, message = Msg.PURCHASE_ORDER_STATUS_NOT_VALID)
+  private String orderStatus;
 
   @NotEmpty(message = Msg.PURCHASE_ORDER_ITEMS_NOT_EMPTY)
   private List<@Valid PurchaseOrderItemsRequestDTO> products;
 
   private BigDecimal total;
-
-  public PurchaseOrderRequestDTO(LocalDateTime date, Long buyerId, OrderStatus orderStatus, List<PurchaseOrderItems> products) {
-    this.date = date;
-    this.buyerId = buyerId;
-    this.orderStatus = orderStatus;
-    this.products = products.stream().map(PurchaseOrderItemsRequestDTO::new).collect(Collectors.toList());
-    products.forEach(p -> System.out.println(p.getProductQuantity()));
-  }
 
   /**
    * toPurchaseOrder
