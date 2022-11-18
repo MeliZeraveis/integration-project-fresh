@@ -30,4 +30,14 @@ public class Review {
 
     @Column(name = "user_id", nullable = false)
     private Long userId;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "announcement_id", insertable = false, updatable = false)
+    //@JsonIgnoreProperties("review")
+    private Announcement announcement;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    //@JsonIgnoreProperties("review")
+    private User user;
 }
