@@ -73,11 +73,7 @@ class BatchStockServiceTest {
         inboundOrder = new InboundOrder(1L, manufacturingDate, 1L, 1L,warehouse, batchStockList, section );
         section = new Section(1L, "Fresh", 50.0f, 20.0f, 1L, new ArrayList<>(), List.of(inboundOrder), null );
 
-//        section = new Section(1L, "Fresh", 50.0f, 20.0f, null, null);
         announcement = new Announcement(1L, "Camisa", "Camisa branca", 4L, BigDecimal.valueOf(100.0), 1L, section, batchStockList, null, new ArrayList<>());
-//        batchStockGetResponseDTO = new BatchStockGetResponseDTO(batchStockList2, "");
-//        batchStockDTOResponseDueDate = new BatchStockDTOResponseDueDate(batchStock);
-
     }
 
     @Test
@@ -92,9 +88,6 @@ assertAll(
 
     @Test
     void GetBatchStockDueDate_ThrowException_WhenBatchStockListIsEmpty() throws NotFoundException {
-//        batchStock.setDueDate(LocalDate.parse("2022-03-03"));
-//        BDDMockito.when(sectionRepo.findById(1L)).thenReturn(Optional.ofNullable(section));
-
         final var actualException = assertThrows(
                 NotFoundException.class,
                 () -> service.getBatchStockByBatchStockId(45, 1L));
@@ -105,7 +98,7 @@ assertAll(
 
     @Test
     void GetBatchStockDueDate_ThrowException_WhenSectionIsEmpty() throws NotFoundException {
-//        batchStock.setDueDate(LocalDate.parse("2022-03-03"));
+
         section.setInboundOrder(new ArrayList<>());
         BDDMockito.when(sectionRepo.findById(ArgumentMatchers.any())).thenReturn(Optional.ofNullable(section));
 
@@ -119,7 +112,6 @@ assertAll(
 
     @Test
     void GetBatchStockDueDate_ThrowException_WhenBatchStockLisFilteredIsEmpty() throws NotFoundException {
-//        batchStock.setDueDate(LocalDate.parse("2022-03-03"));
         section.getInboundOrder().get(0).setBatchStock(new ArrayList<>());
         BDDMockito.when(sectionRepo.findById(ArgumentMatchers.any())).thenReturn(Optional.ofNullable(section));
 
@@ -178,8 +170,6 @@ assertAll(
     @Test
     void FindBatchStockFiltered_ThrowException_WhenBatchStockListIsEmpty() throws NotFoundException {
 
-//        BDDMockito.given(repo.findAllByDueDateBetween(LocalDate.now(), LocalDate.now().plusDays(45))).willThrow(new NotFoundException(Msg.SECTION_NOT_FOUND));
-
         final var actualException = assertThrows(
                 NotFoundException.class,
                 () -> service.findBatchStockByBatchStockNumber(45, "FS", "asc"));
@@ -190,8 +180,6 @@ assertAll(
 
     @Test
     void FindBatchStockFiltered_ThrowException_WhenCategoryIsValid() throws NotFoundException {
-
-//        BDDMockito.given(repo.findAllByDueDateBetween(LocalDate.now(), LocalDate.now().plusDays(45))).willThrow(new NotFoundException(Msg.SECTION_NOT_FOUND));
 
         final var actualException = assertThrows(
                 NotFoundException.class,
@@ -204,7 +192,6 @@ assertAll(
     @Test
     void FindBatchStockFiltered_ThrowException_WhenBatchStockList() throws NotFoundException {
 
-
         final var actualException = assertThrows(
                 NotFoundException.class,
                 () -> service.findBatchStockByBatchStockNumber(45, "XX", "asc"));
@@ -216,8 +203,6 @@ assertAll(
     @Test
     void FindBatchStockFiltered_ThrowException_WhenOrderIsInvalid() throws NotFoundException {
 
-        BDDMockito.given(repo.findAllByDueDateBetween(LocalDate.now(), LocalDate.now().plusDays(45))).willThrow(new NotFoundException(Msg.CATEGORY_NOT_FOUND));
-
         final var actualException = assertThrows(
                 NotFoundException.class,
                 () -> service.findBatchStockByBatchStockNumber(45, "XX", "asc"));
@@ -228,8 +213,6 @@ assertAll(
 
     @Test
     void FindBatchStockFiltered_ThrowException_WhenOrderIsDesc() throws NotFoundException {
-
-        BDDMockito.given(repo.findAllByDueDateBetween(LocalDate.now(), LocalDate.now().plusDays(45))).willThrow(new NotFoundException(Msg.CATEGORY_NOT_FOUND));
 
         final var actualException = assertThrows(
                 NotFoundException.class,
