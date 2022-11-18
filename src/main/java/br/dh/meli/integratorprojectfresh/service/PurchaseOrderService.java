@@ -104,7 +104,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
     // check if purchase order exists and is not already approved
     PurchaseOrder order = orderRepo.findById(id)
             .orElseThrow(() -> new NotFoundException(ExceptionType.PURCHASE_ORDER_NOT_FOUND.name()));
-    if (order.getStatus().equals(OrderStatus.APPROVED)) {
+    if (order.getStatus().equals(OrderStatus.APPROVED.getName())) {
       throw new InvalidParamException(Msg.PURCHASE_ORDER_ALREADY_APPROVED);
     }
 
@@ -146,7 +146,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
     });
 
     // set status to approved and update purchase order in the database
-    order.setStatus(OrderStatus.APPROVED);
+    order.setStatus(OrderStatus.APPROVED.getName());
     orderRepo.save(order);
 
     // return the response back to the controller

@@ -18,8 +18,6 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 public class PurchaseOrderItemsRequestDTO {
-  @NotNull(message = Msg.PURCHASE_ORDER_ID_NOT_NULL)
-  @Positive(message = Msg.PURCHASE_ORDER_ID_NOT_VALID)
   private Long purchaseOrderId;
 
   @NotNull(message = Msg.ANNOUNCEMENT_ID_NOT_NULL)
@@ -30,8 +28,6 @@ public class PurchaseOrderItemsRequestDTO {
   @Positive(message = Msg.PRODUCT_QUANTITY_NOT_VALID)
   private Integer productQuantity;
 
-  @NotNull(message = Msg.PRODUCT_PRICE_NOT_NULL)
-  @Positive(message = Msg.PRODUCT_PRICE_NOT_VALID)
   private BigDecimal productPrice;
 
   public PurchaseOrderItemsRequestDTO(PurchaseOrderItems purchaseOrderItems) {
