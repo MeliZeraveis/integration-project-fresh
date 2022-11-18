@@ -68,7 +68,6 @@ public class BatchStockService implements IBatchStockService {
         }
 
         if (order.toLowerCase().equals("desc")){
-            System.out.println(order);
             batchStock = batchStock.stream().sorted(Comparator.comparing(BatchStock::getDueDate).reversed()).collect(Collectors.toList());
         }
         else {
