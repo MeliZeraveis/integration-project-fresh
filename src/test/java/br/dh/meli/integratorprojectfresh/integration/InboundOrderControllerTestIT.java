@@ -805,7 +805,7 @@ public class InboundOrderControllerTestIT {
 
     @Test
     @DisplayName("Testa se o metodo post retorna uma exceçao SECTION_NOT_FOUND quando o Section é invalido")
-    void SavevalidSection_ReturnExceptionWarehouseNotExist_Fail() throws Exception {
+    void SaveValidSection_ReturnExceptionWarehouseNotExist_Fail() throws Exception {
 
         inboundOrderDTO.setSectionCode(500l);
 

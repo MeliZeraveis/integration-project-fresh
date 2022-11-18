@@ -216,8 +216,6 @@ assertAll(
     @Test
     void FindBatchStockFiltered_ThrowException_WhenOrderIsInvalid() throws NotFoundException {
 
-        BDDMockito.given(repo.findAllByDueDateBetween(LocalDate.now(), LocalDate.now().plusDays(45))).willThrow(new NotFoundException(Msg.CATEGORY_NOT_FOUND));
-
         final var actualException = assertThrows(
                 NotFoundException.class,
                 () -> service.findBatchStockByBatchStockNumber(45, "XX", "asc"));
@@ -228,8 +226,6 @@ assertAll(
 
     @Test
     void FindBatchStockFiltered_ThrowException_WhenOrderIsDesc() throws NotFoundException {
-
-        BDDMockito.given(repo.findAllByDueDateBetween(LocalDate.now(), LocalDate.now().plusDays(45))).willThrow(new NotFoundException(Msg.CATEGORY_NOT_FOUND));
 
         final var actualException = assertThrows(
                 NotFoundException.class,

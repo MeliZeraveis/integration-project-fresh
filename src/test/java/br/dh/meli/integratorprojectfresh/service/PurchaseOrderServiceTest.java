@@ -12,10 +12,7 @@ import br.dh.meli.integratorprojectfresh.enums.Roles;
 import br.dh.meli.integratorprojectfresh.exception.InvalidParamException;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.model.*;
-import br.dh.meli.integratorprojectfresh.repository.AnnouncementRepository;
-import br.dh.meli.integratorprojectfresh.repository.PurchaseOrderItemsRepository;
-import br.dh.meli.integratorprojectfresh.repository.PurchaseOrderRepository;
-import br.dh.meli.integratorprojectfresh.repository.UserRepository;
+import br.dh.meli.integratorprojectfresh.repository.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,6 +25,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -56,6 +54,15 @@ public class PurchaseOrderServiceTest {
     @Mock
     private PurchaseOrderRepository orderRepo;
 
+    @Mock
+    private BatchStockRepository batchStockRepo;
+
+    @Mock
+    private SectionRepository sectionRepo;
+
+    @Mock
+    private InboundOrderRepository inboundOrderRepo;
+
     Warehouse warehouseTest;
     Section sectionTest;
     Announcement announcementTest;
@@ -63,6 +70,8 @@ public class PurchaseOrderServiceTest {
     User userTest;
 
     PurchaseOrder purchaseOrder;
+
+    PurchaseOrder purchaseOrderPending;
     PurchaseOrderItems purchaseOrderItemsTest;
     List<PurchaseOrderItems> purchaseOrderItemsList;
 
@@ -73,20 +82,45 @@ public class PurchaseOrderServiceTest {
     List<PurchaseOrderItemsResponseDTO> purchaseOrderItemsResponseTestList;
 
     PurchaseOrderItemsRequestDTO purchaseOrderItemsRequestTest;
+
     List<PurchaseOrderItemsRequestDTO> purchaseOrderItemsRequestTestList;
+
+    BatchStock batchStock;
+
+    List<BatchStock> batchStockList;
+
+    InboundOrder inboundOrder;
+
+    List<InboundOrder> inboundOrderList;
 
 
     @BeforeEach
     void setup() {
+        LocalDate manufacturingDate = LocalDate.parse("2021-12-12");
+        LocalDate dueDate3 = LocalDate.parse("2022-12-30");
+        LocalDateTime manufacturingTime = LocalDateTime.parse("2020-03-09 17:55:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
         LocalDateTime date = LocalDateTime.parse("2020-03-09 17:55:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
         userTest = new User(1L, "fulano", "123456", "fulano@email.com", Roles.BUYER);
 
-        sectionTest = new Section(1L, "Fresh", (float) 100.0, (float) 80.0, 1L, new ArrayList<>(), new ArrayList<>(), null);
+
+        announcementTest = new Announcement(1L, "Alface Test", "description", 3L, BigDecimal.valueOf(1.80), 1L, sectionTest, new ArrayList<>(), null, new ArrayList<>());
+
+        batchStock = new BatchStock(1L, 1L, "Fresh", 10, manufacturingDate, manufacturingTime, 10.0f, dueDate3, BigDecimal.valueOf(30.50), null);
+        batchStockList = new ArrayList<>();
+        batchStockList.add(batchStock);
+
+        sectionTest = new Section(1L, "Fresh", (float) 100.0, (float) 80.0, 1L, new ArrayList<>(), inboundOrderList, warehouseTest);
         List<Section> sectionList = new ArrayList<>();
         sectionList.add(sectionTest);
+
+        inboundOrder = new InboundOrder(1L, manufacturingDate, 1L, 1L, warehouseTest, batchStockList, sectionTest);
+        inboundOrderList = new ArrayList<>();
+        inboundOrderList.add(inboundOrder);
+
+
         warehouseTest = new Warehouse(1L, "Test", "Address Test", "BR-Test", new ArrayList<>(), sectionList, userTest);
-        announcementTest = new Announcement(1L, "Alface Test", "description", 3L, BigDecimal.valueOf(1.80), 1L, sectionTest, new ArrayList<>(), null, new ArrayList<>());
 
         purchaseOrderItemsTest = new PurchaseOrderItems(1L, 1L, 10, BigDecimal.valueOf(20.00));
         purchaseOrderItemsResponseTest = new PurchaseOrderItemsResponseDTO(purchaseOrderItemsTest);
@@ -97,9 +131,15 @@ public class PurchaseOrderServiceTest {
         purchaseOrderItemsList = new ArrayList<>();
         purchaseOrderItemsList.add(purchaseOrderItemsTest);
 
-        purchaseOrder = new PurchaseOrder(date, OrderStatus.APPROVED, BigDecimal.valueOf(100.00), 1L);
+        purchaseOrder = new PurchaseOrder(date, "Finalizado", BigDecimal.valueOf(100.00), 1L);
+        purchaseOrderPending = new PurchaseOrder(date, "Aberto", BigDecimal.valueOf(100.00), 1L);
 
-        purchaseOrderRequestTest = new PurchaseOrderRequestDTO(date, 1L, OrderStatus.APPROVED, purchaseOrderItemsList);
+        purchaseOrderItemsRequestTest = new PurchaseOrderItemsRequestDTO(purchaseOrderItemsTest);
+        purchaseOrderItemsRequestTestList = new ArrayList<>();
+        purchaseOrderItemsRequestTestList.add(purchaseOrderItemsRequestTest);
+
+
+        purchaseOrderRequestTest = new PurchaseOrderRequestDTO(date, 1l, "Finalizado", purchaseOrderItemsRequestTestList, BigDecimal.valueOf(100.00));
 
         purchaseOrderResponseTest = new PurchaseOrderResponseDTO(purchaseOrder, purchaseOrderItemsList);
 
@@ -128,6 +168,7 @@ public class PurchaseOrderServiceTest {
         });
 
     }
+
     @Test
     @DisplayName("Sucesso ao criar um novo pedido de compra")
     void SaveMethod_ReturnNewPurchaseOrderResponseDTO_WhenParamsAreValid() {
@@ -146,6 +187,7 @@ public class PurchaseOrderServiceTest {
         assertThat(purchaseOrderResponseDTO).isNotNull();
     }
 
+
     @Test
     @DisplayName("Erro ao encontrar buyer")
     void SaveMethod_ThrowsException_WhenBuyerNotFound() throws NotFoundException {
@@ -154,6 +196,30 @@ public class PurchaseOrderServiceTest {
         assertThrows(NotFoundException.class, () -> {
             service.save(purchaseOrderRequestTest);
         });
+    }
+
+    @Test
+    @DisplayName("Sucesso ao atualizar um novo pedido de compra")
+    void UpdateMethod_ReturnNewPurchaseOrderResponseDTO_WhenParamsAreValid() {
+        BDDMockito.when(inboundOrderRepo.findById(ArgumentMatchers.any()))
+                        .thenReturn(java.util.Optional.ofNullable(inboundOrder));
+        BDDMockito.when(orderRepo.findById(ArgumentMatchers.any()))
+                .thenReturn(java.util.Optional.ofNullable(purchaseOrderPending));
+        BDDMockito.when(itemsRepo.findByPurchaseOrderId(ArgumentMatchers.any()))
+                .thenReturn(purchaseOrderItemsList);
+        BDDMockito.when(batchStockRepo.findAllByAnnouncementId(announcementTest.getAnnouncementId()))
+                .thenReturn(batchStockList);
+        BDDMockito.when(batchStockRepo.save(ArgumentMatchers.any()))
+                .thenReturn(batchStock);
+        BDDMockito.when(sectionRepo.save(ArgumentMatchers.any()))
+                .thenReturn(sectionTest);
+        BDDMockito.when(orderRepo.save(purchaseOrderPending))
+                .thenReturn(purchaseOrderPending);
+
+
+        PurchaseOrderResponseDTO purchaseOrderResponseDTO = service.update(purchaseOrderPending.getId());
+
+        assertThat(purchaseOrderResponseDTO).isNotNull();
     }
 
     @Test
@@ -178,6 +244,40 @@ public class PurchaseOrderServiceTest {
         });
     }
 
+    @Test
+    @DisplayName("Erro ao encontrar a lista de PurchaseOrderItems")
+    void UpdateMethod_ThrowsException_WhenPurchaseOrderItemsNotFound() throws NotFoundException {
+        // BDDMockito.given(itemsRepo.findByPurchaseOrderId(ArgumentMatchers.any())).willThrow(new NotFoundException(Msg.PURCHASE_ORDER_ITEMS_NOT_FOUND));
+
+        assertThrows(NotFoundException.class, () -> {
+            service.update(purchaseOrderItemsList.get(0).getPurchaseOrderId());
+        });
+    }
+
+    @Test
+    @DisplayName("Erro ao encontrar a lista de BatchStocks")
+    void UpdateMethod_ThrowsException_WhenBatchListNotFound() throws NotFoundException {
+//        BDDMockito.given(batchStockRepo.findAllByAnnouncementId(ArgumentMatchers.any())).
+//        willThrow(new NotFoundException(Msg.BATCH_NOT_FOUND));
+
+        assertThrows(NotFoundException.class, () -> {
+            service.update(batchStockList.get(0).getBatchNumber());
+        });
+    }
+
+//    @Test
+//    @DisplayName("Erro de estoque insuficiente")
+//    void UpdateMethod_ThrowsException_WhenStockNotIsInsufficient() throws NotFoundException {
+//
+//        PurchaseOrderItems purchaseOrderItemsOver = new PurchaseOrderItems(1L, 1L, 20, BigDecimal.valueOf(20.00));
+//
+//        BDDMockito.given(batchStockRepo.findAllByAnnouncementId(ArgumentMatchers.any())).
+//                willThrow(new NotFoundException(Msg.BATCH_STOCK_INSUFFICIENT));
+//
+//        assertThrows(NotFoundException.class, () -> {
+//            service.update(batchStockList.get(0).getBatchNumber());
+//        });
+//    }
 
 
 }
