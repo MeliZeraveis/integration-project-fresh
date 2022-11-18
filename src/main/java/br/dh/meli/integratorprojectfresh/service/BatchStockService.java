@@ -2,6 +2,7 @@ package br.dh.meli.integratorprojectfresh.service;
 
 import br.dh.meli.integratorprojectfresh.dto.response.BatchStockGetResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
+import br.dh.meli.integratorprojectfresh.enums.Sections;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.model.BatchStock;
 import br.dh.meli.integratorprojectfresh.model.Section;
@@ -48,29 +49,23 @@ public class BatchStockService implements IBatchStockService {
 
     @Override
     public BatchStockGetResponseDTO findBatchStockByBatchStockNumber(Integer numberOfDays, String category, String order) {
+        String section;
+        try {
+            section = Sections.getSectionByCode(category).getName();
+        } catch (Exception e) {
+            throw new NotFoundException(Msg.CATEGORY_NOT_FOUND);
+        }
+
         List<BatchStock> batchStock = repo.findAllByDueDateBetween(LocalDate.now(),LocalDate.now().plusDays(numberOfDays));
         if(batchStock.isEmpty()) {
             throw new NotFoundException(Msg.BATCH_NOT_FOUND);
         }
 
-        if(category.equalsIgnoreCase("FS")) {
-            batchStock = batchStock.stream().filter(b -> Objects.equals(b.getSectionType(), "Fresh")).collect(Collectors.toList());
-        }
-        else if(category.equalsIgnoreCase("RF")) {
-            batchStock = batchStock.stream().filter(b -> Objects.equals(b.getSectionType(), "Refrigerated")).collect(Collectors.toList());
-        }
-        else if(category.equalsIgnoreCase("FF")) {
-            batchStock = batchStock.stream().filter(b -> Objects.equals(b.getSectionType(), "Frozen")).collect(Collectors.toList());
-        }else {
-            throw new NotFoundException(Msg.CATEGORY_NOT_FOUND);
-        }
+        batchStock = batchStock.stream().filter(b -> Objects.equals(b.getSectionType(), section)).collect(Collectors.toList());
 
         if (order.toLowerCase().equals("desc")){
-            System.out.println(order);
             batchStock = batchStock.stream().sorted(Comparator.comparing(BatchStock::getDueDate).reversed()).collect(Collectors.toList());
-        }
-        else {
-            System.out.println("asc");
+        } else {
             batchStock = batchStock.stream().sorted(Comparator.comparing(BatchStock::getDueDate)).collect(Collectors.toList());
         }
         return new BatchStockGetResponseDTO(batchStock);

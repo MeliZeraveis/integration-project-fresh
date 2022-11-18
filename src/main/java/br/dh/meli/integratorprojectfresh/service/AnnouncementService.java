@@ -3,6 +3,7 @@ package br.dh.meli.integratorprojectfresh.service;
 import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementListResponseDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementGetResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
+import br.dh.meli.integratorprojectfresh.enums.Sections;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.model.Announcement;
 import br.dh.meli.integratorprojectfresh.repository.AnnouncementRepository;
@@ -31,7 +32,13 @@ public class AnnouncementService implements IAnnouncementService {
 
   @Override
   public List<AnnouncementListResponseDTO> getAnnouncementsByCategory(String category) {
-    List<Announcement> announcements = repo.findBySectionType(category);
+    String section;
+    try {
+      section = Sections.getSectionByCode(category).getName();
+    } catch (Exception e) {
+      throw new NotFoundException(Msg.CATEGORY_NOT_FOUND);
+    }
+    List<Announcement> announcements = repo.findBySectionType(section);
     if (announcements.isEmpty()) {
       throw new NotFoundException(Msg.ANNOUNCEMENT_NOT_FOUND);
     }
