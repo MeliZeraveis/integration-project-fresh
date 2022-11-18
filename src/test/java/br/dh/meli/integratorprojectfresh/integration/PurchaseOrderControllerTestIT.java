@@ -84,7 +84,7 @@ public class PurchaseOrderControllerTestIT {
 
         PurchaseOrderItems purchaseOrderItems1 = new PurchaseOrderItems(1L, 1L, 1, BigDecimal.valueOf(10.00));
         PurchaseOrderItems purchaseOrderItems2 = new PurchaseOrderItems(2L, 2L, 1, BigDecimal.valueOf(10.00));
-        PurchaseOrderItems purchaseOrderItems3 = new PurchaseOrderItems(3L, 3L, 30000, BigDecimal.valueOf(10.00));
+        PurchaseOrderItems purchaseOrderItems3 = new PurchaseOrderItems(3L, 1L, 30000, BigDecimal.valueOf(10.00));
 
 
         orderRepo.save(purchaseOrder);
