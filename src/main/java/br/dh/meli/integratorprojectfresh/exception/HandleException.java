@@ -35,7 +35,7 @@ public class HandleException extends ResponseEntityExceptionHandler {
             .timeStamp(LocalDateTime.now())
             .build();
 
-    return new ResponseEntity<>(exceptionDetails, HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<>(exceptionDetails, HttpStatus.UNPROCESSABLE_ENTITY);
   }
 
   /**

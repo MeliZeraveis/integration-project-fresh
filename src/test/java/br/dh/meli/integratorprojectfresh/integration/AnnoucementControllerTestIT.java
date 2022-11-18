@@ -49,6 +49,50 @@ public class AnnoucementControllerTestIT {
     void setup() {
 //        announcement = new Announcement(1L, "maça", "description")
 //        annoucementGetResponseDTO = new AnnoucementGetResponseDTO(announcement);
+    }
+
+    @Test
+    @DisplayName("Testa se o metodo retorna o anuncio por categoria em caso de sucesso")
+    void get_ReturnAllAnnoucementGetResponseDTO_Sucess() throws Exception {
+
+        ResultActions response = mockMvc
+                .perform(get("/api/v1/fresh-products")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print());
+
+        response.andExpect(status().isOk());
+        //  .andExpect(jsonPath("$.announcementId", CoreMatchers.is(1)));
+    }
+
+    @Test
+    @DisplayName("Testa se o metodo retorna o anuncio por categoria em caso de sucesso")
+    void get_ReturnannoucementCategoryGetResponseDTO_Sucess() throws Exception {
+
+        ResultActions response = mockMvc
+                .perform(get("/api/v1/fresh-products/list")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("category", "FS"))
+                .andDo(print());
+
+        response.andExpect(status().isOk());
+              //  .andExpect(jsonPath("$.announcementId", CoreMatchers.is(1)));
+    }
+
+    @Test
+    @DisplayName("Testa se o metodo retorna erro se a categoria não existe")
+    void get_ReturnannoucementCategoryGetResponseDTO_WhenCategoryNotExist() throws Exception {
+
+        ResultActions response = mockMvc
+                .perform(get("/api/v1/fresh-products/list")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("category", "FA"))
+                .andDo(print());
+
+        response.andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.OBJECT_NOT_FOUND.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.CATEGORY_NOT_FOUND)))
+                .andExpect(jsonPath("$.status", CoreMatchers.is(HttpStatus.NOT_FOUND.value())));
+
 
     }
 
@@ -112,9 +156,9 @@ public class AnnoucementControllerTestIT {
                 .andDo(print());
 
         response.andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.OBJECT_NOT_FOUND.name())))
+                    .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.OBJECT_NOT_FOUND.name())))
                     .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.LETTER_NOT_VALID)))
-                .andExpect(jsonPath("$.status", CoreMatchers.is(HttpStatus.NOT_FOUND.value())));
+                    .andExpect(jsonPath("$.status", CoreMatchers.is(HttpStatus.NOT_FOUND.value())));
 
     }
 

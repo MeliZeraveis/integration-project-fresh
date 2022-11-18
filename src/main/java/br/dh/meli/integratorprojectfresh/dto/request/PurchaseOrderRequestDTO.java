@@ -41,13 +41,4 @@ public class PurchaseOrderRequestDTO {
   private List<@Valid PurchaseOrderItemsRequestDTO> products;
 
   private BigDecimal total;
-
-  /**
-   * toPurchaseOrder
-   * Convert DTO to Model
-   * @return PurchaseOrder
-   */
-  public PurchaseOrder toPurchaseOrder() {
-    return new PurchaseOrder(this.date, this.orderStatus, BigDecimal.ZERO, this.buyerId);
-  }
 }
