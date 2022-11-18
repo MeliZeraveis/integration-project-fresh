@@ -2,6 +2,7 @@ package br.dh.meli.integratorprojectfresh.dto.request;
 
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.model.PurchaseOrderItems;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,6 +18,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class PurchaseOrderItemsRequestDTO {
   private Long purchaseOrderId;
 
@@ -29,13 +31,6 @@ public class PurchaseOrderItemsRequestDTO {
   private Integer productQuantity;
 
   private BigDecimal productPrice;
-
-  public PurchaseOrderItemsRequestDTO(PurchaseOrderItems purchaseOrderItems) {
-    this.purchaseOrderId = purchaseOrderItems.getPurchaseOrderId();
-    this.announcementId = purchaseOrderItems.getAnnouncementId();
-    this.productQuantity = purchaseOrderItems.getProductQuantity();
-    this.productPrice = purchaseOrderItems.getProductPrice();
-  }
 
   /**
    * toPurchaseOrderItems
