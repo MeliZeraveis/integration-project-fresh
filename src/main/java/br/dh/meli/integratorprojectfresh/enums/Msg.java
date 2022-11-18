@@ -12,6 +12,7 @@ public enum Msg {
   public static final String ANNOUNCEMENT_IS_EMPTY = "Announcement is empty.";
   public static final String ANNOUNCEMENT_NOT_FOUND = "Announcement not found.";
   public static final String BATCH_NOT_FOUND = "Batch not found.";
+  public static final String BATCH_STOCK_INSUFFICIENT = "Batch stock is insufficient.";
   public static final String BATCHSTOCK_NOT_EMPTY = "Batch stock is empty.";
   public static final String BUYER_ID_NOT_FOUND = "Buyer ID was not found.";
   public static final String BUYER_ID_NOT_NULL = "Buyer ID cannot be null.";
@@ -62,7 +63,5 @@ public enum Msg {
   public static final String BATCH_EXPIRED =  "Batch contains product expired or shelf life of less than 3 weeks.";
 
   public static final String PRODUCT_BATCH_INCORRECT =  "Product is in an incorrect batch.";
-  public static final String CATEGORY_NOT_FOUND = "Category must be FS, RS or FF.";
-
-
+  public static final String CATEGORY_NOT_FOUND = "Category must be FS, RF or FF.";
 }
