@@ -28,8 +28,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -76,7 +75,7 @@ public class PurchaseOrderControllerTestIT {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("Sucesso GET")
     void get_ReturnannoucementGetResponseDTO_Sucess() throws Exception {
 
         ResultActions response = mockMvc
@@ -91,7 +90,7 @@ public class PurchaseOrderControllerTestIT {
     }
 
     @Test
-    @DisplayName("depois vejo")
+    @DisplayName("Sucesso Save/Post")
     void SaveMethod_ReturnPurchaseOrderResponseDTO_WhenSucess() throws Exception {
 
         ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/orders")
@@ -104,6 +103,18 @@ public class PurchaseOrderControllerTestIT {
 //        assertThat(orderRepo.findAll().get(0)).isNotNull();
 //        assertThat(orderRepo.findAll().size()).isEqualTo(4);
 //        assertThat(orderRepo.findAll().get(0)).isNotNull();
+
+    }
+
+    @Test
+    @DisplayName("Sucesso Save/Post")
+    void PutMethod_ReturnPurchaseOrderResponseDTO_WhenSucess() throws Exception {
+
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/orders")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("id", "1"));
+
+        response.andExpect(status().isCreated());
 
     }
 
