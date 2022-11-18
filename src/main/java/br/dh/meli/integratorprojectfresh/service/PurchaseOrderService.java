@@ -94,6 +94,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
   public PurchaseOrderResponseDTO update(Long id) {
     PurchaseOrder order = orderRepo.findById(id)
             .orElseThrow(() -> new NotFoundException(ExceptionType.PURCHASE_ORDER_NOT_FOUND.name()));
+    System.out.printf(order.getStatus().name());
     if (order.getStatus().equals(OrderStatus.APPROVED)) {
       throw new InvalidParamException(Msg.PURCHASE_ORDER_ALREADY_APPROVED);
     } 
