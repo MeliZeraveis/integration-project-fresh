@@ -5,7 +5,6 @@ import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPutResponseDTO
 import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderRequestDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPostResponseDTO;
 
-import br.dh.meli.integratorprojectfresh.enums.Routes;
 
 import br.dh.meli.integratorprojectfresh.service.InboundOrderService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -33,7 +33,7 @@ public class User {
     private String email;
 
     @Column(name = "role", nullable = false, length = 30)
-//    @Enumerated(EnumType.STRING)
+    // @Enumerated(EnumType.STRING)
     private String role;
 
     @OneToOne(mappedBy = "manager")

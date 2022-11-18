@@ -1,35 +1,24 @@
 package br.dh.meli.integratorprojectfresh.integration;
 
 
-import br.dh.meli.integratorprojectfresh.dto.request.BatchSotckAnnoucementDTO;
-import br.dh.meli.integratorprojectfresh.dto.request.BatchStockDTO;
-import br.dh.meli.integratorprojectfresh.dto.request.SectionDTO;
-import br.dh.meli.integratorprojectfresh.dto.response.AnnoucementGetResponseDTO;
+import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementGetResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.ExceptionType;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.repository.AnnouncementRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.tomcat.util.http.fileupload.impl.SizeException;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import br.dh.meli.integratorprojectfresh.model.Announcement;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -53,7 +42,7 @@ public class AnnoucementControllerTestIT {
 
     Announcement announcement;
 
-    AnnoucementGetResponseDTO annoucementGetResponseDTO;
+    AnnouncementGetResponseDTO annoucementGetResponseDTO;
 
 
     @BeforeEach
@@ -64,6 +53,7 @@ public class AnnoucementControllerTestIT {
     }
 
     @Test
+    @DisplayName("Testa se o metodo retorna o anuncio correto em caso de sucesso")
     void get_ReturnannoucementGetResponseDTO_Sucess() throws Exception {
 
             ResultActions response = mockMvc
@@ -73,11 +63,12 @@ public class AnnoucementControllerTestIT {
                     .andDo(print());
 
             response.andExpect(status().isOk())
-                   .andExpect(jsonPath("$.productId", CoreMatchers.is(1)));
+                   .andExpect(jsonPath("$.announcementId", CoreMatchers.is(1)));
 
     }
 
     @Test
+    @DisplayName("Testa se o metodo retorna uma mensagem NOT FOUND quando é informado o ID de um anuncio que nao existe")
     void get_ReturnExceptionNotFound_WhenProductNotExist() throws Exception {
 
         ResultActions response = mockMvc
@@ -88,39 +79,41 @@ public class AnnoucementControllerTestIT {
 
         response.andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.OBJECT_NOT_FOUND.name())))
-                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.SECTION_NOT_FOUND)))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.ANNOUNCEMENT_NOT_FOUND)))
                 .andExpect(jsonPath("$.status", CoreMatchers.is(HttpStatus.NOT_FOUND.value())));
 
     }
 
     @Test
+    @DisplayName("Testa se o metodo retorna o anuncio correto quando informado o ID e a categoria de ordenaçao em caso de sucesso")
     void get_ReturnannoucementGetResponseDTOByLetra_Sucess() throws Exception {
 
         ResultActions response = mockMvc
-                .perform(get("/api/v1/fresh-products/list/batch")
+                .perform(get("/api/v1/fresh-products/list")
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("id", "1")
-                        .param("letra", "v"))
+                        .param("sortBy", "V"))
                 .andDo(print());
 
         response.andExpect(status().isOk())
-                .andExpect(jsonPath("$.productId", CoreMatchers.is(1)));
+                .andExpect(jsonPath("$.announcementId", CoreMatchers.is(1)));
 
     }
 
     @Test
+    @DisplayName("Testa se o metodo retorna uma mensagem NOT FOUND quando é informado o ID correto com uma categoria inexistente")
     void get_ReturnExceptionNotFound_WhenProductByLetraNotExist() throws Exception {
 
         ResultActions response = mockMvc
-                .perform(get("/api/v1/fresh-products/list/batch")
+                .perform(get("/api/v1/fresh-products/list")
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("id", "1")
-                        .param("letra", "a"))
+                        .param("sortBy", "a"))
                 .andDo(print());
 
         response.andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.OBJECT_NOT_FOUND.name())))
-                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.SECTION_NOT_FOUND)))
+                    .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.LETTER_NOT_VALID)))
                 .andExpect(jsonPath("$.status", CoreMatchers.is(HttpStatus.NOT_FOUND.value())));
 
     }

@@ -22,6 +22,23 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class HandleException extends ResponseEntityExceptionHandler {
   /**
+   * handleMethodArgumentNotValid - handle the validation errors.
+   * @param ex - the exception
+   * @return ResponseEntity<ExceptionResponseDTO> - the exception response
+   */
+  @ExceptionHandler(BusinessRuleException.class)
+  public ResponseEntity<ExceptionDetails> handlerBusinessRuleException(BusinessRuleException ex) {
+    ExceptionDetails exceptionDetails = ExceptionDetails.builder()
+            .title(ExceptionType.BUSINESS_RULE_EXCEPTION.name())
+            .message(ex.getMessage())
+            .status(HttpStatus.UNPROCESSABLE_ENTITY.value())
+            .timeStamp(LocalDateTime.now())
+            .build();
+
+    return new ResponseEntity<>(exceptionDetails, HttpStatus.BAD_REQUEST);
+  }
+
+  /**
    * Handler for NotFoundException entities.
    *
    * @param ex the NotFoundException instance
@@ -58,8 +75,8 @@ public class HandleException extends ResponseEntityExceptionHandler {
   }
 
 
-  @ExceptionHandler (LimitCapacitySectionException.class)
-  public ResponseEntity<ExceptionDetails> handlerLimitCapacitySectionException(LimitCapacitySectionException ex) {
+  @ExceptionHandler (ActionNotAllowedException.class)
+  public ResponseEntity<ExceptionDetails> handlerLimitCapacitySectionException(ActionNotAllowedException ex) {
     ExceptionDetails exceptionDetails = ExceptionDetails.builder()
             .title("Action not allowed")
             .message(ex.getMessage())
@@ -117,5 +134,22 @@ public class HandleException extends ResponseEntityExceptionHandler {
             .build();
 
     return new ResponseEntity<>(exceptionDetails, httpStatus);
+  }
+
+  /**
+   * Handler for general unknown exception entities.
+   * @param ex the Exception instance
+   * @return ResponseEntity - the generated ResponseEntity with the exception details and the status code
+   */
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<ExceptionDetails> handlerGeneralErrorException(Exception ex) {
+    ExceptionDetails exceptionDetails = ExceptionDetails.builder()
+            .title(ExceptionType.UNKNOWN_SERVER_ERROR.name())
+            .message(ex.getMessage())
+            .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+            .timeStamp(LocalDateTime.now())
+            .build();
+
+    return new ResponseEntity<>(exceptionDetails, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }

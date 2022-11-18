@@ -92,11 +92,12 @@ class InboundOrderServiceTest {
 
         batchStockList.get(0).setAnnouncementId(1L);
         batchStockList.get(1).setAnnouncementId(1L);
-
+        sectionTest = new Section(1L, "Fresh", (float) 100.0, (float) 80.0,1L ,new ArrayList<>(), new ArrayList<>(), null);
+        List<Section> sectionList = new ArrayList<>();
+        sectionList.add(sectionTest);
         User user = new User(5L, "Test", "1234", "test@email.com", "manager");
-        warehouseTest = new Warehouse(1L, "Test", "Address Test", "BR-Test", new ArrayList<>(), user);
-        sectionTest = new Section(1L, "Fresh", (float) 100.0, (float) 80.0, new ArrayList<>());
-        announcementTest = new Announcement(1L, "Alface Test", "description", 3L, BigDecimal.valueOf(1.80), 1L, null, new ArrayList<>(), null, new ArrayList<>());
+        warehouseTest = new Warehouse(1L, "Test", "Address Test", "BR-Test", new ArrayList<>(), sectionList, user);
+        announcementTest = new Announcement(1L, "Alface Test", "description", 3L, BigDecimal.valueOf(1.80), 1L, sectionTest, new ArrayList<>(), null, new ArrayList<>());
     }
 
     @Test
@@ -157,7 +158,7 @@ class InboundOrderServiceTest {
 
     @Test
     @DisplayName("Exceção quando limite da seção é ultrapassado")
-    void SaveMethod_ThrowsExeption_WhenSectionExceededLimit() throws LimitCapacitySectionException {
+    void SaveMethod_ThrowsExeption_WhenSectionExceededLimit() throws ActionNotAllowedException {
 
         batchStockList.get(0).setVolume(3000f);
         batchStockList.get(1).setVolume(5000f);
@@ -165,9 +166,25 @@ class InboundOrderServiceTest {
         BDDMockito.when(sectionRepository.findById(1L))
                 .thenReturn(java.util.Optional.ofNullable(sectionTest));
 
-        assertThrows(LimitCapacitySectionException.class, () -> {
-            service.validSection(1L, batchStockList);
+        assertThrows(ActionNotAllowedException.class, () -> {
+            service.validSection(1L, batchStockList, 1L);
         });
+    }
+
+    @Test
+    @DisplayName("Exceção quando seção não pertence ao armazém")
+    void SaveMethod_ThrowsExeption_WhenSectionDoesntBelongToWareHouse() throws ActionNotAllowedException {
+
+        sectionTest.setWarehouseCode(2L);
+
+        BDDMockito.when(sectionRepository.findById(ArgumentMatchers.any()))
+                .thenReturn(java.util.Optional.ofNullable(sectionTest));
+
+        final var actualException = assertThrows(
+                ActionNotAllowedException.class,
+                () -> service.validSection(8L, batchStockList, 1L));
+        assertAll(
+                () -> Assertions.assertEquals(Msg.SECTION_NOT_BELONG_WAREHOUSE, actualException.getMessage()));
     }
 
     @Test
@@ -186,7 +203,7 @@ class InboundOrderServiceTest {
     void IsValidAnnouncementMethod_ThrowsException_WhenIdIsInvalid() throws NotFoundException {
         final var actualException = assertThrows(
                 NotFoundException.class,
-                () -> service.validIfAnnouncementExist(batchStockList));
+                () -> service.validAnnouncement(batchStockList));
         assertAll(
                 () -> Assertions.assertEquals( Msg.ANNOUNCEMENT_NOT_FOUND, actualException.getMessage())
         );
@@ -198,7 +215,7 @@ class InboundOrderServiceTest {
 
         final var actualException = assertThrows(
                 NotFoundException.class,
-                () -> service.validSection(1L, batchStockList));
+                () -> service.validSection(1L, batchStockList, 1L));
         assertAll(
                 () -> Assertions.assertEquals(Msg.SECTION_NOT_FOUND, actualException.getMessage())
         );
@@ -286,11 +303,77 @@ class InboundOrderServiceTest {
                 .thenReturn(java.util.Optional.ofNullable(sectionTest));
 
         final var actualException = assertThrows(
-                SectionTypeException.class,
-                () -> service.validSection(1L, batchStockList));
+                ActionNotAllowedException.class,
+                () -> service.validSection(1L, batchStockList, 1L));
         assertAll(
                 () -> Assertions.assertEquals(Msg.INSERT_BATCH_SECTION_INCORRET, actualException.getMessage())
         );
     }
+
+    @Test
+    @DisplayName("Testa mensagem da exceção quando seção é divergente")
+    void ValidSectionBatchStockUpdate_ThrowsException_WhenSectionTypeIsIncorrect() throws SectionTypeException {
+        batchStockList.get(0).setSectionType("Refrigerated");
+        batchStockList.get(0).setBatchNumber(1L);
+        batchStockList.get(1).setBatchNumber(2L);
+
+
+        final var actualException = assertThrows(
+                SectionTypeException.class,
+                () -> service.validSectionBatchStockUpdate(sectionTest, batchStockList));
+        assertAll(
+                () -> Assertions.assertEquals(Msg.INSERT_BATCH_SECTION_INCORRET, actualException.getMessage())
+        );
+    }
+
+    @Test
+    @DisplayName("Testa mensagem da exceção quando seção é divergente")
+    void ValidSectionBatchStockUpdate_ThrowsException_WhenVolumeLimitExceeded() throws ActionNotAllowedException {
+
+        batchStockList.get(0).setVolume(3000f);
+        batchStockList.get(1).setVolume(5000f);
+        batchStockList.get(0).setBatchNumber(1L);
+        batchStockList.get(1).setBatchNumber(2L);
+
+
+        BDDMockito.when(batchStockRepo.findById(1L))
+                .thenReturn(Optional.ofNullable(batchStockList2.get(0)));
+
+        final var actualException = assertThrows(
+                ActionNotAllowedException.class,
+                () -> service.validSectionBatchStockUpdate(sectionTest, batchStockList));
+        assertAll(
+                () -> Assertions.assertEquals(Msg.LIMIT_CAPACITY_SECTION, actualException.getMessage())
+        );
+    }
+
+    @Test
+    @DisplayName("Testa se a section existe")
+    void ValidSectionUpdate_ThrowsException_WhenSectionNotFound() throws NotFoundException {
+
+        batchStockList.get(0).setBatchNumber(1L);
+        batchStockList.get(1).setBatchNumber(2L);
+
+        final var actualException = assertThrows(
+                NotFoundException.class,
+                () -> service.validSectionUpdate(1L, batchStockList));
+        assertAll(
+                () -> Assertions.assertEquals(Msg.SECTION_NOT_FOUND, actualException.getMessage())
+        );
+    }
+
+    @Test
+    @DisplayName("Exceção quando seção não pertence ao armazém")
+    void SaveMethod_ThrowsExeption_WhenValidBatchDueDateIsInvalid() throws ActionNotAllowedException {
+
+        batchStockList.get(0).setDueDate(LocalDate.now().plusDays(1));
+
+        final var actualException = assertThrows(
+                ActionNotAllowedException.class,
+                () -> service.validBatchDueDate(batchStockList));
+        assertAll(
+                () -> Assertions.assertEquals(Msg.BATCH_EXPIRED, actualException.getMessage()));
+    }
+
 }
 

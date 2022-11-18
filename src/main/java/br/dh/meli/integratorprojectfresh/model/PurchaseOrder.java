@@ -1,6 +1,6 @@
 package br.dh.meli.integratorprojectfresh.model;
 
-import br.dh.meli.integratorprojectfresh.enums.OrderStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,11 +23,11 @@ public class PurchaseOrder {
   private Long id;
 
   @Column(name = "date", nullable = false)
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime date;
 
   @Column(name = "status", nullable = false)
-  @Enumerated(EnumType.STRING)
-  private OrderStatus status;
+  private String status;
 
   @Column(name = "total", nullable = false)
   private BigDecimal total;
@@ -43,4 +43,12 @@ public class PurchaseOrder {
   @OneToMany(mappedBy = "purchaseOrder")
   @JsonIgnoreProperties("purchaseOrder")
   private List<PurchaseOrderItems> orderItem;
+
+  public PurchaseOrder(LocalDateTime date, String status, BigDecimal total, Long buyerId) {
+    this.date = date;
+    this.status = status;
+    this.total = total;
+    this.buyerId = buyerId;
+    System.out.println("*** PurchaseOrder status: " + this.status);
+  }
 }

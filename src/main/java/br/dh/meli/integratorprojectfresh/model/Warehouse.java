@@ -1,5 +1,6 @@
 package br.dh.meli.integratorprojectfresh.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,6 +34,10 @@ public class Warehouse {
     @OneToMany(mappedBy = "warehouse")
     @JsonIgnoreProperties("warehouse")
     private List<InboundOrder> inboundOrder;
+
+    @OneToMany(mappedBy = "warehouse")
+    @JsonIgnoreProperties("warehouse")
+    private List<Section> section;
 
     @OneToOne
     @JsonIgnoreProperties("warehouse")
