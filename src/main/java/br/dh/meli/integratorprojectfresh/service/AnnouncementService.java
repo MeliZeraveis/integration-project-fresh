@@ -1,5 +1,6 @@
 package br.dh.meli.integratorprojectfresh.service;
 
+import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementListResponseDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementGetResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
@@ -18,21 +19,25 @@ public class AnnouncementService implements IAnnouncementService {
   private final AnnouncementRepository repo;
 
   @Override
-  public List<AnnouncementGetResponseDTO> getAllAnnouncements() {
+  public List<AnnouncementListResponseDTO> getAllAnnouncements() {
     List<Announcement> announcements = repo.findAll();
     if (announcements.isEmpty()) {
       throw new NotFoundException(Msg.ANNOUNCEMENT_NOT_FOUND);
     }
-    return announcements.stream().map(AnnouncementGetResponseDTO::new).collect(Collectors.toList());
+    return announcements.stream()
+            .map(AnnouncementListResponseDTO::new)
+            .collect(Collectors.toList());
   }
 
   @Override
-  public List<AnnouncementGetResponseDTO> getAnnouncementsByCategory(String category) {
-    List<Announcement> announcements = repo.findByCategory(category);
+  public List<AnnouncementListResponseDTO> getAnnouncementsByCategory(String category) {
+    List<Announcement> announcements = repo.findBySectionType(category);
     if (announcements.isEmpty()) {
       throw new NotFoundException(Msg.ANNOUNCEMENT_NOT_FOUND);
     }
-    return announcements.stream().map(AnnouncementGetResponseDTO::new).collect(Collectors.toList());
+    return announcements.stream()
+            .map(AnnouncementListResponseDTO::new)
+            .collect(Collectors.toList());
   }
 
   @Override

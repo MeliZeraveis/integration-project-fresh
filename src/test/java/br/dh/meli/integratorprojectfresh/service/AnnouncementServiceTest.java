@@ -87,7 +87,7 @@ class AnnouncementServiceTest {
                 NotFoundException.class,
                 () -> service.getAnnouncementByAnnouncementId(1L));
         assertAll(
-                () -> Assertions.assertEquals(Msg.ANNOUNCEMENT_IS_EMPTY, actualException.getMessage())
+                () -> Assertions.assertEquals(Msg.ANNOUNCEMENT_NOT_FOUND, actualException.getMessage())
         );
     }
 
