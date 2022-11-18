@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AnnouncementGetResponseDTO {
-  private Long productId;
+  private Long announcementId;
   private List<BatchStockAnnouncementDTO> batchStock;
 
   /**
@@ -30,7 +30,7 @@ public class AnnouncementGetResponseDTO {
    * @param announcement the announcement
    */
   public AnnouncementGetResponseDTO(Announcement announcement) {
-    this.productId = announcement.getAnnouncementId();
+    this.announcementId = announcement.getAnnouncementId();
     this.batchStock = announcement.getBatchStock().stream()
             .map(BatchStockAnnouncementDTO::new)
             .collect(Collectors.toList());
@@ -47,7 +47,7 @@ public class AnnouncementGetResponseDTO {
             'Q', Comparator.comparingInt(BatchStock::getProductQuantity),
             'V', Comparator.comparing(BatchStock::getDueDate)
     );
-    this.productId = announcement.getAnnouncementId();
+    this.announcementId = announcement.getAnnouncementId();
     this.batchStock = announcement.getBatchStock().stream()
             .sorted(comparators.get(sortBy))
             .map(BatchStockAnnouncementDTO::new)

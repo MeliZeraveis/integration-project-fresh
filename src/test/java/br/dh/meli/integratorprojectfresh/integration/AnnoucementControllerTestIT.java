@@ -79,7 +79,7 @@ public class AnnoucementControllerTestIT {
 
         response.andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.OBJECT_NOT_FOUND.name())))
-                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.ANNOUNCEMENT_IS_EMPTY)))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.ANNOUNCEMENT_NOT_FOUND)))
                 .andExpect(jsonPath("$.status", CoreMatchers.is(HttpStatus.NOT_FOUND.value())));
 
     }
@@ -89,10 +89,10 @@ public class AnnoucementControllerTestIT {
     void get_ReturnannoucementGetResponseDTOByLetra_Sucess() throws Exception {
 
         ResultActions response = mockMvc
-                .perform(get("/api/v1/fresh-products/list/batch")
+                .perform(get("/api/v1/fresh-products/list")
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("id", "1")
-                        .param("letra", "V"))
+                        .param("sortBy", "V"))
                 .andDo(print());
 
         response.andExpect(status().isOk())
@@ -105,10 +105,10 @@ public class AnnoucementControllerTestIT {
     void get_ReturnExceptionNotFound_WhenProductByLetraNotExist() throws Exception {
 
         ResultActions response = mockMvc
-                .perform(get("/api/v1/fresh-products/list/batch")
+                .perform(get("/api/v1/fresh-products/list")
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("id", "1")
-                        .param("letra", "a"))
+                        .param("sortBy", "a"))
                 .andDo(print());
 
         response.andExpect(status().isNotFound())
