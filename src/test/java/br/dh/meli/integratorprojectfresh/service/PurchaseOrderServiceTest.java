@@ -104,21 +104,22 @@ public class PurchaseOrderServiceTest {
         LocalDateTime date = LocalDateTime.parse("2020-03-09 17:55:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
         userTest = new User(1L, "fulano", "123456", "fulano@email.com", Roles.BUYER);
-
-
-        announcementTest = new Announcement(1L, "Alface Test", "description", 3L, BigDecimal.valueOf(1.80), 1L, sectionTest, new ArrayList<>(), null, new ArrayList<>());
-
-        batchStock = new BatchStock(1L, 1L, "Fresh", 10, manufacturingDate, manufacturingTime, 10.0f, dueDate3, BigDecimal.valueOf(30.50), null);
-        batchStockList = new ArrayList<>();
-        batchStockList.add(batchStock);
-
         sectionTest = new Section(1L, "Fresh", (float) 100.0, (float) 80.0, 1L, new ArrayList<>(), inboundOrderList, warehouseTest);
-        List<Section> sectionList = new ArrayList<>();
-        sectionList.add(sectionTest);
 
         inboundOrder = new InboundOrder(1L, manufacturingDate, 1L, 1L, warehouseTest, batchStockList, sectionTest);
         inboundOrderList = new ArrayList<>();
         inboundOrderList.add(inboundOrder);
+
+        announcementTest = new Announcement(1L, "Alface Test", "description", 3L, BigDecimal.valueOf(1.80), 1L, sectionTest, new ArrayList<>(), null, new ArrayList<>());
+
+        batchStock = new BatchStock(1L, 1L, "Fresh", 10, manufacturingDate, manufacturingTime, 10.0f, dueDate3, BigDecimal.valueOf(30.50), inboundOrder);
+        batchStockList = new ArrayList<>();
+        batchStockList.add(batchStock);
+
+
+        List<Section> sectionList = new ArrayList<>();
+        sectionList.add(sectionTest);
+
 
 
         warehouseTest = new Warehouse(1L, "Test", "Address Test", "BR-Test", new ArrayList<>(), sectionList, userTest);
@@ -213,8 +214,7 @@ public class PurchaseOrderServiceTest {
                 .thenReturn(purchaseOrderItemsList);
         BDDMockito.when(batchStockRepo.findAllByAnnouncementId(announcementTest.getAnnouncementId()))
                 .thenReturn(batchStockList);
-        BDDMockito.when(batchStockRepo.save(ArgumentMatchers.any()))
-                .thenReturn(batchStock);
+
         BDDMockito.when(sectionRepo.save(ArgumentMatchers.any()))
                 .thenReturn(sectionTest);
         BDDMockito.when(orderRepo.save(purchaseOrderPending))
