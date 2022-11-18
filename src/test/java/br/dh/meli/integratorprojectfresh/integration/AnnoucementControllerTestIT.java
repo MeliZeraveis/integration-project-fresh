@@ -63,7 +63,7 @@ public class AnnoucementControllerTestIT {
                     .andDo(print());
 
             response.andExpect(status().isOk())
-                   .andExpect(jsonPath("$.productId", CoreMatchers.is(1)));
+                   .andExpect(jsonPath("$.announcementId", CoreMatchers.is(1)));
 
     }
 
@@ -96,7 +96,7 @@ public class AnnoucementControllerTestIT {
                 .andDo(print());
 
         response.andExpect(status().isOk())
-                .andExpect(jsonPath("$.productId", CoreMatchers.is(1)));
+                .andExpect(jsonPath("$.announcementId", CoreMatchers.is(1)));
 
     }
 

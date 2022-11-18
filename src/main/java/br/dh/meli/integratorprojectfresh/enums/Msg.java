@@ -56,5 +56,12 @@ public enum Msg {
   public static final String VOLUME_REQUIRED = "Volume is required.";
   public static final String WAREHOUSE_CODE_REQUIRED = "Warehouse code is required.";
   public static final String WAREHOUSE_NOT_FOUND =  "Warehouse not found.";
+
+
+  public static final String SECTION_NOT_BELONG_WAREHOUSE =  "Section doesn't belong warehouse.";
+
+  public static final String BATCH_EXPIRED =  "Batch contains product expired or shelf life of less than 3 weeks.";
+
+  public static final String PRODUCT_BATCH_INCORRECT =  "Product is in an incorrect batch.";
   public static final String CATEGORY_NOT_FOUND = "Category must be FS, RS or FF.";
 }
