@@ -32,6 +32,13 @@ public class PurchaseOrderItemsRequestDTO {
 
   private BigDecimal productPrice;
 
+  public PurchaseOrderItemsRequestDTO(PurchaseOrderItems purchaseOrderItems) {
+    this.purchaseOrderId = purchaseOrderItems.getPurchaseOrderId();
+    this.announcementId = purchaseOrderItems.getAnnouncementId();
+    this.productQuantity = purchaseOrderItems.getProductQuantity();
+    this.productPrice = purchaseOrderItems.getProductPrice();
+  }
+
   /**
    * toPurchaseOrderItems
    * Convert DTO to Model
