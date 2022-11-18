@@ -106,13 +106,37 @@ public class PurchaseOrderControllerTestIT {
                 .content(objectMapper.writeValueAsString(purchaseOrderRequestDTO)));
 
         response.andExpect(status().isCreated());
-
-//        assertThat(orderRepo.findAll().size()).isEqualTo(2);
-//        assertThat(orderRepo.findAll().get(0)).isNotNull();
-//        assertThat(orderRepo.findAll().size()).isEqualTo(4);
-//        assertThat(orderRepo.findAll().get(0)).isNotNull();
-
     }
+
+    @Test
+    @DisplayName("BuyerId Not Found - Save/Post")
+    void SaveMethod_ReturnPurchaseOrderResponseDTO_WhenBuyerNotFound() throws Exception {
+
+        purchaseOrderRequestDTO.setBuyerId(80L);
+        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/orders")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(purchaseOrderRequestDTO)));
+
+        response.andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.OBJECT_NOT_FOUND.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.BUYER_ID_NOT_FOUND)))
+                .andExpect(jsonPath("$.status", CoreMatchers.is(HttpStatus.NOT_FOUND.value())));
+    }
+
+//    @Test
+//    @DisplayName("BuyerId Not Found - Save/Post")
+//    void SaveMethod_ReturnPurchaseOrderResponseDTO_WhenAnnouncementIsNotFound() throws Exception {
+//
+//        purchaseOrderRequestDTO.setProducts(null);
+//        ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/orders")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(objectMapper.writeValueAsString(purchaseOrderRequestDTO)));
+//
+//        response.andExpect(status().isNotFound())
+//                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.OBJECT_NOT_FOUND.name())))
+//                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.ANNOUNCEMENT_NOT_FOUND)))
+//                .andExpect(jsonPath("$.status", CoreMatchers.is(HttpStatus.NOT_FOUND.value())));
+//    }
 
     @Test
     @DisplayName("Sucesso Save/Post")
@@ -141,6 +165,31 @@ public class PurchaseOrderControllerTestIT {
                 .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.PURCHASE_ORDER_ITEMS_NOT_FOUND)))
                 .andExpect(jsonPath("$.status", CoreMatchers.is(HttpStatus.NOT_FOUND.value())));
     }
+
+//    @Test
+//    @DisplayName("Not Found Exception - GET")
+//    void GetMethod_ReturnannoucementGetResponseDTO_WhenIdIsEmpty() throws Exception {
+//
+//
+//        ResultActions response = mockMvc
+//                .perform(get("/api/v1/fresh-product/orders")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .param("id", "1"))
+//                .andDo(print());
+//
+////        purchaseOrder.setId(null);
+////        purchaseOrder.setStatus(null);
+////        purchaseOrder.setDate(null);
+////        purchaseOrder.setTotal(null);
+////        purchaseOrder.setOrderItem(null);
+////        purchaseOrder.setBuyer(null);
+////        purchaseOrder.setBuyerId(null);
+//
+//        response.andExpect(status().isNotFound())
+//                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.OBJECT_NOT_FOUND.name())))
+//                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.PURCHASE_ORDER_ITEMS_NOT_FOUND)))
+//                .andExpect(jsonPath("$.status", CoreMatchers.is(HttpStatus.NOT_FOUND.value())));
+//    }
 
     @Test
     @DisplayName("Exception Put")
