@@ -44,9 +44,9 @@ public class User {
     @JsonIgnoreProperties("seller")
     private List<Announcement> announcement;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER)
-    //@JsonIgnoreProperties("user")
-    private Review review;
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @JsonIgnoreProperties("user")
+    private List<Review> review;
 
     public User(long id, String username, String password, String email, String role) {
         this.userId = id;
