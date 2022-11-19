@@ -59,4 +59,9 @@ public class Announcement {
     @JsonIgnoreProperties("announcement")
     private List<PurchaseOrderItems> purchaseOrderItems;
 
+    @OneToMany(mappedBy = "announcement", fetch = FetchType.LAZY)
+    @JsonIgnore
+    @JsonIgnoreProperties("announcement")
+    private List<Review> review;
+
 }
