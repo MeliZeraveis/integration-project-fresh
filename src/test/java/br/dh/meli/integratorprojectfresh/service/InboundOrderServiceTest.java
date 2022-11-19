@@ -51,7 +51,6 @@ class InboundOrderServiceTest {
     private InboundOrderRepository inboundOrderRepo;
     @Mock
     private BatchStockRepository batchStockRepo;
-    private BatchStockDTO batchStockDTO;
     InboundOrderPostResponseDTO inboundOrderPostResponseDTO;
     InboundOrderPutResponseDTO inboundOrderPutResponseDTO;
     InboundOrderRequestDTO inboundOrderRequestDTO;
