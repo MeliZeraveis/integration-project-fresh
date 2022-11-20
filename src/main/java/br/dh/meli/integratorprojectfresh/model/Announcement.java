@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -59,9 +60,24 @@ public class Announcement {
     @JsonIgnoreProperties("announcement")
     private List<PurchaseOrderItems> purchaseOrderItems;
 
+
     @OneToMany(mappedBy = "announcement", fetch = FetchType.LAZY)
     @JsonIgnore
     @JsonIgnoreProperties("announcement")
     private List<Review> review;
+    
+   /*
+    public Announcement(long announcementId, String name, String description, long sellerId, BigDecimal price, long sectionCode) {
+        this.announcementId = announcementId;
+        this.name = name;
+        this.description = description;
+        this.sellerId = sellerId;
+        this.price = price;
+        this.sectionCode = sectionCode;
+    }
 
+    public <E> Announcement(long l, String camisa, String camisa_branca, long l1, BigDecimal valueOf, long l2, Section section, List<BatchStock> batchStockList2, Object o, ArrayList<E> es) {
+    }
+
+    */
 }
