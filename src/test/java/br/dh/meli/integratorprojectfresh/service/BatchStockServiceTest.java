@@ -73,7 +73,7 @@ class BatchStockServiceTest {
         inboundOrder = new InboundOrder(1L, manufacturingDate, 1L, 1L,warehouse, batchStockList, section );
         section = new Section(1L, "Fresh", 50.0f, 20.0f, 1L, new ArrayList<>(), List.of(inboundOrder), null );
 
-        announcement = new Announcement(1L, "Camisa", "Camisa branca", 4L, BigDecimal.valueOf(100.0), 1L, section, batchStockList, null, new ArrayList<>());
+        announcement = new Announcement(1L, "Camisa", "Camisa branca", 4L, BigDecimal.valueOf(100.0), 1L, section, batchStockList, null, new ArrayList<>(), new ArrayList<>());
     }
 
     @Test
