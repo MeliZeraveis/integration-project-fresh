@@ -162,4 +162,21 @@ public class AnnoucementControllerTestIT {
 
     }
 
+    @Test
+    @DisplayName("Testa se o metodo retorna uma mensagem de erro quando é informado uma string inexistente no Banco de Dados")
+    void FindAnnouncementByQueryString_ReturnException_WhenProductNameNotExist() throws Exception {
+
+        ResultActions response = mockMvc
+                .perform(get("/api/v1/fresh-products/list/query")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("q", "Camiseta"))
+                .andDo(print());
+
+        response.andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.OBJECT_NOT_FOUND.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.QUERY_STRING_NOT_FOUND)))
+                .andExpect(jsonPath("$.status", CoreMatchers.is(HttpStatus.NOT_FOUND.value())));
+
+    }
+
 }

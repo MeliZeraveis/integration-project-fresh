@@ -72,7 +72,7 @@ public class AnnouncementController {
   /**
    * findAnnouncementByQueryString(String queryString)
    * Get all announcements that match the query string.
-   * @param queryString the query string
+   * @param q the query string
    * @return the response entity
    */
 
