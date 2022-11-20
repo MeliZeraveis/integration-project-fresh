@@ -67,4 +67,15 @@ public class AnnouncementService implements IAnnouncementService {
       throw new NotFoundException(Msg.LETTER_NOT_VALID);
     }
   }
+
+  @Override
+  public List<AnnouncementListResponseDTO> findAnnouncementByQueryString(String queryString) {
+    List<Announcement> announcement = repo.findByNameContainingIgnoreCase(queryString);
+    if (announcement.isEmpty()) {
+      throw new NotFoundException(Msg.QUERY_STRING_NOT_FOUND);
+    }
+    return announcement.stream()
+            .map(AnnouncementListResponseDTO::new)
+            .collect(Collectors.toList());
+  }
 }

@@ -11,5 +11,6 @@ public interface IAnnouncementService {
     List<AnnouncementListResponseDTO> getAnnouncementsByCategory(String category);
     AnnouncementGetResponseDTO getAnnouncementByAnnouncementId(Long id);
     AnnouncementGetResponseDTO findAnnouncementByBatchStockNumber(Long id, Character sortBy);
+    List<AnnouncementListResponseDTO> findAnnouncementByQueryString(String queryString);
 
 }

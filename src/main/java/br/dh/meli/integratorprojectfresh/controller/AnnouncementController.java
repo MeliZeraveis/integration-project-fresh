@@ -68,4 +68,17 @@ public class AnnouncementController {
     AnnouncementGetResponseDTO announcement= service.findAnnouncementByBatchStockNumber(id, sortBy);
     return new ResponseEntity<>(announcement, HttpStatus.OK);
   }
+
+  /**
+   * findAnnouncementByQueryString(String queryString)
+   * Get all announcements that match the query string.
+   * @param queryString the query string
+   * @return the response entity
+   */
+
+    @GetMapping(value = Routes.ANNOUNCEMENT_BY_QUERY_STRING, params = {"q"})
+  ResponseEntity<List<AnnouncementListResponseDTO>> findAnnouncementByQueryString(@RequestParam String q) {
+    List<AnnouncementListResponseDTO> announcement = service.findAnnouncementByQueryString(q);
+    return new ResponseEntity<>(announcement, HttpStatus.OK);
+  }
 }
