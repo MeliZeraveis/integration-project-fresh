@@ -149,5 +149,17 @@ class AnnouncementServiceTest {
 
     }
 
+    @Test
+    @DisplayName("Erro quando preço não é encontrada no banco de dados")
+    void FindAnnouncementByPrice_ThrowError_WhenPriceIsNotFind() throws NotFoundException {
+        final var actualException = assertThrows(
+                NotFoundException.class,
+                () -> service.findAnnouncementByPrice(BigDecimal.valueOf(3.0), BigDecimal.valueOf(13.0)));
+        assertAll(
+                () -> Assertions.assertEquals(Msg.PRICE_MIN_MAX, actualException.getMessage())
+        );
+
+    }
+
 
 }
