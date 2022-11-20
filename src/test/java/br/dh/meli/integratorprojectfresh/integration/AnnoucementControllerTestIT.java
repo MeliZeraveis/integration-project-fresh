@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import br.dh.meli.integratorprojectfresh.model.Announcement;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.DOUBLE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -192,6 +193,40 @@ public class AnnoucementControllerTestIT {
         response.andExpect(status().isOk())
                 .andExpectAll(status().isOk())
                 .andExpect(jsonPath("$[0].name", CoreMatchers.containsStringIgnoringCase("banana")));
+    }
+
+    @Test
+    @DisplayName("Testa se passado valores inexistentes no Banco de Dados, retorna um erro.")
+    void FindAnnouncementByPrice_ThrowException_WhenProductPriceNotExist() throws Exception {
+
+        ResultActions response = mockMvc
+                .perform(get("/api/v1/fresh-products/list/price")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("min", "0.1")
+                        .param("max", "0.2"))
+                .andDo(print());
+
+        response.andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.OBJECT_NOT_FOUND.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.PRICE_MIN_MAX)))
+                .andExpect(jsonPath("$.status", CoreMatchers.is(HttpStatus.NOT_FOUND.value())));
+
+    }
+
+    @Test
+    @DisplayName("Testa passado valores minimos e maximos existentes no bd, retorna uma lista ordenada")
+    void FindAnnouncementByPrice_ReturnAnnouncement_WhenPriceExists() throws Exception {
+
+        ResultActions response = mockMvc
+                .perform(get("/api/v1/fresh-products/list/price")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("min", "3.0")
+                        .param( "max", "13.0"))
+                .andDo(print());
+
+        response.andExpect(status().isOk())
+                .andExpectAll(status().isOk())
+                .andExpect(jsonPath("$[0].price", CoreMatchers.notNullValue()));
     }
 
 }
