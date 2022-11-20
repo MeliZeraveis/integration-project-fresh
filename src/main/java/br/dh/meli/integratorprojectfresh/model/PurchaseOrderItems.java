@@ -43,6 +43,8 @@ public class PurchaseOrderItems {
     this.productPrice = productPrice;
   }
 
+
+
 //  public PurchaseOrderItems(Long announcementId, Integer productQuantity, BigDecimal productPrice) {
 //    this.announcementId = announcementId;
 //    this.productQuantity = productQuantity;
