@@ -50,4 +50,12 @@ public class Review {
         this.announcementId = review.getAnnouncementId();
         this.userId = review.getUserId();
     }
+
+    public Review(ReviewDTO reviewDTO, Long reviewId) {
+        this.reviewId = reviewId;
+        this.grade = reviewDTO.getGrade();
+        this.comment = reviewDTO.getComment();
+        this.announcementId = reviewDTO.getAnnouncementId();
+        this.userId = reviewDTO.getUserId();
+    }
 }

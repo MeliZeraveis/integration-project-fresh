@@ -19,6 +19,7 @@ import javax.validation.constraints.Positive;
 //@AllArgsConstructor
 public class ReviewDTO {
 
+    private Long ReviewId;
     @NotNull(message = Msg.GRADE_REQUIRED)
     @Max(value = 5, message = Msg.GRADE_MAX)
     @Positive(message = Msg.GRADE_POSITIVE)

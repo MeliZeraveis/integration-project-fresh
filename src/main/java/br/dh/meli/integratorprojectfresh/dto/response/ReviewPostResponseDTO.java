@@ -12,15 +12,15 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ReviewPostResponseDTO {
     private Long id;
-    private Integer rating;
-    private String comments;
+    private Integer grade;
+    private String comment;
     private Long announcementId;
     private Long userId;
 
     public ReviewPostResponseDTO(Review review) {
         this.id = review.getReviewId();
-        this.rating = review.getGrade();
-        this.comments = review.getComment();
+        this.grade = review.getGrade();
+        this.comment = review.getComment();
         this.userId = review.getUserId();
         this.announcementId = review.getAnnouncementId();
     }

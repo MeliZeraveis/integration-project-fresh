@@ -66,4 +66,5 @@ public enum Msg {
   public static final String GRADE_POSITIVE = "Rating is not positive.";
   public static final String COMMENT_REQUIRED = "Comment is required.";
     public static final String USER_ID_REQUIRED = "User ID is required.";
+    public static final String REVIEW_NOT_FOUND = "Review not found.";
 }
