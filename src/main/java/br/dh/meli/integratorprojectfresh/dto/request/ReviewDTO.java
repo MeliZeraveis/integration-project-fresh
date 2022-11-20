@@ -16,14 +16,12 @@ import javax.validation.constraints.Positive;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 public class ReviewDTO {
 
-
-
-    @NotNull(message = Msg.RATING_REQUIRED)
-    @Max(value = 5, message = Msg.RATING_MAX)
-    @Positive(message = Msg.RATING_POSITIVE)
+    @NotNull(message = Msg.GRADE_REQUIRED)
+    @Max(value = 5, message = Msg.GRADE_MAX)
+    @Positive(message = Msg.GRADE_POSITIVE)
     private Integer grade;
 
     @NotNull(message = Msg.COMMENT_REQUIRED)
@@ -35,12 +33,12 @@ public class ReviewDTO {
     @NotNull(message = Msg.USER_ID_REQUIRED)
     private Long userId;
 
-   /* public ReviewDTO(Integer rating, String comment, Long announcementId, Long userNameId) {
-        this.rating = rating;
+    public ReviewDTO(Integer grade, String comment, Long announcementId, Long userId) {
+        this.grade = grade;
         this.comment = comment;
-        this.productName = productName;
-        this.userName = userName;
+        this.announcementId = announcementId;
+        this.userId = userId;
     }
 
-    */
+
 }

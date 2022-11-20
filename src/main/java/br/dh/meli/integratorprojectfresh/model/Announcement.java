@@ -66,4 +66,11 @@ public class Announcement {
     @JsonIgnoreProperties("announcement")
     private List<Review> review;
 
+    public Announcement(String name, String description, Long sellerId, BigDecimal price, Long sectionCode) {
+        this.name = name;
+        this.description = description;
+        this.sellerId = sellerId;
+        this.price = price;
+        this.sectionCode = sectionCode;
+    }
 }

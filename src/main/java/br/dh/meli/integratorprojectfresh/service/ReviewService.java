@@ -16,6 +16,7 @@ import br.dh.meli.integratorprojectfresh.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,20 +31,20 @@ public class ReviewService implements IReviewService {
 
     private final PurchaseOrderRepository purchaseOrderRepo;
 
-    void validIfPurchaseOrderIsApproved(Long announcementId, Long userId) {
-        Optional<PurchaseOrder> purchaseOrder = purchaseOrderRepo.findByAnnouncementIdAndUserId(announcementId, userId);
-        if (purchaseOrder.isEmpty() && !purchaseOrder.get().getStatus().equals("Finalizado")) {
+    void validIfPurchaseOrderIsApproved(Long announcementId, Long buyerId) {
+        List<PurchaseOrder> purchaseOrder = purchaseOrderRepo.findByAnnouncementIdAndBuyerId(announcementId, buyerId);
+        if (purchaseOrder.isEmpty()) {
             throw new ActionNotAllowedException("Purchase order not approved");
         }
     }
 
-    void validIfAnnouncementExist(Long AnnouncementId) {
-        Optional<Announcement> announcement = announcementRepo.findById(AnnouncementId);
+
+    void validIfAnnouncementExist(Long announcementId) {
+        Optional<Announcement> announcement = announcementRepo.findById(announcementId);
         if (announcement.isEmpty()) {
             throw new NotFoundException(Msg.ANNOUNCEMENT_NOT_FOUND);
         }
     }
-
 
     @Override
     public ReviewPostResponseDTO save(ReviewRequestDTO reviewRequest) {
