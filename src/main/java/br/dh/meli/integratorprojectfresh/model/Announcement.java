@@ -59,4 +59,9 @@ public class Announcement {
     @JsonIgnoreProperties("announcement")
     private List<PurchaseOrderItems> purchaseOrderItems;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "buyer", insertable = false, updatable = false)
+    @JsonIgnoreProperties("announcement")
+    private Buyer buyer;
+
 }

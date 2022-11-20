@@ -44,6 +44,11 @@ public class User {
     @JsonIgnoreProperties("seller")
     private List<Announcement> announcement;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "buyer", insertable = false, updatable = false)
+    @JsonIgnoreProperties("user")
+    private Buyer buyer;
+
     public User(long id, String username, String password, String email, String role) {
         this.userId = id;
         this.username = username;
