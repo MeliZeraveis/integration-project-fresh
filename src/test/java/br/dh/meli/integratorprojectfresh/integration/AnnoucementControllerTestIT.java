@@ -163,8 +163,8 @@ public class AnnoucementControllerTestIT {
     }
 
     @Test
-    @DisplayName("Testa se o metodo retorna uma mensagem de erro quando é informado uma string inexistente no Banco de Dados")
-    void FindAnnouncementByQueryString_ReturnException_WhenProductNameNotExist() throws Exception {
+    @DisplayName("Testa se o metodo retorna uma mensagem de erro quando é informado um NAME inexistente no Banco de Dados")
+    void FindAnnouncementByQueryString_ThrowException_WhenProductNameNotExist() throws Exception {
 
         ResultActions response = mockMvc
                 .perform(get("/api/v1/fresh-products/list/query")
@@ -177,6 +177,21 @@ public class AnnoucementControllerTestIT {
                 .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.QUERY_STRING_NOT_FOUND)))
                 .andExpect(jsonPath("$.status", CoreMatchers.is(HttpStatus.NOT_FOUND.value())));
 
+    }
+
+    @Test
+    @DisplayName("Testa se o metodo retorna o anuncio correto quando informado um NAME existente no banco de dados")
+    void FindAnnouncementByQueryString_ReturnAnnouncement_WhenProductNameExist() throws Exception {
+
+        ResultActions response = mockMvc
+                .perform(get("/api/v1/fresh-products/list/query")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("q", "banana"))
+                .andDo(print());
+
+        response.andExpect(status().isOk())
+                .andExpectAll(status().isOk())
+                .andExpect(jsonPath("$[0].name", CoreMatchers.containsStringIgnoringCase("banana")));
     }
 
 }
