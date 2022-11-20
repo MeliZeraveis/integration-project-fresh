@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -79,6 +80,19 @@ public class AnnouncementController {
     @GetMapping(value = Routes.ANNOUNCEMENT_BY_QUERY_STRING, params = {"q"})
   ResponseEntity<List<AnnouncementListResponseDTO>> findAnnouncementByQueryString(@RequestParam String q) {
     List<AnnouncementListResponseDTO> announcement = service.findAnnouncementByQueryString(q);
+    return new ResponseEntity<>(announcement, HttpStatus.OK);
+  }
+
+  /**
+   * findAnnouncementByQueryString(String queryString)
+   * Get all announcements that match the query string.
+   * @param q the query string
+   * @return the response entity
+   */
+
+  @GetMapping(value = Routes.ANNOUNCEMENT_BY_PRICE, params = {"min", "max"})
+  ResponseEntity<List<AnnouncementListResponseDTO>> findAnnouncementByPrice(@RequestParam BigDecimal min, @RequestParam BigDecimal max) {
+    List<AnnouncementListResponseDTO> announcement = service.findAnnouncementByPrice(min, max);
     return new ResponseEntity<>(announcement, HttpStatus.OK);
   }
 }

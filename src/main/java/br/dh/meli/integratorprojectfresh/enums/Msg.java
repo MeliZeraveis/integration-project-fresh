@@ -63,4 +63,5 @@ public enum Msg {
   public static final String CATEGORY_NOT_FOUND = "Category must be FS, RF or FF.";
 
   public static final String QUERY_STRING_NOT_FOUND = "Sorry, we couldn't find any results for your search.";
+  public static final String PRICE_MIN_MAX = "Sorry, we couldn't find any results for your search.";
 }

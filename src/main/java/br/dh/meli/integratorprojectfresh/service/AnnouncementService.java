@@ -10,6 +10,7 @@ import br.dh.meli.integratorprojectfresh.repository.AnnouncementRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -73,6 +74,17 @@ public class AnnouncementService implements IAnnouncementService {
     List<Announcement> announcement = repo.findByNameContainingIgnoreCase(queryString);
     if (announcement.isEmpty()) {
       throw new NotFoundException(Msg.QUERY_STRING_NOT_FOUND);
+    }
+    return announcement.stream()
+            .map(AnnouncementListResponseDTO::new)
+            .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<AnnouncementListResponseDTO> findAnnouncementByPrice(BigDecimal min, BigDecimal max) {
+    List<Announcement> announcement = repo.findByPriceBetweenOrderByPrice(min, max);
+    if (announcement.isEmpty()) {
+      throw new NotFoundException(Msg.PRICE_MIN_MAX);
     }
     return announcement.stream()
             .map(AnnouncementListResponseDTO::new)
