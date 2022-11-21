@@ -25,6 +25,14 @@ public enum Msg {
   public static final String FILTER_NOT_FOUND = "Filter not found.";
   public static final String INBOUND_ORDER_NOT_FOUND = "Inbound order not found.";
   public static final String INSERT_BATCH_SECTION_INCORRET = "Insert batch in wrong section";
+  public static final String SELLER_ID_NOT_FOUND = "Seller ID was not found.";
+  public static final String SELLER_ID_NOT_NULL = "Seller ID cannot be null.";
+  public static final String SELLER_ID_NOT_VALID = "Seller ID is not valid.";
+  public static final String SECTION_ORDER_STATUS_NOT_NULL = "Purchase Order status cannot be null.";
+  public static final String SECTION_ORDER_STATUS_NOT_VALID = "Purchase Order status is not valid.";
+  public static final String SECTION_ORDER_ALREADY_APPROVED = "Purchase Order already approved.";
+  public static final String MAX_CAPACITY_NOT_NULL = "Max capacity cannot be null.";
+  public static final String MAX_CAPACITY_POSITIVE = "Max capacity requested is not positive.";
 
   public static final String LETTER_NOT_VALID = "The letter must to be L, V or Q";
   public static final String LIMIT_CAPACITY_SECTION = "Total sector capacity limit exceeded.";
