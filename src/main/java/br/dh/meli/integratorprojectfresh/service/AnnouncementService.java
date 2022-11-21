@@ -1,7 +1,9 @@
 package br.dh.meli.integratorprojectfresh.service;
 
+import br.dh.meli.integratorprojectfresh.dto.request.AnnouncementRequestDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementListResponseDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementGetResponseDTO;
+import br.dh.meli.integratorprojectfresh.enums.ExceptionType;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.enums.Sections;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
@@ -89,5 +91,21 @@ public class AnnouncementService implements IAnnouncementService {
     return announcement.stream()
             .map(AnnouncementListResponseDTO::new)
             .collect(Collectors.toList());
+  }
+
+  @Override
+  public AnnouncementRequestDTO updateById(AnnouncementRequestDTO announcementRequestDTO, Long id) {
+    Optional<Announcement> announcement = repo.findById(id);
+    if (announcement.isEmpty()) {
+      throw new NotFoundException(Msg.ANNOUNCEMENT_NOT_FOUND);
+    }
+    Announcement announcementUpdate = announcement.get();
+
+    announcementUpdate.setName(announcementRequestDTO.getName());
+    announcementUpdate.setDescription(announcementRequestDTO.getDescription());
+    announcementUpdate.setPrice(announcementRequestDTO.getPrice());
+    announcementUpdate.setSectionCode(announcementRequestDTO.getSectionCode());
+    repo.save(announcementUpdate);
+    return new AnnouncementRequestDTO(announcementUpdate);
   }
 }
