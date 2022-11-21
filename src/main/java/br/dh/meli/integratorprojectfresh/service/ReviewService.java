@@ -3,8 +3,7 @@ package br.dh.meli.integratorprojectfresh.service;
 import br.dh.meli.integratorprojectfresh.dto.request.ReviewDTO;
 import br.dh.meli.integratorprojectfresh.dto.request.ReviewRequestDTO;
 //import br.dh.meli.integratorprojectfresh.dto.response.ReviewListPostResponseDTO;
-import br.dh.meli.integratorprojectfresh.dto.response.ReviewPostResponseDTO;
-import br.dh.meli.integratorprojectfresh.dto.response.ReviewPutResponseDTO;
+import br.dh.meli.integratorprojectfresh.dto.response.*;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.exception.ActionNotAllowedException;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
@@ -20,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -73,8 +73,22 @@ public class ReviewService implements IReviewService {
         Review reviewUpdated = reviewRepo.save(review);
 
         return new ReviewPutResponseDTO(reviewUpdated);
+    }
 
+    @Override
+    public ReviewGetResponseDTO getReviewByReviewId(Long id) {
+        Review review = reviewRepo.findById(id).orElseThrow(() -> new NotFoundException(Msg.REVIEW_NOT_FOUND));
+        return new ReviewGetResponseDTO(review);
 
+    }
+
+    @Override
+    public List<ReviewGetResponseDTO> getAllReviews() {
+        List<Review> reviews = reviewRepo.findAll();
+        if(reviews.isEmpty()) {
+            throw new NotFoundException(Msg.REVIEW_NOT_FOUND);
+        }
+        return reviews.stream().map(ReviewGetResponseDTO::new).collect(Collectors.toList());
     }
 }
 

@@ -1,27 +1,25 @@
 package br.dh.meli.integratorprojectfresh.dto.response;
 
 import br.dh.meli.integratorprojectfresh.model.Review;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
 @NoArgsConstructor
-@AllArgsConstructor
-public class ReviewPostResponseDTO {
+//@AllArgsConstructor
+public class ReviewGetResponseDTO {
     private Long reviewId;
     private Integer grade;
     private String comment;
-    private Long announcementId;
     private Long userId;
+    private Long announcementId;
 
-    public ReviewPostResponseDTO(Review review) {
+    public ReviewGetResponseDTO(Review review) {
         this.reviewId = review.getReviewId();
         this.grade = review.getGrade();
         this.comment = review.getComment();
         this.userId = review.getUserId();
         this.announcementId = review.getAnnouncementId();
     }
+
 }
