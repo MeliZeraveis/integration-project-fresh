@@ -8,7 +8,6 @@ import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.model.*;
 import br.dh.meli.integratorprojectfresh.repository.BatchStockRepository;
 import br.dh.meli.integratorprojectfresh.repository.SectionRepository;
-import br.dh.meli.integratorprojectfresh.service.BatchStockService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,8 +29,6 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;;
 
@@ -40,7 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;;
 class BatchStockServiceTest {
 
     @InjectMocks
-    private BatchStockService service;
+    private IBatchStockService.BatchStockService service;
 
     @Mock
     private BatchStockRepository repo;

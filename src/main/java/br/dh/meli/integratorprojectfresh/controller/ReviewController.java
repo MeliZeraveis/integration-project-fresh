@@ -40,8 +40,8 @@ public class ReviewController {
         return new ResponseEntity<>(review, HttpStatus.OK);
     }
 
-    @GetMapping("/review/list")
-    public ResponseEntity<List<ReviewGetResponseDTO>> getAllReviews() {
-        return new ResponseEntity<>(reviewService.getAllReviews(), HttpStatus.OK);
+    @GetMapping("/review/list/{announcementId}")
+    public ResponseEntity<List<ReviewGetResponseDTO>> getAllReviews(@PathVariable Long announcementId) {
+        return new ResponseEntity<>(reviewService.getAllReviews(announcementId), HttpStatus.OK);
     }
 }

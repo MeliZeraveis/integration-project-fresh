@@ -104,4 +104,27 @@ public class BatchStockControllerTestIT {
                 .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.BATCH_NOT_FOUND)))
                 .andExpect(jsonPath("$.status", CoreMatchers.is(HttpStatus.NOT_FOUND.value())));
     }
+
+    static class ReviewControllerTestIT {
+
+        @BeforeEach
+        void setUp() {
+        }
+
+        @Test
+        void save() {
+        }
+
+        @Test
+        void update() {
+        }
+
+        @Test
+        void getReviewByReviewId() {
+        }
+
+        @Test
+        void getAllReviews() {
+        }
+    }
 }

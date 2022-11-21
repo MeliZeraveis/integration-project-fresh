@@ -105,8 +105,9 @@ public class InboundOrderService implements IInboundOrderService {
         InboundOrder inboundOrder = new InboundOrder(inboundOrderResquest.getInboundOrder());
         validIfWarehouseExist(inboundOrder.getWarehouseCode());
         validAnnouncement(inboundOrderResquest.getInboundOrder().getBatchStock());
-        validSection(inboundOrder.getSectionCode(), inboundOrderResquest.getInboundOrder().getBatchStock(), inboundOrder.getWarehouseCode());
         validBatchDueDate(inboundOrderResquest.getInboundOrder().getBatchStock());
+        validSection(inboundOrder.getSectionCode(), inboundOrderResquest.getInboundOrder().getBatchStock(), inboundOrder.getWarehouseCode());
+
         repo.save(inboundOrder);
         List<BatchStock> batchStockList =  inboundOrderResquest.getInboundOrder()
                 .getBatchStock().stream()
@@ -154,10 +155,10 @@ public class InboundOrderService implements IInboundOrderService {
       validIfWarehouseExist(inboundOrder.getWarehouseCode());
 
         validAnnouncement(inboundOrderResquest.getInboundOrder().getBatchStock());
-
+        validBatchDueDate(inboundOrderResquest.getInboundOrder().getBatchStock());
         validSectionUpdate(inboundOrder.getSectionCode(), inboundOrderResquest.getInboundOrder().getBatchStock());
 
-        validBatchDueDate(inboundOrderResquest.getInboundOrder().getBatchStock());
+
 
       InboundOrder inboundOrderUpdated = repo.save(inboundOrder);
 

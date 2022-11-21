@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class AnnouncementServiceTest {
     @InjectMocks
-    private AnnouncementService service;
+    private IBatchStockService.AnnouncementService service;
 
     @Mock
     private AnnouncementRepository repository;

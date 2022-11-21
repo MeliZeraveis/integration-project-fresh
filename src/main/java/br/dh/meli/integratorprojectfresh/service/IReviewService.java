@@ -13,6 +13,6 @@ public interface IReviewService {
     ReviewPostResponseDTO save(ReviewRequestDTO review);
     ReviewPutResponseDTO update(ReviewRequestDTO review);
     ReviewGetResponseDTO getReviewByReviewId(Long id);
-   List<ReviewGetResponseDTO> getAllReviews();
+   List<ReviewGetResponseDTO> getAllReviews(Long announcementId);
 
 }

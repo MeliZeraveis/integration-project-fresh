@@ -83,8 +83,8 @@ public class ReviewService implements IReviewService {
     }
 
     @Override
-    public List<ReviewGetResponseDTO> getAllReviews() {
-        List<Review> reviews = reviewRepo.findAll();
+    public List<ReviewGetResponseDTO> getAllReviews(Long announcementId) {
+        List<Review> reviews = reviewRepo.findAllByAnnouncementId(announcementId);
         if(reviews.isEmpty()) {
             throw new NotFoundException(Msg.REVIEW_NOT_FOUND);
         }
