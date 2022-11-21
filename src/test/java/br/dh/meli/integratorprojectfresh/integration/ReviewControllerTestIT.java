@@ -19,9 +19,13 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -81,17 +85,91 @@ public class ReviewControllerTestIT {
         response.andExpect(status().isBadRequest());
 
     }
-    void update() {
+
+
+    @Test
+    @DisplayName(("Deve retornar 200 quando atualizar uma review"))
+    void update() throws Exception{
+        reviewDTO.setGrade(5);
+        reviewRequestDTO.setReview(reviewDTO);
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/review/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(reviewRequestDTO)));
+        response.andExpect(status().isCreated())
+                .andDo(print());
     }
 
     @Test
-    void getReviewByReviewId() {
+    @DisplayName(("Deve retornar 400 quando atualizar uma review com nota inválida"))
+    void updateInvalidGrade() throws Exception{
+        reviewDTO.setGrade(6);
+        reviewRequestDTO.setReview(reviewDTO);
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/review/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(reviewRequestDTO)));
+        response.andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+
+
+    @Test
+    @DisplayName(("Deve retornar 404 quando atualizar uma review inexistente"))
+    void updateInvalidId() throws Exception{
+        reviewDTO.setGrade(4);
+        reviewRequestDTO.setReview(reviewDTO);
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-product/review/0")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(reviewRequestDTO)));
+        response.andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+
+    @Test
+    @DisplayName("Deve retornar 200 quando buscar uma review")
+    void findById() throws Exception{
+        ResultActions response = mockMvc
+                .perform(get("/api/v1/fresh-product/review")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("id", "1"))
+                .andDo(print());
+        response.andExpect(status().isOk());
     }
 
     @Test
-    void getAllReviews() {
+    @DisplayName("Deve retornar 404 quando buscar uma review inexistente")
+    void findByIdInvalid() throws Exception{
+        ResultActions response = mockMvc
+                .perform(get("/api/v1/fresh-product/review")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("id", "0"))
+                .andDo(print());
+        response.andExpect(status().isNotFound());
+    }
+
+
+    @Test
+    @DisplayName("Deve retornar 200 quando buscar  uma lista de reviews por id do anúncio")
+    void getAllReviews() throws Exception{
+        ResultActions response = mockMvc
+                .perform(get("/api/v1/fresh-product/review/list")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("announcementId", "2"))
+                .andDo(print());
+        response.andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Deve retornar 404 quando buscar  uma lista de reviews por id do anúncio inexistente")
+    void getAllReviewsInvalid() throws Exception{
+        ResultActions response = mockMvc
+                .perform(get("/api/v1/fresh-product/review/list")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("announcementId", "0"))
+                .andDo(print());
+        response.andExpect(status().isNotFound());
     }
 
 }
 
-//@DisplayName("Deve retornar 400 quando salvar uma review com nota inválida")

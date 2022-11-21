@@ -4,7 +4,7 @@ package br.dh.meli.integratorprojectfresh.enums;
  * The enum Msg lists all the messages returned to the user.
  */
 public enum Msg {
-  __MSG__, RATING_MIN;
+  __MSG__, RATING_MIN, PURCHASE_ORDER_IS_NOT_APPROVED;
 
   public static final String ANNOUNCEMENT_ID_NOT_NULL = "Announcement ID cannot be null.";
   public static final String ANNOUNCEMENT_ID_NOT_VALID = "Announcement ID is not valid.";
@@ -67,4 +67,5 @@ public enum Msg {
   public static final String COMMENT_REQUIRED = "Comment is required.";
     public static final String USER_ID_REQUIRED = "User ID is required.";
     public static final String REVIEW_NOT_FOUND = "Review not found.";
+  public static final String PURCHASE_ORDER_NOT_APPROVED = "Purchase Order is not approved.";
 }

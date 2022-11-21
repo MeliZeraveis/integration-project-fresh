@@ -39,7 +39,7 @@ public class ReviewService implements IReviewService {
     void validIfPurchaseOrderIsApproved(Long announcementId, Long buyerId) {
         List<PurchaseOrder> purchaseOrder = purchaseOrderRepo.findByAnnouncementIdAndBuyerId(announcementId, buyerId);
         if (purchaseOrder.isEmpty()) {
-            throw new ActionNotAllowedException("Purchase order not approved");
+            throw new ActionNotAllowedException(Msg.PURCHASE_ORDER_NOT_APPROVED);
         }
     }
 
@@ -68,8 +68,6 @@ public class ReviewService implements IReviewService {
         reviewRepo.save(review);
         return new ReviewPutResponseDTO(review);
     }
-
-
 
 
     @Override
