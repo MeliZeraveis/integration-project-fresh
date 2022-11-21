@@ -1,5 +1,6 @@
 package br.dh.meli.integratorprojectfresh.controller;
 
+import br.dh.meli.integratorprojectfresh.dto.request.AnnouncementRequestDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementListResponseDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementGetResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Routes;
@@ -7,11 +8,10 @@ import br.dh.meli.integratorprojectfresh.service.IAnnouncementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -66,6 +66,46 @@ public class AnnouncementController {
   @GetMapping(value = Routes.PRODUCT_LIST, params = {"id","sortBy"})
   ResponseEntity<AnnouncementGetResponseDTO> findAnnouncementByBatchStockNumber(@RequestParam Long id, @RequestParam Character sortBy) {
     AnnouncementGetResponseDTO announcement= service.findAnnouncementByBatchStockNumber(id, sortBy);
+    return new ResponseEntity<>(announcement, HttpStatus.OK);
+  }
+
+  /**
+   * findAnnouncementByQueryString(String queryString)
+   * Get all announcements that match the query string.
+   * @param q the query string
+   * @return the response entity
+   */
+
+    @GetMapping(value = Routes.ANNOUNCEMENT_BY_QUERY_STRING, params = {"q"})
+  ResponseEntity<List<AnnouncementListResponseDTO>> findAnnouncementByQueryString(@RequestParam String q) {
+    List<AnnouncementListResponseDTO> announcement = service.findAnnouncementByQueryString(q);
+    return new ResponseEntity<>(announcement, HttpStatus.OK);
+  }
+
+  /**
+   * findAnnouncementByQueryString(String queryString)
+   * Get all announcements that match the query string.
+   * @param min the bigDecimal price of the announcement
+   *           @param max the BigDecimal price of the announcement
+   * @return the response entity
+   */
+
+  @GetMapping(value = Routes.ANNOUNCEMENT_BY_PRICE, params = {"min", "max"})
+  ResponseEntity<List<AnnouncementListResponseDTO>> findAnnouncementByPrice(@RequestParam BigDecimal min, @RequestParam BigDecimal max) {
+    List<AnnouncementListResponseDTO> announcement = service.findAnnouncementByPrice(min, max);
+    return new ResponseEntity<>(announcement, HttpStatus.OK);
+  }
+
+  /**
+   * findAnnouncementByQueryString(String queryString)
+   * Get all announcements that match the query string.
+   * @param id the bigDecimal price of the announcement
+   * @return the response entity
+   */
+
+  @PutMapping(value = Routes.ANNOUNCEMENT_BY_PRICE)
+  ResponseEntity<AnnouncementRequestDTO> updateById(@RequestBody @Valid AnnouncementRequestDTO announcementRequestDTO, @RequestParam Long id) {
+    AnnouncementRequestDTO announcement = service.updateById(announcementRequestDTO, id);
     return new ResponseEntity<>(announcement, HttpStatus.OK);
   }
 }

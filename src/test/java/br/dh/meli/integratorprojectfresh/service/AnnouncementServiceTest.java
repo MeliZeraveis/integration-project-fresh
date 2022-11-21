@@ -1,5 +1,6 @@
 package br.dh.meli.integratorprojectfresh.service;
 import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementGetResponseDTO;
+import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementListResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.model.*;
@@ -33,8 +34,10 @@ class AnnouncementServiceTest {
     private AnnouncementRepository repository;
 
     AnnouncementGetResponseDTO responseDTO;
+    AnnouncementListResponseDTO listResponseDTO;
     InboundOrder inboundOrder;
     Announcement announcement;
+    Announcement announcementList1;
     BatchStock batchStock;
     Section section;
     Warehouse warehouse;
@@ -58,7 +61,17 @@ class AnnouncementServiceTest {
         section = new Section(1L, "Fresh", 50.0f, 20.0f, 1L, new ArrayList<>(), List.of(inboundOrder), null );
         announcement = new Announcement(1L, "Camisa", "Camisa branca", 4L, BigDecimal.valueOf(100.0), 1L, section, batchStockList2, null, new ArrayList<>());
 
+//        announcementList1 = new Announcement(2L, "banana", "Banana amarela", 4L, BigDecimal.valueOf(10.0), 1L, section, batchStockList2, null, new ArrayList<>());
+//        Announcement announcementList2 = new Announcement(3L, "Banana Prata", "Banana amarela", 3L, BigDecimal.valueOf(8.0), 1L, section, batchStockList2, null, new ArrayList<>());
+//        Announcement announcementList3 = new Announcement(4L, "Banana Nanica", "Banana amarela", 4L, BigDecimal.valueOf(6.8), 1L, section, batchStockList2, null, new ArrayList<>());
+////        List<Announcement> announcementList = new ArrayList<>();
+////        announcementList.add(announcementList1);
+////        announcementList.add(announcementList2);
+////        announcementList.add(announcementList3);
+//        listResponseDTO = new AnnouncementListResponseDTO(announcementList1);
+
         responseDTO = new AnnouncementGetResponseDTO(announcement);
+
 
     }
 
@@ -113,6 +126,39 @@ class AnnouncementServiceTest {
         assertAll(
                 () -> Assertions.assertEquals(Msg.LETTER_NOT_VALID, actualException.getMessage())
         );
+    }
+
+//    @Test
+//    @DisplayName("Sucesso ao retornar uma lista de anúncios buscando por palavra chave - SEARCH")
+//    void FindAnnouncementByQueryString_ReturnListOfAnnouncement_WhenQueryStringIsValid() {
+//        BDDMockito.when(repository.findByNameContainingIgnoreCase("banana")).thenReturn(announcementList1);
+//        listResponseDTO = service.findAnnouncementByQueryString("banana");
+//        assertThat(responseDTO).isNotNull();
+//
+//    }
+
+        @Test
+    @DisplayName("Erro quando palavra chave não é encontrada no banco de dados")
+    void FindAnnouncementByQueryString_ThrowError_WhenQueryStringIsNotFind() throws NotFoundException {
+            final var actualException = assertThrows(
+                    NotFoundException.class,
+                    () -> service.findAnnouncementByQueryString("banana"));
+            assertAll(
+                    () -> Assertions.assertEquals(Msg.QUERY_STRING_NOT_FOUND, actualException.getMessage())
+            );
+
+    }
+
+    @Test
+    @DisplayName("Erro quando preço não é encontrada no banco de dados")
+    void FindAnnouncementByPrice_ThrowError_WhenPriceIsNotFind() throws NotFoundException {
+        final var actualException = assertThrows(
+                NotFoundException.class,
+                () -> service.findAnnouncementByPrice(BigDecimal.valueOf(3.0), BigDecimal.valueOf(13.0)));
+        assertAll(
+                () -> Assertions.assertEquals(Msg.PRICE_MIN_MAX, actualException.getMessage())
+        );
+
     }
 
 

@@ -1,7 +1,9 @@
 package br.dh.meli.integratorprojectfresh.service;
 
+import br.dh.meli.integratorprojectfresh.dto.request.AnnouncementRequestDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementListResponseDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementGetResponseDTO;
+import br.dh.meli.integratorprojectfresh.enums.ExceptionType;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.enums.Sections;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
@@ -10,6 +12,7 @@ import br.dh.meli.integratorprojectfresh.repository.AnnouncementRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -66,5 +69,43 @@ public class AnnouncementService implements IAnnouncementService {
     } else {
       throw new NotFoundException(Msg.LETTER_NOT_VALID);
     }
+  }
+
+  @Override
+  public List<AnnouncementListResponseDTO> findAnnouncementByQueryString(String queryString) {
+    List<Announcement> announcement = repo.findByNameContainingIgnoreCase(queryString);
+    if (announcement.isEmpty()) {
+      throw new NotFoundException(Msg.QUERY_STRING_NOT_FOUND);
+    }
+    return announcement.stream()
+            .map(AnnouncementListResponseDTO::new)
+            .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<AnnouncementListResponseDTO> findAnnouncementByPrice(BigDecimal min, BigDecimal max) {
+    List<Announcement> announcement = repo.findByPriceBetweenOrderByPrice(min, max);
+    if (announcement.isEmpty()) {
+      throw new NotFoundException(Msg.PRICE_MIN_MAX);
+    }
+    return announcement.stream()
+            .map(AnnouncementListResponseDTO::new)
+            .collect(Collectors.toList());
+  }
+
+  @Override
+  public AnnouncementRequestDTO updateById(AnnouncementRequestDTO announcementRequestDTO, Long id) {
+    Optional<Announcement> announcement = repo.findById(id);
+    if (announcement.isEmpty()) {
+      throw new NotFoundException(Msg.ANNOUNCEMENT_NOT_FOUND);
+    }
+    Announcement announcementUpdate = announcement.get();
+
+    announcementUpdate.setName(announcementRequestDTO.getName());
+    announcementUpdate.setDescription(announcementRequestDTO.getDescription());
+    announcementUpdate.setPrice(announcementRequestDTO.getPrice());
+    announcementUpdate.setSectionCode(announcementRequestDTO.getSectionCode());
+    repo.save(announcementUpdate);
+    return new AnnouncementRequestDTO(announcementUpdate);
   }
 }
