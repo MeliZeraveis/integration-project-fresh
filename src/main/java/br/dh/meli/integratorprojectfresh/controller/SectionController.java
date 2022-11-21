@@ -22,8 +22,9 @@ public class SectionController {
     }
 
     @PutMapping("sections/{id}")
-    public ResponseEntity<SectionResponseDTO> updateSection(@RequestBody @Valid @PathVariable Long id) {
-        return new ResponseEntity<>(sectionService.updateSection(id), HttpStatus.CREATED);
+    public ResponseEntity<SectionResponseDTO> updateSection(@RequestBody @Valid SectionRequestDTO sectionRequestDTO,
+                                                            @PathVariable @Valid Long id) {
+        return new ResponseEntity<>(sectionService.updateSection(id, sectionRequestDTO), HttpStatus.CREATED);
     }
 
 

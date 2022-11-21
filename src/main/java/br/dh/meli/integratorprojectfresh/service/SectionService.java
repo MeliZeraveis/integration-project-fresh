@@ -31,15 +31,17 @@ public class SectionService implements ISectionService {
     }
 
     @Override
-    public SectionResponseDTO updateSection(Long id) {
-        Section section = sectionRepo.findById(id)
+    public SectionResponseDTO updateSection(Long id, SectionRequestDTO section) {
+        Warehouse warehouse = warehouseRepo.findById(section.getWarehouseCode())
+                .orElseThrow(() -> new NotFoundException(Msg.WAREHOUSE_NOT_FOUND));
+
+        sectionRepo.findById(id)
                 .orElseThrow(() -> new NotFoundException(Msg.SECTION_NOT_FOUND));
 
-        Section newSection = new Section(section.getMaxCapacity(), section.getUsedCapacity(), section.getWarehouseCode(), section.getType(), section.getSectionCode());
-        Section updatedSection = sectionRepo.save(newSection);
+        Section editSection = new Section(section.getMaxCapacity(), section.getUsedCapacity(), warehouse.getWarehouseCode(), section.getType());
+        Section updatedSection = sectionRepo.save(editSection);
 
         return new SectionResponseDTO(updatedSection);
     }
-
 
 }
