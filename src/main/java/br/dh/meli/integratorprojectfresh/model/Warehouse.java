@@ -1,6 +1,8 @@
 package br.dh.meli.integratorprojectfresh.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "warehouse")
 public class Warehouse {
@@ -19,16 +22,26 @@ public class Warehouse {
     @Column(name = "id")
     private Long warehouseCode;
 
-    @Column(name = "warehouse_name", nullable = false, length = 50)
+    @Column(name = "name", nullable = false, length = 50)
     private String warehouseName;
+
+    @Column(name = "address", nullable = false, length = 100)
+    private String warehouseAddress;
+
+    @Column(name = "country_code", nullable = false, length = 2)
+    private String warehouseCountryCode;
 
     @OneToMany(mappedBy = "warehouse")
     @JsonIgnoreProperties("warehouse")
     private List<InboundOrder> inboundOrder;
 
+    @OneToMany(mappedBy = "warehouse")
+    @JsonIgnoreProperties("warehouse")
+    private List<Section> section;
+
     @OneToOne
     @JsonIgnoreProperties("warehouse")
-    @JoinColumn(name = "id_user")
-    private User user;
+    @JoinColumn(name = "manager_id")
+    private User manager;
 
 }
