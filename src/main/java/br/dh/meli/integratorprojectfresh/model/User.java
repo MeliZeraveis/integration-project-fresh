@@ -44,6 +44,10 @@ public class User {
     @JsonIgnoreProperties("seller")
     private List<Announcement> announcement;
 
+    @OneToMany(mappedBy = "seller")
+    @JsonIgnoreProperties("seller")
+    private List<SellerSection> sellerSectionList;
+
     public User(long id, String username, String password, String email, String role) {
         this.userId = id;
         this.username = username;

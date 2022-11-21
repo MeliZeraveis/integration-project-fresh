@@ -49,6 +49,10 @@ public class Section {
     @JsonIgnoreProperties("section")
     private Warehouse warehouse;
 
+    @OneToMany(mappedBy = "section")
+    @JsonIgnoreProperties("section")
+    private List<SellerSection> sellerSectionList;
+
     public Section(long sectionCode, String type, float maxCapacity, float usedCapacity, ArrayList<Announcement> listAnnoucement) {
     this.sectionCode = sectionCode;
     this.type = type;
