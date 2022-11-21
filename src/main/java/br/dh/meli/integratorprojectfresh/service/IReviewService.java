@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface IReviewService {
     ReviewPostResponseDTO save(ReviewRequestDTO review);
-    ReviewPutResponseDTO update(ReviewRequestDTO review);
+    ReviewPutResponseDTO update(ReviewRequestDTO review, Long id);
     ReviewGetResponseDTO getReviewByReviewId(Long id);
    List<ReviewGetResponseDTO> getAllReviews(Long announcementId);
 

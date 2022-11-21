@@ -29,9 +29,9 @@ public class ReviewController {
         return new ResponseEntity<>(reviewService.save(review), HttpStatus.CREATED);
     }
 
-    @PutMapping("/review")
-    public ResponseEntity<ReviewPutResponseDTO> update(@RequestBody @Valid ReviewRequestDTO review) {
-        return new ResponseEntity<>(reviewService.update(review), HttpStatus.CREATED);
+    @PutMapping("/review/{id}")
+    public ResponseEntity<ReviewPutResponseDTO> update(@RequestBody @Valid ReviewRequestDTO review, @PathVariable Long id) {
+        return new ResponseEntity<>(reviewService.update(review, id), HttpStatus.CREATED);
     }
 
     @GetMapping("/review")

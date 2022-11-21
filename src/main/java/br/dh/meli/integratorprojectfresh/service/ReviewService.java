@@ -60,20 +60,17 @@ public class ReviewService implements IReviewService {
     }
 
     @Override
-    public ReviewPutResponseDTO update(ReviewRequestDTO reviewUpdate) {
-        ReviewDTO reviewDTO = reviewUpdate.getReview();
-
-        validIfAnnouncementExist(reviewUpdate.getReview().getAnnouncementId());
-        validIfPurchaseOrderIsApproved(reviewUpdate.getReview().getAnnouncementId(), reviewUpdate.getReview().getUserId());
-
-        validIfReviewExist(reviewDTO.getReviewId());
-
-        Review review = new Review(reviewDTO, reviewDTO.getReviewId());
-
-        Review reviewUpdated = reviewRepo.save(review);
-
-        return new ReviewPutResponseDTO(reviewUpdated);
+    public ReviewPutResponseDTO update(ReviewRequestDTO reviewUpdate, Long id) {
+        validIfReviewExist(id);
+        Review review = reviewRepo.findById(id).get();
+        review.setGrade(reviewUpdate.getReview().getGrade());
+        review.setComment(reviewUpdate.getReview().getComment());
+        reviewRepo.save(review);
+        return new ReviewPutResponseDTO(review);
     }
+
+
+
 
     @Override
     public ReviewGetResponseDTO getReviewByReviewId(Long id) {
