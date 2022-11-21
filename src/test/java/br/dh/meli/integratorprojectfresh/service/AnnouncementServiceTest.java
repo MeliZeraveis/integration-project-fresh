@@ -1,5 +1,6 @@
 package br.dh.meli.integratorprojectfresh.service;
 import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementGetResponseDTO;
+import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementListResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.model.*;
@@ -114,6 +115,23 @@ class AnnouncementServiceTest {
                 () -> Assertions.assertEquals(Msg.LETTER_NOT_VALID, actualException.getMessage())
         );
     }
+    @Test
+    @DisplayName("Retorna todo os anuncios com sucesso")
+    void GetAllAnnouncement_ThrowsException_Success() {
+        BDDMockito.when(repository.findAll()).thenReturn(List.of(announcement));
+
+        List<AnnouncementListResponseDTO> reposnseListAnnouncementDTO = service.getAllAnnouncements();
+
+        assertThat(reposnseListAnnouncementDTO).isNotNull();
+    }
 
 
+
+    @Test
+    @DisplayName("Retorna todo os anuncios por categoria com sucesso")
+    void GetAnnouncementsByCategory_ThrowsException_Success() {
+        BDDMockito.when(repository.findBySectionType(ArgumentMatchers.anyString())).thenReturn(List.of(announcement));
+        List<AnnouncementListResponseDTO> reposnseListAnnouncementDTO = service.getAnnouncementsByCategory("FS");
+        assertThat(reposnseListAnnouncementDTO).isNotNull();
+    }
 }
