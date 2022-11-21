@@ -1,11 +1,7 @@
 package br.dh.meli.integratorprojectfresh.controller;
 
-import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderRequestDTO;
+
 import br.dh.meli.integratorprojectfresh.dto.request.UserDTO;
-import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPostResponseDTO;
-import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPutResponseDTO;
-import br.dh.meli.integratorprojectfresh.model.User;
-import br.dh.meli.integratorprojectfresh.service.InboundOrderService;
 import br.dh.meli.integratorprojectfresh.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,24 +15,28 @@ import java.util.List;
 @RequestMapping("/api/v1/fresh-products")
 public class UserController {
 
-        @Autowired
-        private UserService service;
+    @Autowired
+    private UserService service;
 
-        @PostMapping("/user")
+    @PostMapping("/user")
 
-        public ResponseEntity<UserDTO> save(@RequestBody @Valid UserDTO user) {
-            return new ResponseEntity<>(service.save(user), HttpStatus.CREATED);
-        }
+    public ResponseEntity<UserDTO> save(@RequestBody @Valid UserDTO user) {
+        return new ResponseEntity<>(service.save(user), HttpStatus.CREATED);
+    }
 
+    @PutMapping("/user")
+    public ResponseEntity<UserDTO> update(@RequestBody @Valid UserDTO userDTO, @RequestParam Long id) {
+        return new ResponseEntity<>(service.update(userDTO, id), HttpStatus.CREATED);
+    }
 
-        @PutMapping("/user")
-        public ResponseEntity<UserDTO> update(@RequestBody @Valid UserDTO userDTO, @RequestParam Long id) {
-            return new ResponseEntity<>(service.update(userDTO, id), HttpStatus.CREATED);
-        }
-
-    @GetMapping("/user")
+    @GetMapping("/user/role")
     public ResponseEntity<List<UserDTO>> findByRole(@RequestParam String role) {
         return new ResponseEntity<>(service.findByRole(role), HttpStatus.OK);
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<List<UserDTO>> findAll() {
+        return new ResponseEntity<>(service.getAll(), HttpStatus.OK);
     }
 
     @DeleteMapping("/user/{id}")
