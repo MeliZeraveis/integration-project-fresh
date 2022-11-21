@@ -29,6 +29,7 @@ public enum Msg {
   public static final String LETTER_NOT_VALID = "The letter must to be L, V or Q";
   public static final String LIMIT_CAPACITY_SECTION = "Total sector capacity limit exceeded.";
   public static final String MANAGER_NOT_VALID = "Warehouse does not have a valid manager.";
+  public static final String ORDER_BY_NOT_VALID = "Order parameter is not valid.";
   public static final String PRICE_REQUIRED = "Price is required.";
   public static final String PRODUCT_PRICE_NOT_NULL = "Product Price cannot be null.";
   public static final String PRODUCT_PRICE_NOT_VALID = "Product Price is not valid.";
