@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "purchase_order_items")
 public class PurchaseOrderItems {
@@ -42,12 +43,4 @@ public class PurchaseOrderItems {
     this.productQuantity = productQuantity;
     this.productPrice = productPrice;
   }
-
-
-
-//  public PurchaseOrderItems(Long announcementId, Integer productQuantity, BigDecimal productPrice) {
-//    this.announcementId = announcementId;
-//    this.productQuantity = productQuantity;
-//    this.productPrice = productPrice;
-//  }
 }

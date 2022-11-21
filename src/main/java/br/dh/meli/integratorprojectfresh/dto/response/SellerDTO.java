@@ -19,13 +19,14 @@ public class SellerDTO {
     private String sellerName;
     private String role;
     private BigDecimal totalEarnings;
-    private List<PurchaseOrderFinishedDTO> purshaceOrderFinished;
+    private Integer totalSales;
 
-    public SellerDTO(User seller, BigDecimal totalEarnings,List<PurchaseOrderFinishedDTO> purshaceOrderFinished) {
+    public SellerDTO(User seller, BigDecimal totalEarnings,Integer totalSales) {
         this.sellerId = seller.getUserId();
         this.sellerName = seller.getUsername();
         this.role = seller.getRole();
         this.totalEarnings = totalEarnings;
-        this.purshaceOrderFinished = purshaceOrderFinished;
+        this.totalSales = totalSales;
+
     }
 }

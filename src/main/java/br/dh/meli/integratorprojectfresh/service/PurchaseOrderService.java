@@ -71,13 +71,13 @@ public class PurchaseOrderService implements IPurchaseOrderService {
     User buyer = userRepo.findById(purchaseOrder.getBuyerId())
             .orElseThrow(() -> new NotFoundException(Msg.BUYER_ID_NOT_FOUND));
 
-    for(int i = 0; i < purchaseOrder.getProducts().size(); i++){
-      if (Objects
-              .equals(purchaseOrder.getProducts().get(i).getAnnouncementId(),
-                      purchaseOrder.getProducts().get(i + 1).getAnnouncementId())){
-        throw new ActionNotAllowedException("Product duplicated");
-      }
-    }
+//    for(int i = 0; i < purchaseOrder.getProducts().size(); i++){
+//      if (Objects
+//              .equals(purchaseOrder.getProducts().get(i).getAnnouncementId(),
+//                      purchaseOrder.getProducts().get(i + 1).getAnnouncementId())){
+//        throw new ActionNotAllowedException("Product duplicated");
+//      }
+//    }
 
     // convert the product list back to model objects, fetch the price from the database and calculate the total
     List<PurchaseOrderItems> products = purchaseOrder.getProducts().stream()

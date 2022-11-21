@@ -62,5 +62,8 @@ public enum Msg {
   public static final String PRODUCT_BATCH_INCORRECT =  "Product is in an incorrect batch.";
   public static final String CATEGORY_NOT_FOUND = "Category must be FS, RF or FF.";
 
-  public  static final String USER_NOT_FOUND = "User not found.";
+  public  static final String SELLER_NOT_FOUND = "Seller not found.";
+
+
+ public  static final String SELLER_NOT_HAS_AD = "Seller has no ads posted.";
 }
