@@ -1,14 +1,10 @@
 package br.dh.meli.integratorprojectfresh.integration;
 
-import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementGetResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.ExceptionType;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
-import br.dh.meli.integratorprojectfresh.repository.PurchaseOrderItemsRepository;
-import br.dh.meli.integratorprojectfresh.repository.PurchaseOrderRepository;
-import br.dh.meli.integratorprojectfresh.repository.UserRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.hamcrest.CoreMatchers;
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +31,6 @@ public class SellerControllerTestIT {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private UserRepository userRepo;
 
 
     @Test
