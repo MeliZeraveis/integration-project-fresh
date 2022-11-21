@@ -1,14 +1,16 @@
 package br.dh.meli.integratorprojectfresh.service;
 
-import br.dh.meli.integratorprojectfresh.dto.request.AnnouncementRequestDTO;
+import br.dh.meli.integratorprojectfresh.dto.request.AnnouncementPostRequestDTO;
+import br.dh.meli.integratorprojectfresh.dto.request.AnnouncementUpdateRequestDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementListResponseDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementGetResponseDTO;
-import br.dh.meli.integratorprojectfresh.enums.ExceptionType;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.enums.Sections;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.model.Announcement;
+import br.dh.meli.integratorprojectfresh.model.User;
 import br.dh.meli.integratorprojectfresh.repository.AnnouncementRepository;
+import br.dh.meli.integratorprojectfresh.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AnnouncementService implements IAnnouncementService {
   private final AnnouncementRepository repo;
+  private final UserRepository userRepo;
 
   @Override
   public List<AnnouncementListResponseDTO> getAllAnnouncements() {
@@ -94,18 +97,30 @@ public class AnnouncementService implements IAnnouncementService {
   }
 
   @Override
-  public AnnouncementRequestDTO updateById(AnnouncementRequestDTO announcementRequestDTO, Long id) {
-    Optional<Announcement> announcement = repo.findById(id);
+  public AnnouncementUpdateRequestDTO updateById(AnnouncementUpdateRequestDTO announcementRequestDTO) {
+    Optional<Announcement> announcement = repo.findById(announcementRequestDTO.getId());
     if (announcement.isEmpty()) {
       throw new NotFoundException(Msg.ANNOUNCEMENT_NOT_FOUND);
     }
-    Announcement announcementUpdate = announcement.get();
-
-    announcementUpdate.setName(announcementRequestDTO.getName());
-    announcementUpdate.setDescription(announcementRequestDTO.getDescription());
-    announcementUpdate.setPrice(announcementRequestDTO.getPrice());
-    announcementUpdate.setSectionCode(announcementRequestDTO.getSectionCode());
+    if (!announcement.get().getSellerId().equals(announcementRequestDTO.getSellerId())) {
+      throw new NotFoundException(Msg.USER_NOT_AUTHORIZED);
+    }
+    Optional<User> user = userRepo.findById(announcementRequestDTO.getSellerId());
+    if (user.isEmpty()) {
+      throw new NotFoundException(Msg.SELLER_NOT_FOUND);
+    }
+    if (!user.get().getRole().equals("seller")){
+      throw new NotFoundException(Msg.USER_NOT_AUTHORIZED);
+    }
+    Announcement announcementUpdate = new Announcement(announcementRequestDTO);
     repo.save(announcementUpdate);
-    return new AnnouncementRequestDTO(announcementUpdate);
+    return new AnnouncementUpdateRequestDTO(announcementUpdate);
+  }
+
+  @Override
+  public AnnouncementPostRequestDTO save(AnnouncementPostRequestDTO announcementRequestDTO) {
+    Announcement announcementUpdate = new Announcement(announcementRequestDTO);
+    repo.save(announcementUpdate);
+    return new AnnouncementPostRequestDTO(announcementUpdate);
   }
 }

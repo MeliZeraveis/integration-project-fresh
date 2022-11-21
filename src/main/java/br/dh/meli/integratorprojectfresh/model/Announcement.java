@@ -1,5 +1,7 @@
 package br.dh.meli.integratorprojectfresh.model;
 
+import br.dh.meli.integratorprojectfresh.dto.request.AnnouncementPostRequestDTO;
+import br.dh.meli.integratorprojectfresh.dto.request.AnnouncementUpdateRequestDTO;
 import br.dh.meli.integratorprojectfresh.enums.Sections;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -58,5 +60,22 @@ public class Announcement {
     @JsonIgnore
     @JsonIgnoreProperties("announcement")
     private List<PurchaseOrderItems> purchaseOrderItems;
+
+    public Announcement(AnnouncementPostRequestDTO request) {
+        this.name = request.getName();
+        this.description = request.getDescription();
+        this.sellerId = request.getSellerId();
+        this.price = request.getPrice();
+        this.sectionCode = request.getSectionCode();
+    }
+
+    public Announcement(AnnouncementUpdateRequestDTO request) {
+        this.announcementId = request.getId();
+        this.name = request.getName();
+        this.description = request.getDescription();
+        this.price = request.getPrice();
+        this.sectionCode = request.getSectionCode();
+        this.sellerId = request.getSellerId();
+    }
 
 }

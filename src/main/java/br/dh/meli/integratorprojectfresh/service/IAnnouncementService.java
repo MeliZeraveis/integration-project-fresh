@@ -1,7 +1,8 @@
 package br.dh.meli.integratorprojectfresh.service;
 
 //import br.dh.meli.integratorprojectfresh.dto.request.AnnouncementDTO;
-import br.dh.meli.integratorprojectfresh.dto.request.AnnouncementRequestDTO;
+import br.dh.meli.integratorprojectfresh.dto.request.AnnouncementPostRequestDTO;
+import br.dh.meli.integratorprojectfresh.dto.request.AnnouncementUpdateRequestDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementListResponseDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementGetResponseDTO;
 
@@ -15,5 +16,6 @@ public interface IAnnouncementService {
     AnnouncementGetResponseDTO findAnnouncementByBatchStockNumber(Long id, Character sortBy);
     List<AnnouncementListResponseDTO> findAnnouncementByQueryString(String queryString);
     List<AnnouncementListResponseDTO> findAnnouncementByPrice(BigDecimal min, BigDecimal max);
-    AnnouncementRequestDTO updateById(AnnouncementRequestDTO announcementRequestDTO, Long id);
+    AnnouncementUpdateRequestDTO updateById(AnnouncementUpdateRequestDTO announcementRequestDTO);
+    AnnouncementPostRequestDTO save(AnnouncementPostRequestDTO announcementRequestDTO);
 }

@@ -9,16 +9,20 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AnnouncementRequestDTO {
+public class AnnouncementUpdateRequestDTO {
+    private Long id;
     private String name;
     private String description;
     private BigDecimal price;
     private Long sectionCode;
+    private Long sellerId;
 
-    public AnnouncementRequestDTO(Announcement announcement) {
+    public AnnouncementUpdateRequestDTO(Announcement announcement) {
+        this.id = announcement.getAnnouncementId();
         this.name = announcement.getName();
         this.description = announcement.getDescription();
         this.price = announcement.getPrice();
         this.sectionCode = announcement.getSectionCode();
+        this.sellerId = announcement.getSellerId();
     }
 }

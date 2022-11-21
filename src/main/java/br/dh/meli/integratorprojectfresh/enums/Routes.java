@@ -11,4 +11,6 @@ public class Routes {
   public static final String PURCHASE_ORDER = "/orders";
   public static final String ANNOUNCEMENT_BY_QUERY_STRING = "/list/query";
   public static final String ANNOUNCEMENT_BY_PRICE = "/list/price";
+  public static final String ANNOUNCEMENT_UPDATE = "/update";
+  public static final String ANNOUNCEMENT_SAVE = "/save";
 }

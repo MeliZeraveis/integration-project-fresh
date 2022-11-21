@@ -1,6 +1,7 @@
 package br.dh.meli.integratorprojectfresh.controller;
 
-import br.dh.meli.integratorprojectfresh.dto.request.AnnouncementRequestDTO;
+import br.dh.meli.integratorprojectfresh.dto.request.AnnouncementPostRequestDTO;
+import br.dh.meli.integratorprojectfresh.dto.request.AnnouncementUpdateRequestDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementListResponseDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementGetResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Routes;
@@ -103,9 +104,14 @@ public class AnnouncementController {
    * @return the response entity
    */
 
-  @PutMapping(value = Routes.ANNOUNCEMENT_BY_PRICE)
-  ResponseEntity<AnnouncementRequestDTO> updateById(@RequestBody @Valid AnnouncementRequestDTO announcementRequestDTO, @RequestParam Long id) {
-    AnnouncementRequestDTO announcement = service.updateById(announcementRequestDTO, id);
+  @PutMapping(value = Routes.ANNOUNCEMENT_UPDATE)
+  ResponseEntity<AnnouncementUpdateRequestDTO> updateById(@RequestBody @Valid AnnouncementUpdateRequestDTO announcementRequestDTO) {
+    AnnouncementUpdateRequestDTO announcement = service.updateById(announcementRequestDTO);
+    return new ResponseEntity<>(announcement, HttpStatus.OK);
+  }
+  @PostMapping(value = Routes.ANNOUNCEMENT_SAVE)
+  ResponseEntity<AnnouncementPostRequestDTO> save(@RequestBody @Valid AnnouncementPostRequestDTO announcementRequestDTO) {
+    AnnouncementPostRequestDTO announcement = service.save(announcementRequestDTO);
     return new ResponseEntity<>(announcement, HttpStatus.OK);
   }
 }

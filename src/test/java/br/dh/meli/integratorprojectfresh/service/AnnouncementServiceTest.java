@@ -1,10 +1,12 @@
 package br.dh.meli.integratorprojectfresh.service;
+import br.dh.meli.integratorprojectfresh.dto.request.AnnouncementUpdateRequestDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementGetResponseDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementListResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.model.*;
 import br.dh.meli.integratorprojectfresh.repository.AnnouncementRepository;
+import br.dh.meli.integratorprojectfresh.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -32,15 +35,20 @@ class AnnouncementServiceTest {
 
     @Mock
     private AnnouncementRepository repository;
+    @Mock
+    private UserRepository userRepo;
 
     AnnouncementGetResponseDTO responseDTO;
     AnnouncementListResponseDTO listResponseDTO;
+    AnnouncementUpdateRequestDTO updateRequestDTO;
     InboundOrder inboundOrder;
     Announcement announcement;
+    Announcement announcementSeller;
     Announcement announcementList1;
     BatchStock batchStock;
     Section section;
     Warehouse warehouse;
+    User user;
 
     @BeforeEach
     void setUp() {
@@ -61,7 +69,11 @@ class AnnouncementServiceTest {
         section = new Section(1L, "Fresh", 50.0f, 20.0f, 1L, new ArrayList<>(), List.of(inboundOrder), null );
         announcement = new Announcement(1L, "Camisa", "Camisa branca", 4L, BigDecimal.valueOf(100.0), 1L, section, batchStockList2, null, new ArrayList<>());
 
-//        announcementList1 = new Announcement(2L, "banana", "Banana amarela", 4L, BigDecimal.valueOf(10.0), 1L, section, batchStockList2, null, new ArrayList<>());
+        user = new User(3L, "usuarioTeste", "123456", "teste@email.com", "seller");
+        announcementSeller = new Announcement(1L, "Camisa", "Camisa branca", 4L, BigDecimal.valueOf(100.0), 1L, section, batchStockList2, user, new ArrayList<>());
+
+
+        //        announcementList1 = new Announcement(2L, "banana", "Banana amarela", 4L, BigDecimal.valueOf(10.0), 1L, section, batchStockList2, null, new ArrayList<>());
 //        Announcement announcementList2 = new Announcement(3L, "Banana Prata", "Banana amarela", 3L, BigDecimal.valueOf(8.0), 1L, section, batchStockList2, null, new ArrayList<>());
 //        Announcement announcementList3 = new Announcement(4L, "Banana Nanica", "Banana amarela", 4L, BigDecimal.valueOf(6.8), 1L, section, batchStockList2, null, new ArrayList<>());
 ////        List<Announcement> announcementList = new ArrayList<>();
@@ -71,6 +83,7 @@ class AnnouncementServiceTest {
 //        listResponseDTO = new AnnouncementListResponseDTO(announcementList1);
 
         responseDTO = new AnnouncementGetResponseDTO(announcement);
+        updateRequestDTO = new AnnouncementUpdateRequestDTO(1L, "sorvete", "sorvete de passas", BigDecimal.valueOf(10.0), 1L, 3L);
 
 
     }
@@ -140,13 +153,12 @@ class AnnouncementServiceTest {
         @Test
     @DisplayName("Erro quando palavra chave não é encontrada no banco de dados")
     void FindAnnouncementByQueryString_ThrowError_WhenQueryStringIsNotFind() throws NotFoundException {
-            final var actualException = assertThrows(
-                    NotFoundException.class,
-                    () -> service.findAnnouncementByQueryString("banana"));
-            assertAll(
-                    () -> Assertions.assertEquals(Msg.QUERY_STRING_NOT_FOUND, actualException.getMessage())
-            );
-
+        final var actualException = assertThrows(
+                NotFoundException.class,
+                () -> service.findAnnouncementByQueryString("banana"));
+        assertAll(
+                () -> Assertions.assertEquals(Msg.QUERY_STRING_NOT_FOUND, actualException.getMessage())
+        );
     }
 
     @Test
@@ -158,8 +170,65 @@ class AnnouncementServiceTest {
         assertAll(
                 () -> Assertions.assertEquals(Msg.PRICE_MIN_MAX, actualException.getMessage())
         );
-
     }
+
+    @Test
+    @DisplayName("Erro quando produto não existe")
+    void UpdateById_ThrowError_WhenProductNotExist() throws NotFoundException {
+        final var actualException = assertThrows(
+                NotFoundException.class,
+                () -> service.updateById(updateRequestDTO));
+        assertAll(
+                () -> Assertions.assertEquals(Msg.ANNOUNCEMENT_NOT_FOUND, actualException.getMessage())
+        );
+    }
+
+    @Test
+    @DisplayName("Erro quando preço não é encontrada no banco de dados")
+    void UpdateById_ThrowError_WhenUserIsNotASeller() throws NotFoundException {
+        updateRequestDTO.setSellerId(1L);
+        user.setRole("buyer");
+        BDDMockito.when(repository.findById(1L)).thenReturn(java.util.Optional.ofNullable(announcementSeller));
+        final var actualException = assertThrows(
+                NotFoundException.class,
+                () -> service.updateById(updateRequestDTO));
+        assertAll(
+                () -> Assertions.assertEquals(Msg.USER_NOT_AUTHORIZED, actualException.getMessage())
+        );
+    }
+
+    @Test
+    @DisplayName("Erro quando user não existe")
+    void UpdateById_ThrowError_WhenUserIsEmpty() throws NotFoundException {
+        updateRequestDTO.setSellerId(1L);
+        user.setUserId(30L);
+//        user.setRole("buyer");
+        BDDMockito.when(repository.findById(1L)).thenReturn(java.util.Optional.ofNullable(announcementSeller));
+        final var actualException = assertThrows(
+                NotFoundException.class,
+                () -> service.updateById(updateRequestDTO));
+        assertAll(
+                () -> Assertions.assertEquals(Msg.USER_NOT_AUTHORIZED, actualException.getMessage())
+        );
+    }
+
+    @Test
+    @DisplayName("Erro quando user não existe")
+    void UpdateById_ThrowError_WhenSellerIsNotFound() throws NotFoundException {
+        updateRequestDTO.setSellerId(1L);
+        user.setUserId(1L);
+        user.setRole("buyer");
+//        user.setRole("buyer");
+        BDDMockito.when(repository.findById(1L)).thenReturn(java.util.Optional.ofNullable(announcementSeller));
+//        BDDMockito.when(userRepo.findById(1L)).thenReturn(java.util.Optional.ofNullable(user));
+        final var actualException = assertThrows(
+                NotFoundException.class,
+                () -> service.updateById(updateRequestDTO));
+        assertAll(
+                () -> Assertions.assertEquals(Msg.USER_NOT_AUTHORIZED, actualException.getMessage())
+        );
+    }
+
 
 
 }
