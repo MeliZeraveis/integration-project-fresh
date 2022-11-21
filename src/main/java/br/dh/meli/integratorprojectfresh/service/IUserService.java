@@ -13,4 +13,6 @@ public interface IUserService {
     UserDTO save(UserDTO user);
     UserDTO update(UserDTO user, Long id);
     List<UserDTO> findByRole(String role);
+
+    void delete(Long id);
 }

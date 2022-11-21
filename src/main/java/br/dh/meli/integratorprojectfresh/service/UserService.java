@@ -63,4 +63,8 @@ public class UserService implements IUserService{
         List<UserDTO> userDTO = user.stream().map(UserDTO::new).collect(Collectors.toList());
         return userDTO;
     }
+
+    @Override
+    public void delete(Long id) {repo.deleteById(id);}
+
 }
