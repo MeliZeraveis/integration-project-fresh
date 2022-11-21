@@ -1,5 +1,6 @@
 package br.dh.meli.integratorprojectfresh.model;
 
+import br.dh.meli.integratorprojectfresh.dto.request.UserDTO;
 import br.dh.meli.integratorprojectfresh.enums.Roles;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -44,16 +45,18 @@ public class User {
     @JsonIgnoreProperties("seller")
     private List<Announcement> announcement;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "buyer", insertable = false, updatable = false)
-    @JsonIgnoreProperties("user")
-    private Buyer buyer;
-
     public User(long id, String username, String password, String email, String role) {
         this.userId = id;
         this.username = username;
         this.password = password;
         this.email = email;
         this.role = role;
+    }
+
+    public User(UserDTO userDTO) {
+        this.username = userDTO.getUsername();
+        this.password = userDTO.getPassword();
+        this.email = userDTO.getEmail();
+        this.role = userDTO.getRole();
     }
 }

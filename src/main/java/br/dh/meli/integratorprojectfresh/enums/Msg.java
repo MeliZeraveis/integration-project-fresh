@@ -20,6 +20,8 @@ public enum Msg {
   public static final String DATE_FUTURE = "Date is in the future.";
   public static final String DATE_PAST_OR_PRESENT = "One or more fields are not past or present.";
   public static final String DATE_REQUIRED = "Date is required.";
+
+  public static final String EMAIL_REQUIRED = "Email is required.";
   public static final String FIELD_MIN_VALUE = "One or more fields are less than the minimum value.";
   public static final String FIELD_NOT_FOUND = "One or more fields are invalid.";
   public static final String FILTER_NOT_FOUND = "Filter not found.";
@@ -46,6 +48,8 @@ public enum Msg {
   public static final String QUANTITY_MIN_VALUE = "Quantity is less than the minimum value.";
   public static final String QUANTITY_REQUIRED = "Quantity is required.";
   public static final String SECTION_CODE_NOT_EMPTY = "Section code is empty.";
+
+  public static final String ROLE_REQUIRED = "Role is required.";
   public static final String SECTION_NOT_VALID = "Section is not valid.";
   public static final String SECTION_CODE_POSITIVE = "Section code is not positive.";
   public static final String SECTION_CODE_REQUIRED = "Section code is required.";
@@ -53,12 +57,19 @@ public enum Msg {
   public static final String TEMPERATURE_REQUIRED = "Temperature is required.";
   public static final String TIME_REQUIRED = "Time is required.";
   public static final String TIME_PAST_OR_PRESENT = "Time is not past or present.";
+  public static final String USER_NAME_REQUIRED = "User name is required.";
+
+  public static final String USER_NOT_FOUND = "User not found.";
+
+  public static final String USER_NAME_OR_EMAIL_ALREADY_REGISTERED = "USERNAME or EMAIL already registered";
   public static final String VOLUME_MIN_VALUE = "Volume is less than the minimum value.";
   public static final String VOLUME_REQUIRED = "Volume is required.";
   public static final String WAREHOUSE_CODE_REQUIRED = "Warehouse code is required.";
   public static final String WAREHOUSE_NOT_FOUND =  "Warehouse not found.";
   public static final String SECTION_NOT_BELONG_WAREHOUSE =  "Section doesn't belong warehouse.";
   public static final String BATCH_EXPIRED =  "Batch contains product expired or shelf life of less than 3 weeks.";
+
+  public static final String PASSWORD_REQUIRED = "Password is required.";
   public static final String PRODUCT_BATCH_INCORRECT =  "Product is in an incorrect batch.";
   public static final String CATEGORY_NOT_FOUND = "Category must be FS, RF or FF.";
 }
