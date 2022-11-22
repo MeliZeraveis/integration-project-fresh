@@ -1,7 +1,6 @@
 package br.dh.meli.integratorprojectfresh.service;
 
 import br.dh.meli.integratorprojectfresh.dto.request.OutboundOrderRequestDTO;
-import br.dh.meli.integratorprojectfresh.dto.response.BatchStockGetResponseDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.OutboundOrderResponseDTO;
 
 /**
@@ -10,10 +9,11 @@ import br.dh.meli.integratorprojectfresh.dto.response.OutboundOrderResponseDTO;
 public interface IOutboundOrderService {
   /**
    * Read all items from an outbound order.
+   *
    * @param id the id of the outbound order
    * @return List of BatchStockGetResponseDTO
    */
-  BatchStockGetResponseDTO read(Long id);
+  OutboundOrderResponseDTO read(Long id);
 
   /**
    * Save outbound order post response DTO.

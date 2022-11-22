@@ -32,7 +32,7 @@ public class OutboundOrderController {
    * @return ResponseEntity<BatchStockGetResponseDTO> - the Outbound Order items
    */
   @GetMapping(Routes.OUTBOUND_ORDER)
-  public ResponseEntity<BatchStockGetResponseDTO> read(Long id) {
+  public ResponseEntity<OutboundOrderResponseDTO> read(Long id) {
     return ResponseEntity.ok(service.read(id));
   }
 

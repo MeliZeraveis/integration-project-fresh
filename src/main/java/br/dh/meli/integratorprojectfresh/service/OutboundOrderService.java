@@ -1,7 +1,6 @@
 package br.dh.meli.integratorprojectfresh.service;
 
 import br.dh.meli.integratorprojectfresh.dto.request.OutboundOrderRequestDTO;
-import br.dh.meli.integratorprojectfresh.dto.response.BatchStockGetResponseDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.OutboundOrderResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.enums.Roles;
@@ -31,16 +30,13 @@ public class OutboundOrderService implements IOutboundOrderService {
   private final WarehouseRepository warehouseRepo;
 
   @Override
-  public BatchStockGetResponseDTO read(Long id) {
+  public OutboundOrderResponseDTO read(Long id) {
+    OutboundOrder order = orderRepo.findById(id).orElseThrow(() -> new NotFoundException(Msg.OUTBOUND_ORDER_NOT_FOUND));
     List<OutboundOrderBatches> outboundOrderBatches = batchRepo.findAllByOrderNumberId(id);
     if (outboundOrderBatches.isEmpty()) {
       throw new NotFoundException(Msg.OUTBOUND_ORDER_BATCH_NOT_FOUND);
     }
-
-    List<BatchStock> batches = outboundOrderBatches.stream()
-            .map(OutboundOrderBatches::toBatchStock)
-            .collect(Collectors.toList());
-    return new BatchStockGetResponseDTO(batches);
+    return new OutboundOrderResponseDTO(order, outboundOrderBatches);
   }
 
   @Override
@@ -72,10 +68,10 @@ public class OutboundOrderService implements IOutboundOrderService {
     // Save the outbound order to the database, and remove all expired batches from the batch stock table
     OutboundOrder order = orderRepo.save(new OutboundOrder(outboundOrder.getOutboundOrder()));
     batches.forEach(batch -> batch.setOrderNumberId(order.getOrderNumber()));
+    batchRepo.saveAllAndFlush(batches);
     batchStockRepo.deleteAllById(outboundOrder.getOutboundOrder().getBatchIds());
-    batchRepo.saveAll(batches);
-
-    return new OutboundOrderResponseDTO(order, batches);
+  
+    return read(order.getOrderNumber());
   }
 
   @Override
