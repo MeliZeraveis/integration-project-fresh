@@ -2,8 +2,7 @@ package br.dh.meli.integratorprojectfresh.controller;
 
 import br.dh.meli.integratorprojectfresh.dto.request.OutboundOrderRequestDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.BatchStockGetResponseDTO;
-import br.dh.meli.integratorprojectfresh.dto.response.OutboundOrderPostResponseDTO;
-import br.dh.meli.integratorprojectfresh.dto.response.OutboundOrderPutResponseDTO;
+import br.dh.meli.integratorprojectfresh.dto.response.OutboundOrderResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Routes;
 import br.dh.meli.integratorprojectfresh.service.IOutboundOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +45,7 @@ public class OutboundOrderController {
    * @return ResponseEntity<OutboundOrderResponseDTO>  response entity
    */
   @PostMapping(Routes.OUTBOUND_ORDER)
-  public ResponseEntity<OutboundOrderPostResponseDTO> save(@RequestBody @Valid OutboundOrderRequestDTO outboundOrder) {
+  public ResponseEntity<OutboundOrderResponseDTO> save(@RequestBody @Valid OutboundOrderRequestDTO outboundOrder) {
     return new ResponseEntity<>(service.save(outboundOrder), HttpStatus.CREATED);
   }
 
@@ -59,7 +58,7 @@ public class OutboundOrderController {
    * @return ResponseEntity<OutboundOrderResponseDTO>  response entity
    */
   @PutMapping(Routes.OUTBOUND_ORDER)
-  public ResponseEntity<OutboundOrderPutResponseDTO> update(@RequestBody @Valid OutboundOrderRequestDTO outboundOrder) {
+  public ResponseEntity<OutboundOrderResponseDTO> update(@RequestBody @Valid OutboundOrderRequestDTO outboundOrder) {
     return new ResponseEntity<>(service.update(outboundOrder), HttpStatus.CREATED);
   }
 }
