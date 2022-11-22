@@ -77,9 +77,9 @@ public class AnnouncementController {
    * @return the response entity
    */
 
-    @GetMapping(value = Routes.ANNOUNCEMENT_BY_QUERY_STRING, params = {"q"})
-  ResponseEntity<List<AnnouncementListResponseDTO>> findAnnouncementByQueryString(@RequestParam String q) {
-    List<AnnouncementListResponseDTO> announcement = service.findAnnouncementByQueryString(q);
+    @GetMapping(value = Routes.ANNOUNCEMENT_BY_QUERY_STRING, params = {"productName"})
+  ResponseEntity<List<AnnouncementListResponseDTO>> findAnnouncementByQueryString(@RequestParam String productName) {
+    List<AnnouncementListResponseDTO> announcement = service.findAnnouncementByQueryString(productName);
     return new ResponseEntity<>(announcement, HttpStatus.OK);
   }
 

@@ -152,4 +152,17 @@ public class HandleException extends ResponseEntityExceptionHandler {
 
     return new ResponseEntity<>(exceptionDetails, HttpStatus.INTERNAL_SERVER_ERROR);
   }
+
+  @ExceptionHandler (UnauthorizedException.class)
+  public ResponseEntity<ExceptionDetails> unauthorizedException(UnauthorizedException ex) {
+    ExceptionDetails exceptionDetails = ExceptionDetails.builder()
+            .title("User not authorized")
+            .message(ex.getMessage())
+            .status(HttpStatus.UNAUTHORIZED.value())
+            .timeStamp(LocalDateTime.now())
+            .build();
+
+    return new ResponseEntity<>(exceptionDetails, HttpStatus.UNAUTHORIZED);
+  }
+
 }

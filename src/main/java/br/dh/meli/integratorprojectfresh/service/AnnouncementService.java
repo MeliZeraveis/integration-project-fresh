@@ -6,10 +6,14 @@ import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementListResponseDT
 import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementGetResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.enums.Sections;
+import br.dh.meli.integratorprojectfresh.exception.ActionNotAllowedException;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
+import br.dh.meli.integratorprojectfresh.exception.UnauthorizedException;
 import br.dh.meli.integratorprojectfresh.model.Announcement;
+import br.dh.meli.integratorprojectfresh.model.Section;
 import br.dh.meli.integratorprojectfresh.model.User;
 import br.dh.meli.integratorprojectfresh.repository.AnnouncementRepository;
+import br.dh.meli.integratorprojectfresh.repository.SectionRepository;
 import br.dh.meli.integratorprojectfresh.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +28,7 @@ import java.util.stream.Collectors;
 public class AnnouncementService implements IAnnouncementService {
   private final AnnouncementRepository repo;
   private final UserRepository userRepo;
+  private final SectionRepository sectionRepo;
 
   @Override
   public List<AnnouncementListResponseDTO> getAllAnnouncements() {
@@ -103,14 +108,18 @@ public class AnnouncementService implements IAnnouncementService {
       throw new NotFoundException(Msg.ANNOUNCEMENT_NOT_FOUND);
     }
     if (!announcement.get().getSellerId().equals(announcementRequestDTO.getSellerId())) {
-      throw new NotFoundException(Msg.USER_NOT_AUTHORIZED);
+      throw new UnauthorizedException(Msg.USER_NOT_AUTHORIZED);
     }
     Optional<User> user = userRepo.findById(announcementRequestDTO.getSellerId());
     if (user.isEmpty()) {
       throw new NotFoundException(Msg.SELLER_NOT_FOUND);
     }
     if (!user.get().getRole().equals("seller")){
-      throw new NotFoundException(Msg.USER_NOT_AUTHORIZED);
+      throw new UnauthorizedException(Msg.USER_NOT_AUTHORIZED);
+    }
+    Optional<Section> section = sectionRepo.findBySectionCode(announcementRequestDTO.getSectionCode());
+    if (section.isEmpty()) {
+      throw new NotFoundException(Msg.SECTION_NOT_FOUND);
     }
     Announcement announcementUpdate = new Announcement(announcementRequestDTO);
     repo.save(announcementUpdate);
@@ -120,6 +129,17 @@ public class AnnouncementService implements IAnnouncementService {
   @Override
   public AnnouncementPostRequestDTO save(AnnouncementPostRequestDTO announcementRequestDTO) {
     Announcement announcementUpdate = new Announcement(announcementRequestDTO);
+    Optional<Section> section = sectionRepo.findBySectionCode(announcementRequestDTO.getSectionCode());
+    Optional<User> user = userRepo.findById(announcementRequestDTO.getSellerId());
+    if (user.isEmpty()) {
+      throw new NotFoundException(Msg.SELLER_NOT_FOUND);
+    }
+    if (!user.get().getRole().equals("seller")){
+      throw new UnauthorizedException(Msg.USER_NOT_AUTHORIZED);
+    }
+    if (section.isEmpty()) {
+      throw new NotFoundException(Msg.SECTION_NOT_FOUND);
+    }
     repo.save(announcementUpdate);
     return new AnnouncementPostRequestDTO(announcementUpdate);
   }
