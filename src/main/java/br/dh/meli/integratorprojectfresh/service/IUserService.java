@@ -10,5 +10,5 @@ public interface IUserService {
     List<UserDTO> findByRole(String role);
 
     List<UserDTO> getAll();
-    void delete(Long id);
+//    void delete(Long id);
 }

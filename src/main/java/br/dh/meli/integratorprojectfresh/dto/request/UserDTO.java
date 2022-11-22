@@ -26,7 +26,7 @@ public class UserDTO {
     private String password;
 
     @NotNull(message = Msg.EMAIL_REQUIRED)
-    @Email
+    @Email(message = Msg.EMAIL_INCORRET)
     private String email;
 
     @NotNull(message = Msg.ROLE_REQUIRED)

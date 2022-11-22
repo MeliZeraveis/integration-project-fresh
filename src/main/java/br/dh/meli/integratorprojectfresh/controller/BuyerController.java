@@ -23,13 +23,14 @@ public class BuyerController {
     @Autowired
     BuyerService service;
 
-    @GetMapping("/buyer/order")
-    public ResponseEntity<List<PurchaseOrderResponseDTO>> findByBuyerId(@RequestParam Long id) {
-        return new ResponseEntity<>(service.getByBuyer(id), HttpStatus.OK);
-    }
-
     @GetMapping("/buyer/orderItems")
     public ResponseEntity<List<OrderItemsResponseDTO>> getOrderWithItems(@RequestParam Long id) {
         return new ResponseEntity<>(service.getOrderWithItems(id), HttpStatus.OK);
     }
+
+    @GetMapping("/buyer/status")
+    public ResponseEntity<List<OrderItemsResponseDTO>> getOrderByStatus(@RequestParam Long id, @RequestParam String status) {
+        return new ResponseEntity<>(service.findPurchaseOrderByStatus(id, status), HttpStatus.OK);
+    }
+
 }

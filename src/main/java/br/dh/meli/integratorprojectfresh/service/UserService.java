@@ -1,5 +1,6 @@
 package br.dh.meli.integratorprojectfresh.service;
 
+//import br.dh.meli.integratorprojectfresh.dto.request.UserDTO;
 import br.dh.meli.integratorprojectfresh.dto.request.UserDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
@@ -31,7 +32,7 @@ public class UserService implements IUserService{
     @Override
     public UserDTO save(UserDTO userDTO) {
         User user = new User(userDTO);
-       validUserNameAndEmail(user);
+        validUserNameAndEmail(user);
         repo.save(user);
         return userDTO;
     }
@@ -40,11 +41,10 @@ public class UserService implements IUserService{
     public UserDTO update(UserDTO user, Long id) {
         Optional<User> optionalUser = repo.findById(id);
         if (optionalUser.isEmpty()){
-            throw new NotFoundException(Msg.USER_NOT_FOUND);
-        }
+            throw new NotFoundException(Msg.USER_NOT_FOUND);}
         User updateUser = optionalUser.get();
 
-        validUserNameAndEmail(updateUser);
+       // validUserNameAndEmail(updateUser);
         updateUser.setUsername(user.getUsername());
         updateUser.setEmail(user.getEmail());
         updateUser.setPassword(user.getPassword());
@@ -56,9 +56,12 @@ public class UserService implements IUserService{
 
     @Override
     public List<UserDTO> findByRole(String role) {
-        List<User> user = repo.findUserByRole(role);
-        List<UserDTO> userDTO = user.stream().map(UserDTO::new).collect(Collectors.toList());
-        return userDTO;
+        if(role.equalsIgnoreCase("manager") || role.equalsIgnoreCase("buyer") || role.equalsIgnoreCase("seller")) {
+            List<User> user = repo.findUserByRole(role);
+            List<UserDTO> userDTO = user.stream().map(UserDTO::new).collect(Collectors.toList());
+            return userDTO;
+        }
+        throw new NotFoundException(Msg.ROLE_IS_NOT_EXIST);
     }
 
     @Override
@@ -68,7 +71,7 @@ public class UserService implements IUserService{
         return userDTO;
     }
 
-    @Override
-    public void delete(Long id) {repo.deleteById(id);}
+//    @Override
+//    public void delete(Long id) {repo.deleteById(id);}
 
 }

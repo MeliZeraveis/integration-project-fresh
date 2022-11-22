@@ -22,6 +22,8 @@ public enum Msg {
   public static final String DATE_REQUIRED = "Date is required.";
 
   public static final String EMAIL_REQUIRED = "Email is required.";
+
+  public static final String EMAIL_INCORRET = "The email provided is in the wrong format.";
   public static final String FIELD_MIN_VALUE = "One or more fields are less than the minimum value.";
   public static final String FIELD_NOT_FOUND = "One or more fields are invalid.";
   public static final String FILTER_NOT_FOUND = "Filter not found.";
@@ -50,7 +52,11 @@ public enum Msg {
   public static final String SECTION_CODE_NOT_EMPTY = "Section code is empty.";
 
   public static final String ROLE_REQUIRED = "Role is required.";
+
+  public static final String ROLE_IS_NOT_EXIST = "Role is not exist.";
   public static final String SECTION_NOT_VALID = "Section is not valid.";
+
+  public static final String  STATUS_NOT_VALID = "Status is not valid.";
   public static final String SECTION_CODE_POSITIVE = "Section code is not positive.";
   public static final String SECTION_CODE_REQUIRED = "Section code is required.";
   public static final String SECTION_NOT_FOUND = "Section not found.";
@@ -60,6 +66,8 @@ public enum Msg {
   public static final String USER_NAME_REQUIRED = "User name is required.";
 
   public static final String USER_NOT_FOUND = "User not found.";
+
+  public static final String  USER_ID_NOT_FOUND = "User id not found.";
 
   public static final String USER_NAME_OR_EMAIL_ALREADY_REGISTERED = "USERNAME or EMAIL already registered";
   public static final String VOLUME_MIN_VALUE = "Volume is less than the minimum value.";
