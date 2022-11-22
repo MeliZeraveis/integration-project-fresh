@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Map;
 
 @Getter
@@ -20,6 +21,7 @@ import java.util.Map;
 public class UserDTO {
 
     @NotNull(message = Msg.USER_NAME_REQUIRED)
+    @Size(max=200)
     private String username;
 
     @NotNull(message = Msg.PASSWORD_REQUIRED)

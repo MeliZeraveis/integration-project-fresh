@@ -24,15 +24,34 @@ public class UserService implements IUserService{
     void validUserNameAndEmail(User user) {
         List<User> userList = repo.findAll();
         for(User u : userList) {
-            if(u.getUsername().equalsIgnoreCase(user.getUsername()) || u.getEmail().equalsIgnoreCase(user.getEmail()))
-                throw new NotFoundException(Msg.USER_NAME_OR_EMAIL_ALREADY_REGISTERED);
+                if (u.getUsername().equalsIgnoreCase(user.getUsername()) || u.getEmail().equalsIgnoreCase(user.getEmail()))
+                    throw new NotFoundException(Msg.USER_NAME_OR_EMAIL_ALREADY_REGISTERED);
         }
     }
+
+    void update_validUserNameAndEmail(User user) {
+        List<User> userList = repo.findAll();
+        for(User u : userList) {
+            if (u.getUserId() != user.getUserId()) {
+                if (u.getUsername().equalsIgnoreCase(user.getUsername()) || u.getEmail().equalsIgnoreCase(user.getEmail()))
+                    throw new NotFoundException(Msg.USER_NAME_OR_EMAIL_ALREADY_REGISTERED);
+            }
+        }
+    }
+
+    void validRole(User user) {
+            if(user.getRole().equalsIgnoreCase("manager") || user.getRole().equalsIgnoreCase("buyer") || user.getRole().equalsIgnoreCase("seller")) {
+            }
+            else {
+                throw new NotFoundException(Msg.ROLE_IS_NOT_EXIST);
+            }
+        }
 
     @Override
     public UserDTO save(UserDTO userDTO) {
         User user = new User(userDTO);
         validUserNameAndEmail(user);
+        validRole(user);
         repo.save(user);
         return userDTO;
     }
@@ -40,11 +59,15 @@ public class UserService implements IUserService{
     @Override
     public UserDTO update(UserDTO user, Long id) {
         Optional<User> optionalUser = repo.findById(id);
+       User newUser = new User(user);
+
         if (optionalUser.isEmpty()){
             throw new NotFoundException(Msg.USER_NOT_FOUND);}
         User updateUser = optionalUser.get();
 
-       // validUserNameAndEmail(updateUser);
+        validRole(newUser);
+        update_validUserNameAndEmail(updateUser);
+
         updateUser.setUsername(user.getUsername());
         updateUser.setEmail(user.getEmail());
         updateUser.setPassword(user.getPassword());
@@ -70,8 +93,5 @@ public class UserService implements IUserService{
         List<UserDTO> userDTO = userList.stream().map(UserDTO::new).collect(Collectors.toList());
         return userDTO;
     }
-
-//    @Override
-//    public void delete(Long id) {repo.deleteById(id);}
 
 }

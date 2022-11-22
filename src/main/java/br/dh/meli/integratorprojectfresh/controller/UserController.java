@@ -34,15 +34,8 @@ public class UserController {
         return new ResponseEntity<>(service.findByRole(role), HttpStatus.OK);
     }
 
-    @GetMapping("/user")
+    @GetMapping("/user/findAll")
     public ResponseEntity<List<UserDTO>> findAll() {
         return new ResponseEntity<>(service.getAll(), HttpStatus.OK);
     }
-
-//    @DeleteMapping("/user/{id}")
-//    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-//        service.delete(id);
-//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//    }
-
 }

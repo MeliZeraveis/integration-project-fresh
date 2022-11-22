@@ -46,19 +46,12 @@ public class UserControllerTestIT {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private List<User> userList;
-    private User user;
-
     private UserDTO userDTO;
 
+
+    UserDTO userDTO1;
     @BeforeEach
     void setup() {
-
-        List<User> userList = new ArrayList<>();
-        userDTO = new UserDTO("Fulano1234", "123456", "emaildofulano@email.com", "manager");
-
-        user = new User(userDTO);
-
     }
 
 
@@ -70,7 +63,7 @@ public class UserControllerTestIT {
 
         ResultActions responseTest = mockMvc.perform(post("/api/v1/fresh-products/user")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userDTO)))
+                .content(objectMapper.writeValueAsString(userDTO1)))
                 .andDo(print());
 
         ResultActions response = mockMvc.perform(post("/api/v1/fresh-products/user")
@@ -87,17 +80,16 @@ public class UserControllerTestIT {
     @Test
     @DisplayName("Testa se o metodo post retorna uma excessao em caso de falha")
     void save_ReturnExceptionUserDTOWithUserNameRepet_Fail() throws Exception {
-
-        UserDTO userDTO1 = new UserDTO("Fulano456789", "123456", "emaildofulano@email.com", "manager");
+        UserDTO userDTO2 = new UserDTO("Fulano12346", "123456", "fulano6@email.com", "manager");
 
         ResultActions responseTest = mockMvc.perform(post("/api/v1/fresh-products/user")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(userDTO)))
+                        .content(objectMapper.writeValueAsString(userDTO2)))
                 .andDo(print());
 
         ResultActions response = mockMvc.perform(post("/api/v1/fresh-products/user")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(userDTO1)))
+                        .content(objectMapper.writeValueAsString(userDTO2)))
                 .andDo(print());
 
         response.andExpect(status().isNotFound())
@@ -110,7 +102,7 @@ public class UserControllerTestIT {
     @DisplayName("Testa se o metodo post retorna uma excessao em caso de falha")
     void save_ReturnExceptionUserDTOWithEmailFormatInvalid_Fail() throws Exception {
 
-        UserDTO userDTO1 = new UserDTO("Fulano456789", "123456", "email.com", "buyer");
+       UserDTO userDTO1 = new UserDTO("Fulano456789", "123456", "email.com", "buyer");
 
         ResultActions response = mockMvc.perform(post("/api/v1/fresh-products/user")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -128,8 +120,8 @@ public class UserControllerTestIT {
     @Test
     @DisplayName("Testa se o metodo put retorna uma excessao em caso de falha")
     void update_ReturnExceptionWhenEmailIsIncorret_Fail() throws Exception {
-
-        UserDTO userDTO1 = new UserDTO("Fulano456789", "123456", "email.com", "buyer");
+//        userDTO1.setEmail("email.com");
+       UserDTO userDTO1 = new UserDTO("Fulano456789", "123456", "email.com", "buyer");
 
         ResultActions response = mockMvc.perform(put("/api/v1/fresh-products/user")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -141,6 +133,29 @@ public class UserControllerTestIT {
                 .andExpect(jsonPath("$.message", CoreMatchers.is("One or more fields are invalid.")))
                 .andExpect(jsonPath("$.fields", CoreMatchers.containsString("email")))
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.EMAIL_INCORRET)));
+
+    }
+
+    @Test
+    @DisplayName("Testa se o metodo post retorna uma excessao em caso de falha")
+    void update_ReturnExceptionUserDTOWithUserNameRepet_Fail() throws Exception {
+        UserDTO userDTO2 = new UserDTO("Fulano12346", "123456", "fulano6@email.com", "manager");
+
+        ResultActions responseTest = mockMvc.perform(put("/api/v1/fresh-products/user")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("id", "11")
+                        .content(objectMapper.writeValueAsString(userDTO2)))
+                .andDo(print());
+
+        ResultActions response = mockMvc.perform(put("/api/v1/fresh-products/user")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("id", "11")
+                       .content(objectMapper.writeValueAsString(userDTO2)))
+                .andDo(print());
+
+        response.andExpect(status().isNotFound())
+              .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.OBJECT_NOT_FOUND.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.USER_NAME_OR_EMAIL_ALREADY_REGISTERED)));
 
     }
 
@@ -163,8 +178,9 @@ public class UserControllerTestIT {
         @Test
     @DisplayName("Testa se o metodo post armazena os dados corretamente em caso de sucesso")
     void getAll_ReturnUserDTO_Sucess() throws Exception {
+           userDTO = new UserDTO("Fulano1234", "123456", "emaildofulano@email.com", "manager");
 
-        ResultActions response = mockMvc.perform(get("/api/v1/fresh-products/user")
+        ResultActions response = mockMvc.perform(get("/api/v1/fresh-products/user/findAll")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(userDTO)));
 
@@ -174,49 +190,7 @@ public class UserControllerTestIT {
         assertThat(repo.findAll().get(0)).isNotNull();
 
     }
-//
-//    @Test
-//    @DisplayName("Testa se o metodo retorna erro se o id não existe")
-//    void delete_ReturnException_WhenIdNotExist() throws Exception {
-//
-//        ResultActions response = mockMvc
-//                .perform(delete("/api/v1/fresh-products/user/100")
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andDo(print());
-//
-//        response.andExpect(status().isNotFound())
-//                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.OBJECT_NOT_FOUND.name())))
-//                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.USER_ID_NOT_FOUND)));
-//    }
-//
-//    @Test
-//    @DisplayName("Testa se o metodo retorna erro se o id não existe")
-//    void delete_ReturnVoid_Sucess() throws Exception {
-//
-//        ResultActions response = mockMvc
-//                .perform(delete("/api/v1/fresh-products/user/1")
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andDo(print());
-//
-//        response.andExpect(status().isOk())
-//                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.OBJECT_NOT_FOUND.name())))
-//                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.USER_ID_NOT_FOUND)));
-//    }
-//    @Test
-//    @DisplayName("Testa se o metodo post armazena os dados corretamente em caso de sucesso")
-//    void save_ReturnUserDTO_Sucess() throws Exception {
-//
-//        ResultActions response = mockMvc.perform(post("/api/v1/fresh-products/user")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(objectMapper.writeValueAsString(userDTO)));
-//
-//        response.andExpect(status().isCreated())
-//                .andDo(print());
-//
-//        assertThat(repo.findAll().size()).isNotEqualTo(0);
-//        assertThat(repo.findAll().get(0)).isNotNull();
-//
-//    }
+
 
 
 

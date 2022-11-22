@@ -11,4 +11,6 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findUserByRole(String role);
+
+    void deleteUserByEmail(String email);
 }

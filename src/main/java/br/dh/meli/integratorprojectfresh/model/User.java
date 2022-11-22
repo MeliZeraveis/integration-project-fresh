@@ -59,4 +59,5 @@ public class User {
         this.email = userDTO.getEmail();
         this.role = userDTO.getRole();
     }
+
 }
