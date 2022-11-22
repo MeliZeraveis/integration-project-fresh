@@ -10,22 +10,26 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class SectionRequestDTO {
-    @NotNull
+    @NotNull(message = Msg.MAX_CAPACITY_NOT_NULL)
+    @Positive(message = Msg.MAX_CAPACITY_POSITIVE)
     private float maxCapacity;
 
-    @NotNull
+    @NotNull(message = Msg.USED_CAPACITY_NOT_NULL)
+    @Positive(message = Msg.USED_CAPACITY_POSITIVE)
     private float usedCapacity;
 
-    @NotNull
+    @NotNull(message = Msg.SECTION_CODE_NOT_EMPTY)
+    @Positive(message = Msg.SECTION_NOT_VALID)
     private Long warehouseCode;
 
-    @NotEmpty
+    @NotEmpty(message = Msg.SECTION_CODE_NOT_EMPTY)
     @OneOf(value = {"Fresh", "Frozen", "Refrigerated"}, message = Msg.SECTION_NOT_VALID)
     private String type;
 
