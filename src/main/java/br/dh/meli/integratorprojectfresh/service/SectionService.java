@@ -1,6 +1,7 @@
 package br.dh.meli.integratorprojectfresh.service;
 
 import br.dh.meli.integratorprojectfresh.dto.request.SectionRequestDTO;
+import br.dh.meli.integratorprojectfresh.dto.response.SectionDetailResponseDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.SectionResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
@@ -44,5 +45,21 @@ public class SectionService implements ISectionService {
 
         return new SectionResponseDTO(updatedSection);
     }
+
+    @Override
+    public void deleteSection(Long id) {
+        sectionRepo.findById(id)
+                .orElseThrow(() -> new NotFoundException(Msg.SECTION_NOT_FOUND));
+        sectionRepo.deleteBySectionCode(id);
+    }
+
+    @Override
+    public SectionDetailResponseDTO findById(Long id) {
+        sectionRepo.findById(id)
+                .orElseThrow(() -> new NotFoundException(Msg.SECTION_NOT_FOUND));
+
+        return new SectionDetailResponseDTO();
+    }
+
 
 }
