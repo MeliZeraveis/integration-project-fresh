@@ -118,6 +118,33 @@ public class SectionServiceTest {
 
     }
 
+    @Test
+    void deleteSectionMethod_ReturnNewSection_WhenParamsAreValid(){
+        BDDMockito.when(warehouseRepo.findById(warehouseTest.getWarehouseCode()))
+                .thenReturn(java.util.Optional.ofNullable(warehouseTest));
+        BDDMockito.when(sectionRepo.save(ArgumentMatchers.any()))
+                .thenReturn(sectionTest);
+
+        sectionResponseTest = service.saveSection(sectionRequestTest);
+
+        assertThat(sectionResponseTest).isNotNull();
+
+    }
+
+    @Test
+    void deleteSectionMethod_ReturnNewSection_WhenSectionNotExist(){
+        BDDMockito.when(warehouseRepo.findById(1L))
+                .thenReturn(java.util.Optional.ofNullable(warehouseTest));
+
+        final var actualException = assertThrows(
+                NotFoundException.class,
+                () -> service.deleteSection(sectionTest.getSectionCode()));
+        assertAll(
+                () -> Assertions.assertEquals(Msg.SECTION_NOT_FOUND, actualException.getMessage())
+        );
+
+    }
+
 
 
 }
