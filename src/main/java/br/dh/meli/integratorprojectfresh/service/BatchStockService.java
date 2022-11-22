@@ -15,6 +15,9 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * The type Batch stock service.
+ */
 @Service
 @RequiredArgsConstructor
 public class BatchStockService implements IBatchStockService {

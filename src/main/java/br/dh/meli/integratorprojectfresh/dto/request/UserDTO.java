@@ -17,6 +17,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Map;
 
+/**
+ * The type User dto.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -37,6 +40,14 @@ public class UserDTO {
     @OneOf(value = {Roles.SELLER, Roles.MANAGER, Roles.BUYER}, message = Msg.ROLE_IS_NOT_EXIST)
     private String role;
 
+    /**
+     * Instantiates a new User dto.
+     *
+     * @param username the username
+     * @param password the password
+     * @param email    the email
+     * @param role     the role
+     */
     public UserDTO(String username, String password, String email, String role) {
         this.username = username;
         this.password = password;
@@ -44,6 +55,11 @@ public class UserDTO {
         this.role = role;
     }
 
+    /**
+     * Instantiates a new User dto.
+     *
+     * @param user the user
+     */
     public UserDTO(User user) {
         this.username = user.getUsername();
         this.password = user.getPassword();

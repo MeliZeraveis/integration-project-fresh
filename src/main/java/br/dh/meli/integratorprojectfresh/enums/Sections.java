@@ -9,20 +9,30 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum Sections {
-  FRESH("Fresh", "FS"),
-  FROZEN("Frozen", "FF"),
-  REFRIGERATED("Refrigerated", "RF");
+    /**
+     * Fresh sections.
+     */
+    FRESH("Fresh", "FS"),
+    /**
+     * Frozen sections.
+     */
+    FROZEN("Frozen", "FF"),
+    /**
+     * Refrigerated sections.
+     */
+    REFRIGERATED("Refrigerated", "RF");
 
   private final String name;
   private final String code;
 
-  /**
-   * getSectionByCode
-   * Returns the section enum by its code.
-   * @param code - the section code
-   * @return Sections - the section enum
-   */
-  public static Sections getSectionByCode(String code) {
+    /**
+     * getSectionByCode
+     * Returns the section enum by its code.
+     *
+     * @param code - the section code
+     * @return Sections - the section enum
+     */
+    public static Sections getSectionByCode(String code) {
     for (Sections section : Sections.values()) {
       if (section.getCode().equals(code)) {
         return section;

@@ -13,6 +13,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
+/**
+ * The type Warehouse service.
+ */
 @Service
 @RequiredArgsConstructor
 public class WarehouseService implements IWareshouseService {

@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+/**
+ * The type Inbound order controller.
+ */
 @RestController
 @RequestMapping("/api/v1/fresh-product")
 public class InboundOrderController {
@@ -21,6 +24,12 @@ public class InboundOrderController {
     @Autowired
     private InboundOrderService inboundOrderService;
 
+    /**
+     * Save response entity.
+     *
+     * @param inboundOrder the inbound order
+     * @return the response entity
+     */
     @PostMapping("/inboundorder")
 
     public ResponseEntity<InboundOrderPostResponseDTO> save(@RequestBody @Valid InboundOrderRequestDTO inboundOrder) {
@@ -28,6 +37,12 @@ public class InboundOrderController {
     }
 
 
+    /**
+     * Update response entity.
+     *
+     * @param inboundOrder the inbound order
+     * @return the response entity
+     */
     @PutMapping("/inboundorder")
     public ResponseEntity<InboundOrderPutResponseDTO> update(@RequestBody @Valid InboundOrderRequestDTO inboundOrder) {
         return new ResponseEntity<>(inboundOrderService.update(inboundOrder), HttpStatus.CREATED);

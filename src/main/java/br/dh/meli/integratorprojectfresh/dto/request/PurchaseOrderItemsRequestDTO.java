@@ -32,19 +32,25 @@ public class PurchaseOrderItemsRequestDTO {
 
   private BigDecimal productPrice;
 
-  public PurchaseOrderItemsRequestDTO(PurchaseOrderItems purchaseOrderItems) {
+    /**
+     * Instantiates a new Purchase order items request dto.
+     *
+     * @param purchaseOrderItems the purchase order items
+     */
+    public PurchaseOrderItemsRequestDTO(PurchaseOrderItems purchaseOrderItems) {
     this.purchaseOrderId = purchaseOrderItems.getPurchaseOrderId();
     this.announcementId = purchaseOrderItems.getAnnouncementId();
     this.productQuantity = purchaseOrderItems.getProductQuantity();
     this.productPrice = purchaseOrderItems.getProductPrice();
   }
 
-  /**
-   * toPurchaseOrderItems
-   * Convert DTO to Model
-   * @return PurchaseOrderItems
-   */
-  public PurchaseOrderItems toPurchaseOrderItems() {
+    /**
+     * toPurchaseOrderItems
+     * Convert DTO to Model
+     *
+     * @return PurchaseOrderItems purchase order items
+     */
+    public PurchaseOrderItems toPurchaseOrderItems() {
     return new PurchaseOrderItems(purchaseOrderId, announcementId, productQuantity, productPrice);
   }
 }

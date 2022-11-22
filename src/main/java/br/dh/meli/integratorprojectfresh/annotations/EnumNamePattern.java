@@ -20,8 +20,31 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Constraint(validatedBy = EnumNamePatternValidator.class)
 public @interface EnumNamePattern {
-  String regexp();
-  String message() default "Enum value must match the pattern \"{regexp}\".";
-  Class<?>[] groups() default {};
-  Class<? extends Payload>[] payload() default {};
+    /**
+     * Regexp string.
+     *
+     * @return the string
+     */
+    String regexp();
+
+    /**
+     * Message string.
+     *
+     * @return the string
+     */
+    String message() default "Enum value must match the pattern \"{regexp}\".";
+
+    /**
+     * Groups class [ ].
+     *
+     * @return the class [ ]
+     */
+    Class<?>[] groups() default {};
+
+    /**
+     * Payload class [ ].
+     *
+     * @return the class [ ]
+     */
+    Class<? extends Payload>[] payload() default {};
 }

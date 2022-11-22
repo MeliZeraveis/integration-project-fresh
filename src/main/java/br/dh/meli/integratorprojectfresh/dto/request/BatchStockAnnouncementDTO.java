@@ -22,11 +22,12 @@ public class BatchStockAnnouncementDTO {
   private LocalDate dueDate;
   private InboundOrderSectionDTO section;
 
-  /**
-   * Instantiates a new Batch stock announcement DTO.
-   * @param batchStock the batch stock
-   */
-  public BatchStockAnnouncementDTO(BatchStock batchStock) {
+    /**
+     * Instantiates a new Batch stock announcement DTO.
+     *
+     * @param batchStock the batch stock
+     */
+    public BatchStockAnnouncementDTO(BatchStock batchStock) {
         this.batchNumber = batchStock.getBatchNumber();
         this.productQuantity = batchStock.getProductQuantity();
         this.dueDate = batchStock.getDueDate();

@@ -8,6 +8,9 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
+/**
+ * The type Batch stock dto response due date.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,6 +23,11 @@ public class BatchStockDTOResponseDueDate {
     private LocalDate dueDate;
     private int productQuantity;
 
+    /**
+     * Instantiates a new Batch stock dto response due date.
+     *
+     * @param batchStock the batch stock
+     */
     public BatchStockDTOResponseDueDate(BatchStock batchStock) {
         this.batchNumber = batchStock.getBatchNumber();
         this.annoucementId = batchStock.getAnnouncementId();

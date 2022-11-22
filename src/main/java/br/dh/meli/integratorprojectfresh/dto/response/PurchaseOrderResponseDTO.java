@@ -24,7 +24,13 @@ public class PurchaseOrderResponseDTO {
   private BigDecimal totalPrice;
   private List<PurchaseOrderItemsResponseDTO> products;
 
-  public PurchaseOrderResponseDTO(PurchaseOrder purchaseOrder, List<PurchaseOrderItems> products) {
+    /**
+     * Instantiates a new Purchase order response dto.
+     *
+     * @param purchaseOrder the purchase order
+     * @param products      the products
+     */
+    public PurchaseOrderResponseDTO(PurchaseOrder purchaseOrder, List<PurchaseOrderItems> products) {
     this.id = purchaseOrder.getId();
     this.date = purchaseOrder.getDate().toString();
     this.orderStatus = purchaseOrder.getStatus();
@@ -32,7 +38,12 @@ public class PurchaseOrderResponseDTO {
     this.products = products.stream().map(PurchaseOrderItemsResponseDTO::new).collect(Collectors.toList());
   }
 
-  public PurchaseOrderResponseDTO(PurchaseOrder purchaseOrder) {
+    /**
+     * Instantiates a new Purchase order response dto.
+     *
+     * @param purchaseOrder the purchase order
+     */
+    public PurchaseOrderResponseDTO(PurchaseOrder purchaseOrder) {
     this.id = purchaseOrder.getId();
     this.date = purchaseOrder.getDate().toString();
     this.orderStatus = purchaseOrder.getStatus();

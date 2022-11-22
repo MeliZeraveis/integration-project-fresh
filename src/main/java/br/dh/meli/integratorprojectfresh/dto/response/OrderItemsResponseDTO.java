@@ -12,6 +12,9 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The type Order items response dto.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,6 +26,12 @@ public class OrderItemsResponseDTO {
     private BigDecimal totalPrice;
     private List<OrderProductsResponseDTO> products;
 
+    /**
+     * Instantiates a new Order items response dto.
+     *
+     * @param purchaseOrder the purchase order
+     * @param products      the products
+     */
     public OrderItemsResponseDTO(PurchaseOrder purchaseOrder, List<PurchaseOrderItems> products) {
         this.id = purchaseOrder.getId();
         this.date = purchaseOrder.getDate().toString();

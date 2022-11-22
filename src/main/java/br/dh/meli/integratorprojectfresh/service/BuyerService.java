@@ -17,16 +17,31 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The type Buyer service.
+ */
 @Service
 @RequiredArgsConstructor
 public class BuyerService implements IBuyerService{
+    /**
+     * The Purchase order repo.
+     */
     @Autowired
     PurchaseOrderRepository purchaseOrderRepo;
 
+    /**
+     * The Purchase order items repo.
+     */
     @Autowired
     PurchaseOrderItemsRepository purchaseOrderItemsRepo;
 
 
+    /**
+     * Not found id list.
+     *
+     * @param id the id
+     * @return the list
+     */
     List<PurchaseOrder> NotFoundId(Long id) {
         List<PurchaseOrder> purchaseOrderList = purchaseOrderRepo.findPurchaseOrderByBuyerId(id);
         if(purchaseOrderList.size()==0) {

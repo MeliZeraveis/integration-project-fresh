@@ -21,12 +21,13 @@ import java.util.stream.Collectors;
  */
 @ControllerAdvice
 public class HandleException extends ResponseEntityExceptionHandler {
-  /**
-   * handleMethodArgumentNotValid - handle the validation errors.
-   * @param ex - the exception
-   * @return ResponseEntity<ExceptionResponseDTO> - the exception response
-   */
-  @ExceptionHandler(BusinessRuleException.class)
+    /**
+     * handleMethodArgumentNotValid - handle the validation errors.
+     *
+     * @param ex - the exception
+     * @return ResponseEntity<ExceptionResponseDTO>  - the exception response
+     */
+    @ExceptionHandler(BusinessRuleException.class)
   public ResponseEntity<ExceptionDetails> handlerBusinessRuleException(BusinessRuleException ex) {
     ExceptionDetails exceptionDetails = ExceptionDetails.builder()
             .title(ExceptionType.BUSINESS_RULE_EXCEPTION.name())
@@ -38,13 +39,13 @@ public class HandleException extends ResponseEntityExceptionHandler {
     return new ResponseEntity<>(exceptionDetails, HttpStatus.UNPROCESSABLE_ENTITY);
   }
 
-  /**
-   * Handler for NotFoundException entities.
-   *
-   * @param ex the NotFoundException instance
-   * @return the generated ResponseEntity with the exception details and the status code
-   */
-  @ExceptionHandler(NotFoundException.class)
+    /**
+     * Handler for NotFoundException entities.
+     *
+     * @param ex the NotFoundException instance
+     * @return the generated ResponseEntity with the exception details and the status code
+     */
+    @ExceptionHandler(NotFoundException.class)
   public ResponseEntity<ExceptionDetails> handlerNotFoundException(NotFoundException ex) {
     ExceptionDetails exceptionDetails = ExceptionDetails.builder()
             .title(ExceptionType.OBJECT_NOT_FOUND.name())
@@ -56,13 +57,13 @@ public class HandleException extends ResponseEntityExceptionHandler {
     return new ResponseEntity<>(exceptionDetails, HttpStatus.NOT_FOUND);
   }
 
-  /**
-   * Handler for InvalidParamException entity.
-   *
-   * @param ex the InvalidParamException instance
-   * @return the generated ResponseEntity with the exception details and the status code
-   */
-  @ExceptionHandler (InvalidParamException.class)
+    /**
+     * Handler for InvalidParamException entity.
+     *
+     * @param ex the InvalidParamException instance
+     * @return the generated ResponseEntity with the exception details and the status code
+     */
+    @ExceptionHandler (InvalidParamException.class)
   public ResponseEntity<ExceptionDetails> handlerInvalidParamException(InvalidParamException ex) {
     ExceptionDetails exceptionDetails = ExceptionDetails.builder()
             .title(ExceptionType.PARAMETER_NOT_VALID.name())
@@ -75,7 +76,13 @@ public class HandleException extends ResponseEntityExceptionHandler {
   }
 
 
-  @ExceptionHandler (ActionNotAllowedException.class)
+    /**
+     * Handler limit capacity section exception response entity.
+     *
+     * @param ex the ex
+     * @return the response entity
+     */
+    @ExceptionHandler (ActionNotAllowedException.class)
   public ResponseEntity<ExceptionDetails> handlerLimitCapacitySectionException(ActionNotAllowedException ex) {
     ExceptionDetails exceptionDetails = ExceptionDetails.builder()
             .title("Action not allowed")
@@ -87,7 +94,13 @@ public class HandleException extends ResponseEntityExceptionHandler {
     return new ResponseEntity<>(exceptionDetails, HttpStatus.UNPROCESSABLE_ENTITY);
   }
 
-  @ExceptionHandler (SectionTypeException.class)
+    /**
+     * Handler section type exception response entity.
+     *
+     * @param ex the ex
+     * @return the response entity
+     */
+    @ExceptionHandler (SectionTypeException.class)
   public ResponseEntity<ExceptionDetails> handlerSectionTypeException(SectionTypeException ex) {
     ExceptionDetails exceptionDetails = ExceptionDetails.builder()
             .title("Section Type incorrect")
@@ -99,7 +112,13 @@ public class HandleException extends ResponseEntityExceptionHandler {
     return new ResponseEntity<>(exceptionDetails, HttpStatus.UNPROCESSABLE_ENTITY);
   }
 
-  @ExceptionHandler (ManagerNotValidException.class)
+    /**
+     * Handler manager not valid exception response entity.
+     *
+     * @param ex the ex
+     * @return the response entity
+     */
+    @ExceptionHandler (ManagerNotValidException.class)
   public ResponseEntity<ExceptionDetails> handlerManagerNotValidException(ManagerNotValidException ex) {
     ExceptionDetails exceptionDetails = ExceptionDetails.builder()
             .title("Manager not valid")
@@ -136,12 +155,13 @@ public class HandleException extends ResponseEntityExceptionHandler {
     return new ResponseEntity<>(exceptionDetails, httpStatus);
   }
 
-  /**
-   * Handler for general unknown exception entities.
-   * @param ex the Exception instance
-   * @return ResponseEntity - the generated ResponseEntity with the exception details and the status code
-   */
-  @ExceptionHandler(Exception.class)
+    /**
+     * Handler for general unknown exception entities.
+     *
+     * @param ex the Exception instance
+     * @return ResponseEntity - the generated ResponseEntity with the exception details and the status code
+     */
+    @ExceptionHandler(Exception.class)
   public ResponseEntity<ExceptionDetails> handlerGeneralErrorException(Exception ex) {
     ExceptionDetails exceptionDetails = ExceptionDetails.builder()
             .title(ExceptionType.UNKNOWN_SERVER_ERROR.name())

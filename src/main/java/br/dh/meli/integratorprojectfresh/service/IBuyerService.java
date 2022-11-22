@@ -9,8 +9,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
+/**
+ * The interface Buyer service.
+ */
 public interface IBuyerService {
-       List<OrderItemsResponseDTO> getOrderWithItems(Long idBuyer);
+    /**
+     * Gets order with items.
+     *
+     * @param idBuyer the id buyer
+     * @return the order with items
+     */
+    List<OrderItemsResponseDTO> getOrderWithItems(Long idBuyer);
 
-       List<OrderItemsResponseDTO> findPurchaseOrderByStatus( Long id, String status);
+    /**
+     * Find purchase order by status list.
+     *
+     * @param id     the id
+     * @param status the status
+     * @return the list
+     */
+    List<OrderItemsResponseDTO> findPurchaseOrderByStatus( Long id, String status);
 }

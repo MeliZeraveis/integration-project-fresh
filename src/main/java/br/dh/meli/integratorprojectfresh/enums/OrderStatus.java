@@ -10,8 +10,17 @@ import org.hibernate.criterion.Order;
 @Getter
 @AllArgsConstructor
 public enum OrderStatus {
-  PENDING("Aberto"),
-  APPROVED("Finalizado");
+    /**
+     * Pending order status.
+     */
+    PENDING("Aberto"),
+    /**
+     * Approved order status.
+     */
+    APPROVED("Finalizado");
 
-  public final String name;
+    /**
+     * The Name.
+     */
+    public final String name;
 }

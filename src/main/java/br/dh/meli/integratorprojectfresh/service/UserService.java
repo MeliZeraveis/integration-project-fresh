@@ -17,12 +17,23 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 
+/**
+ * The type User service.
+ */
 @Service
 @RequiredArgsConstructor
 public class UserService implements IUserService{
+    /**
+     * The Repo.
+     */
     @Autowired
     UserRepository repo;
 
+    /**
+     * Valid user name and email.
+     *
+     * @param user the user
+     */
     void validUserNameAndEmail(User user) {
         List<User> userList = repo.findAll();
         for(User u : userList) {
@@ -31,6 +42,11 @@ public class UserService implements IUserService{
         }
     }
 
+    /**
+     * Update valid user name and email.
+     *
+     * @param user the user
+     */
     void update_validUserNameAndEmail(User user) {
         List<User> userList = repo.findAll();
         for(User u : userList) {

@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+/**
+ * The type Announcement list response dto.
+ */
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,6 +24,11 @@ public class AnnouncementListResponseDTO {
     private BigDecimal price;
 
 
+    /**
+     * Instantiates a new Announcement list response dto.
+     *
+     * @param announcement the announcement
+     */
     public AnnouncementListResponseDTO(Announcement announcement) {
         this.name = announcement.getName();
         this.description = announcement.getDescription();

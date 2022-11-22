@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * The type Announcement service.
+ */
 @Service
 @RequiredArgsConstructor
 public class AnnouncementService implements IAnnouncementService {
