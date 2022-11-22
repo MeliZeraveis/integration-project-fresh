@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "96ff6662-05af-4118-842b-0be37f47f723",
-		"name": "User",
+		"_postman_id": "1d320a23-f716-4b56-a7e9-1b97cc6162da",
+		"name": "User Copy",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "23721676"
 	},
@@ -101,7 +101,28 @@
 			"name": "Get user by role",
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/fresh-products/user/role?role=manager",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"user",
+						"role"
+					],
+					"query": [
+						{
+							"key": "role",
+							"value": "manager"
+						}
+					]
+				}
 			},
 			"response": []
 		}
