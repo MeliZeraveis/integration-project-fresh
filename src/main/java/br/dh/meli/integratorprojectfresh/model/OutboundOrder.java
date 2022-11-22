@@ -42,7 +42,7 @@ public class OutboundOrder {
   
   @OneToMany(mappedBy = "outboundOrder")
   @JsonIgnoreProperties("outboundOrder")
-  private List<BatchStock> batchStock;
+  private List<OutboundOrderBatches> outboundOrderBatches;
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "section_code", insertable = false, updatable = false)
@@ -76,17 +76,17 @@ public class OutboundOrder {
   /**
    * Instantiates a new Outbound order.
    *
-   * @param orderNumber   the order number
-   * @param orderDate     the order date
-   * @param sectionCode   the section code
-   * @param warehouseCode the warehouse code
-   * @param batchStock    the batch stock
+   * @param orderNumber          the order number
+   * @param orderDate            the order date
+   * @param sectionCode          the section code
+   * @param warehouseCode        the warehouse code
+   * @param outboundOrderBatches the batch stock
    */
-  public OutboundOrder(Long orderNumber, LocalDate orderDate, Long sectionCode, Long warehouseCode, List<BatchStock> batchStock) {
+  public OutboundOrder(Long orderNumber, LocalDate orderDate, Long sectionCode, Long warehouseCode, List<OutboundOrderBatches> outboundOrderBatches) {
     this.orderNumber = orderNumber;
     this.orderDate = orderDate;
     this.sectionCode = sectionCode;
     this.warehouseCode = warehouseCode;
-    this.batchStock = batchStock;
+    this.outboundOrderBatches = outboundOrderBatches;
   }
 }
