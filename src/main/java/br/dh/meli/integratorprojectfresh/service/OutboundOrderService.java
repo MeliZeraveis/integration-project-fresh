@@ -4,6 +4,8 @@ import br.dh.meli.integratorprojectfresh.dto.request.OutboundOrderRequestDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.BatchStockGetResponseDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.OutboundOrderPostResponseDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.OutboundOrderPutResponseDTO;
+import br.dh.meli.integratorprojectfresh.enums.Msg;
+import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.model.BatchStock;
 import br.dh.meli.integratorprojectfresh.model.OutboundOrderBatches;
 import br.dh.meli.integratorprojectfresh.repository.*;
@@ -28,6 +30,10 @@ public class OutboundOrderService implements IOutboundOrderService {
   @Override
   public BatchStockGetResponseDTO read(Long id) {
     List<OutboundOrderBatches> outboundOrderBatches = batchRepo.findAllByOrderNumberId(id);
+    if (outboundOrderBatches.isEmpty()) {
+      throw new NotFoundException(Msg.OUTBOUND_ORDER_BATCHES_NOT_FOUND);
+    }
+
     List<BatchStock> batches = outboundOrderBatches.stream()
             .map(OutboundOrderBatches::toBatchStock)
             .collect(Collectors.toList());
