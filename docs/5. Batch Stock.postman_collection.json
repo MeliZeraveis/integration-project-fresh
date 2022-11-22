@@ -1,0 +1,79 @@
+{
+	"info": {
+		"_postman_id": "aac71794-eb0c-4193-80e9-cc521a9c4e87",
+		"name": "5. Batch Stock",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23721676"
+	},
+	"item": [
+		{
+			"name": "GET Batch Stock by dueDate and category",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/fresh-products/due-date/list?numberOfDays=1000&category=FS&order=asc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"due-date",
+						"list"
+					],
+					"query": [
+						{
+							"key": "numberOfDays",
+							"value": "1000"
+						},
+						{
+							"key": "category",
+							"value": "FS"
+						},
+						{
+							"key": "order",
+							"value": "asc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Batch Stock by dueDate and sectionCode",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/fresh-products/due-date?numberOfDays=1000&sectionCode=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"due-date"
+					],
+					"query": [
+						{
+							"key": "numberOfDays",
+							"value": "1000"
+						},
+						{
+							"key": "sectionCode",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
