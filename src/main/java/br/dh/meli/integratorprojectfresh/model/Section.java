@@ -1,6 +1,5 @@
 package br.dh.meli.integratorprojectfresh.model;
 
-import br.dh.meli.integratorprojectfresh.enums.Sections;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -49,6 +48,8 @@ public class Section {
     @JsonIgnoreProperties("section")
     private Warehouse warehouse;
 
+
+
     public Section(long sectionCode, String type, float maxCapacity, float usedCapacity, ArrayList<Announcement> listAnnoucement) {
     this.sectionCode = sectionCode;
     this.type = type;
@@ -57,4 +58,21 @@ public class Section {
     this.announcement = listAnnoucement;
 
     }
+
+    public Section(float maxCapacity, float usedCapacity, Long warehouseCode, String type) {
+        this.maxCapacity = maxCapacity;
+        this.usedCapacity = usedCapacity;
+        this.warehouseCode = warehouseCode;
+        this.type = type;
+    }
+
+    public Section(Float maxCapacity, Float usedCapacity, Long warehouseCode, String type, Long sectionCode) {
+        this.maxCapacity = maxCapacity;
+        this.usedCapacity = usedCapacity;
+        this.warehouseCode = warehouseCode;
+        this.type = type;
+        this.sectionCode = sectionCode;
+    }
+
+
 }
