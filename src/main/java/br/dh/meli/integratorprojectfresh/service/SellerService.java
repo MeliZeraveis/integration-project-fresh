@@ -83,6 +83,9 @@ public class SellerService implements ISellerService {
         List<PurchaseOrderItems> itemsSoldFilter = new ArrayList<>();
         totalEarnings = new BigDecimal(0);
         totalProductsSold = 0;
+        if (purchaseOrdersFinish.isEmpty()){
+            throw  new NotFoundException(Msg.SALES_NOT_FOUND);
+        }
         purchaseOrderFinishedDTOList = new ArrayList<>();
         for (PurchaseOrder p : purchaseOrdersFinish.stream().distinct().collect(Collectors.toList())){
             itemsSoldFilter = itemsSold.stream()

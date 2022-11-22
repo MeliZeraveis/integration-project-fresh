@@ -50,9 +50,13 @@ class SellerServiceTest {
     @BeforeEach
     void setup(){
         LocalDateTime date = LocalDateTime.parse("2020-03-09 17:55:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
         purchaseOrder = new PurchaseOrder(date, "Finalizado", BigDecimal.valueOf(100.00), 1L);
+        PurchaseOrderItems purchaseOrderItems1 = new PurchaseOrderItems(1L,1L, 1L, 1, BigDecimal.valueOf(10.00), purchaseOrder, null);
+        PurchaseOrderItems purchaseOrderItems2 = new PurchaseOrderItems(1L, 2L, 2L, 1, BigDecimal.valueOf(10.00), purchaseOrder, null);
+
         PurchaseOrderItems purchaseOrderItemsTest2 = new PurchaseOrderItems(1L, 1L, 1L, 10, BigDecimal.valueOf(20.00),purchaseOrder,null);
-        Announcement announcementTest = new Announcement(1L, "Alface Test", "description", 3L, BigDecimal.valueOf(1.80), 1L, null, new ArrayList<>(), null, new ArrayList<>());
+        Announcement announcementTest = new Announcement(1L, "Alface Test", "description", 3L, BigDecimal.valueOf(1.80), 1L, null, new ArrayList<>(), null, List.of(purchaseOrderItems1,purchaseOrderItems2));
         sellerTest = new User(1L, "fulano", "123456", "fulano@email.com", Roles.BUYER,null, List.of(announcementTest));
     }
 
@@ -124,8 +128,8 @@ class SellerServiceTest {
     @Test
     @DisplayName("Retorna todas as vendas do vendedor em periodo de tempo com sucesso")
     void GetSalesByDate_ReturnSalesSallerListDTO_Success() {
-        LocalDate date1 = LocalDate.parse("2021-10-10");
-        LocalDate date2 = LocalDate.parse("2021-11-11");
+        LocalDate date1 = LocalDate.parse("2000-10-10");
+        LocalDate date2 = LocalDate.parse("2025-11-11");
 
         purchaseOrder.setId(1L);
         sellerTest.setRole("seller");
