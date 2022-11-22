@@ -14,6 +14,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * The type Outbound order batches.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -66,6 +69,12 @@ public class OutboundOrderBatches {
   @JsonIgnoreProperties("batchStock")
   private Announcement announcement;
 
+  /**
+   * Instantiates a new Outbound order batches.
+   *
+   * @param a           the a
+   * @param orderNumber the order number
+   */
   public OutboundOrderBatches(BatchStockDTO a, Long orderNumber) {
     this.announcementId = a.getAnnouncementId();
     this.sectionType = a.getSectionType();
@@ -78,6 +87,13 @@ public class OutboundOrderBatches {
     this.manufacturingTime =  a.getManufacturingTime();
   }
 
+  /**
+   * Instantiates a new Outbound order batches.
+   *
+   * @param a           the a
+   * @param orderNumber the order number
+   * @param batchNumber the batch number
+   */
   public OutboundOrderBatches(BatchStockDTO a, Long orderNumber, Long batchNumber) {
     this.batchNumber = batchNumber;
     this.announcementId = a.getAnnouncementId();
@@ -91,6 +107,18 @@ public class OutboundOrderBatches {
     this.manufacturingTime = a.getManufacturingTime();
   }
 
+  /**
+   * Instantiates a new Outbound order batches.
+   *
+   * @param announcementId    the announcement id
+   * @param sectionType       the section type
+   * @param productQuantity   the product quantity
+   * @param manufacturingDate the manufacturing date
+   * @param manufacturingTime the manufacturing time
+   * @param volume            the volume
+   * @param dueDate           the due date
+   * @param price             the price
+   */
   public OutboundOrderBatches(Long announcementId, String sectionType, int productQuantity, LocalDate manufacturingDate, LocalDateTime manufacturingTime, Float volume, LocalDate dueDate, BigDecimal price) {
     this.announcementId = announcementId;
     this.sectionType = sectionType;
@@ -102,6 +130,20 @@ public class OutboundOrderBatches {
     this.price = price;
   }
 
+  /**
+   * Instantiates a new Outbound order batches.
+   *
+   * @param batchNumber       the batch number
+   * @param announcementId    the announcement id
+   * @param sectionType       the section type
+   * @param productQuantity   the product quantity
+   * @param manufacturingDate the manufacturing date
+   * @param manufacturingTime the manufacturing time
+   * @param volume            the volume
+   * @param dueDate           the due date
+   * @param price             the price
+   * @param inboundOrder      the inbound order
+   */
   public OutboundOrderBatches(long batchNumber, long announcementId, String sectionType, int productQuantity, LocalDate manufacturingDate, LocalDateTime manufacturingTime, float volume, LocalDate dueDate, BigDecimal price, InboundOrder inboundOrder) {
     this.batchNumber = batchNumber;
     this.announcementId = announcementId;
@@ -112,5 +154,15 @@ public class OutboundOrderBatches {
     this.volume = volume;
     this.dueDate = dueDate;
     this.price = price;
+  }
+
+  /**
+   * Convert OutboundOrderBatches to BatchStock.
+   *
+   * @return a new BatchStock object with the same values as the OutboundOrderBatches object
+   */
+  public BatchStock toBatchStock() {
+    return new BatchStock(this.announcementId, this.sectionType, this.productQuantity, this.manufacturingDate,
+            this.manufacturingTime, this.volume, this.dueDate, this.price);
   }
 }
