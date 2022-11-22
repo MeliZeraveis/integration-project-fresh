@@ -98,10 +98,9 @@ public class AnnouncementController {
   }
 
   /**
-   * findAnnouncementByQueryString(String queryString)
-   * Get all announcements that match the query string.
-   * @param id the bigDecimal price of the announcement
-   * @return the response entity
+    * update announcement by id that matches the body
+    * @param announcementRequestDTO the announcement request
+    * @return the response entity
    */
 
   @PutMapping(value = Routes.ANNOUNCEMENT_UPDATE)
@@ -109,6 +108,13 @@ public class AnnouncementController {
     AnnouncementUpdateRequestDTO announcement = service.updateById(announcementRequestDTO);
     return new ResponseEntity<>(announcement, HttpStatus.OK);
   }
+
+  /**
+   * create announcement that matches the body
+   * @param announcementRequestDTO
+   * @return new announcement
+   */
+
   @PostMapping(value = Routes.ANNOUNCEMENT_SAVE)
   ResponseEntity<AnnouncementPostRequestDTO> save(@RequestBody @Valid AnnouncementPostRequestDTO announcementRequestDTO) {
     AnnouncementPostRequestDTO announcement = service.save(announcementRequestDTO);

@@ -4,6 +4,7 @@ import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementGetResponseDTO
 import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementListResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
+import br.dh.meli.integratorprojectfresh.exception.UnauthorizedException;
 import br.dh.meli.integratorprojectfresh.model.*;
 import br.dh.meli.integratorprojectfresh.repository.AnnouncementRepository;
 import br.dh.meli.integratorprojectfresh.repository.UserRepository;
@@ -185,12 +186,12 @@ class AnnouncementServiceTest {
 
     @Test
     @DisplayName("Erro quando preço não é encontrada no banco de dados")
-    void UpdateById_ThrowError_WhenUserIsNotASeller() throws NotFoundException {
+    void UpdateById_ThrowError_WhenUserIsNotASeller() throws UnauthorizedException {
         updateRequestDTO.setSellerId(1L);
         user.setRole("buyer");
         BDDMockito.when(repository.findById(1L)).thenReturn(java.util.Optional.ofNullable(announcementSeller));
         final var actualException = assertThrows(
-                NotFoundException.class,
+                UnauthorizedException.class,
                 () -> service.updateById(updateRequestDTO));
         assertAll(
                 () -> Assertions.assertEquals(Msg.USER_NOT_AUTHORIZED, actualException.getMessage())
@@ -199,13 +200,13 @@ class AnnouncementServiceTest {
 
     @Test
     @DisplayName("Erro quando user não existe")
-    void UpdateById_ThrowError_WhenUserIsEmpty() throws NotFoundException {
+    void UpdateById_ThrowError_WhenUserIsEmpty() throws UnauthorizedException {
         updateRequestDTO.setSellerId(1L);
         user.setUserId(30L);
 //        user.setRole("buyer");
         BDDMockito.when(repository.findById(1L)).thenReturn(java.util.Optional.ofNullable(announcementSeller));
         final var actualException = assertThrows(
-                NotFoundException.class,
+                UnauthorizedException.class,
                 () -> service.updateById(updateRequestDTO));
         assertAll(
                 () -> Assertions.assertEquals(Msg.USER_NOT_AUTHORIZED, actualException.getMessage())
@@ -214,7 +215,7 @@ class AnnouncementServiceTest {
 
     @Test
     @DisplayName("Erro quando user não existe")
-    void UpdateById_ThrowError_WhenSellerIsNotFound() throws NotFoundException {
+    void UpdateById_ThrowError_WhenSellerIsNotFound() throws UnauthorizedException {
         updateRequestDTO.setSellerId(1L);
         user.setUserId(1L);
         user.setRole("buyer");
@@ -222,7 +223,7 @@ class AnnouncementServiceTest {
         BDDMockito.when(repository.findById(1L)).thenReturn(java.util.Optional.ofNullable(announcementSeller));
 //        BDDMockito.when(userRepo.findById(1L)).thenReturn(java.util.Optional.ofNullable(user));
         final var actualException = assertThrows(
-                NotFoundException.class,
+                UnauthorizedException.class,
                 () -> service.updateById(updateRequestDTO));
         assertAll(
                 () -> Assertions.assertEquals(Msg.USER_NOT_AUTHORIZED, actualException.getMessage())

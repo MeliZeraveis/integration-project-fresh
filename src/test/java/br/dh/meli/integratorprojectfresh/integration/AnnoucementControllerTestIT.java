@@ -203,7 +203,7 @@ public class AnnoucementControllerTestIT {
         ResultActions response = mockMvc
                 .perform(get("/api/v1/fresh-products/list/query")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .param("q", "Camiseta"))
+                        .param("productName", "Camiseta"))
                 .andDo(print());
 
         response.andExpect(status().isNotFound())
@@ -220,7 +220,7 @@ public class AnnoucementControllerTestIT {
         ResultActions response = mockMvc
                 .perform(get("/api/v1/fresh-products/list/query")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .param("q", "banana"))
+                        .param("productName", "banana"))
                 .andDo(print());
 
         response.andExpect(status().isOk())
@@ -299,8 +299,7 @@ public class AnnoucementControllerTestIT {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(announcementUpdateRequestDTO)));
 
-        response.andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.OBJECT_NOT_FOUND.name())))
+        response.andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.USER_NOT_AUTHORIZED)));
     }
 
