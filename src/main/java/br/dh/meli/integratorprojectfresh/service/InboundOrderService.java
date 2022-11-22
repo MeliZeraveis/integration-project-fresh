@@ -105,8 +105,8 @@ public class InboundOrderService implements IInboundOrderService {
         InboundOrder inboundOrder = new InboundOrder(inboundOrderResquest.getInboundOrder());
         validIfWarehouseExist(inboundOrder.getWarehouseCode());
         validAnnouncement(inboundOrderResquest.getInboundOrder().getBatchStock());
-        validSection(inboundOrder.getSectionCode(), inboundOrderResquest.getInboundOrder().getBatchStock(), inboundOrder.getWarehouseCode());
         validBatchDueDate(inboundOrderResquest.getInboundOrder().getBatchStock());
+        validSection(inboundOrder.getSectionCode(), inboundOrderResquest.getInboundOrder().getBatchStock(), inboundOrder.getWarehouseCode());
         repo.save(inboundOrder);
         List<BatchStock> batchStockList =  inboundOrderResquest.getInboundOrder()
                 .getBatchStock().stream()

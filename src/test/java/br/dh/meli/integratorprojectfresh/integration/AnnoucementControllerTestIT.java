@@ -201,7 +201,7 @@ public class AnnoucementControllerTestIT {
     void FindAnnouncementByQueryString_ThrowException_WhenProductNameNotExist() throws Exception {
 
         ResultActions response = mockMvc
-                .perform(get("/api/v1/fresh-products/list/query")
+                .perform(get("/api/v1/fresh-products/list/product-name")
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("productName", "Camiseta"))
                 .andDo(print());
@@ -218,7 +218,7 @@ public class AnnoucementControllerTestIT {
     void FindAnnouncementByQueryString_ReturnAnnouncement_WhenProductNameExist() throws Exception {
 
         ResultActions response = mockMvc
-                .perform(get("/api/v1/fresh-products/list/query")
+                .perform(get("/api/v1/fresh-products/list/product-name")
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("productName", "banana"))
                 .andDo(print());

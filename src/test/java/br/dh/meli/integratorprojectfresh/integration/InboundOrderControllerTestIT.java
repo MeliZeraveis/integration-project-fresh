@@ -874,7 +874,6 @@ public class InboundOrderControllerTestIT {
     @Test
     @DisplayName("Testa o metodo SAVE se retorna uma EXCEPTION se o DUEDATE tiver menos de 3 semanas")
     void Save_validBatchDueDateReturnException_Fail() throws Exception {
-
         LocalDate orderDate2 = LocalDate.now().plusWeeks(2);
         batchStockList.get(0).setDueDate(orderDate2);
 
