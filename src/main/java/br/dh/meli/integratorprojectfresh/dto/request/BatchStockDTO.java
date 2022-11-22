@@ -14,7 +14,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-
+/**
+ * The type Batch stock dto.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -56,6 +58,11 @@ public class BatchStockDTO {
 
     private Long orderNumberId;
 
+    /**
+     * Instantiates a new Batch stock dto.
+     *
+     * @param a the a
+     */
     public BatchStockDTO(BatchStock a) {
         this.batchNumber = a.getBatchNumber();
         this.announcementId = a.getAnnouncementId();
@@ -70,6 +77,18 @@ public class BatchStockDTO {
     }
 
 
+    /**
+     * Instantiates a new Batch stock dto.
+     *
+     * @param announcementId    the announcement id
+     * @param sectionType       the section type
+     * @param productQuantity   the product quantity
+     * @param manufacturingDate the manufacturing date
+     * @param manufacturingTime the manufacturing time
+     * @param volume            the volume
+     * @param dueDate           the due date
+     * @param price             the price
+     */
     public BatchStockDTO(Long announcementId, String sectionType, int productQuantity, LocalDate manufacturingDate, LocalDateTime manufacturingTime, float volume, LocalDate dueDate, BigDecimal price) {
         this.announcementId = announcementId;
         this.sectionType = sectionType;

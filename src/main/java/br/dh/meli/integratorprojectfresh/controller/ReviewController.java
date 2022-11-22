@@ -1,9 +1,7 @@
 package br.dh.meli.integratorprojectfresh.controller;
 
 import br.dh.meli.integratorprojectfresh.dto.request.ReviewRequestDTO;
-//import br.dh.meli.integratorprojectfresh.dto.response.ReviewListPostResponseDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.ReviewGetResponseDTO;
-import br.dh.meli.integratorprojectfresh.dto.response.ReviewListGetResponseDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.ReviewPostResponseDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.ReviewPutResponseDTO;
 import br.dh.meli.integratorprojectfresh.service.ReviewService;

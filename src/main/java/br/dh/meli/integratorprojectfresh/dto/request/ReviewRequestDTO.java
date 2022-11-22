@@ -7,6 +7,9 @@ import lombok.Setter;
 
 import javax.validation.Valid;
 
+/**
+ * The type Review request dto.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
