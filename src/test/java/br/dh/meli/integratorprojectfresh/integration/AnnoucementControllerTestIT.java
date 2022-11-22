@@ -1,6 +1,5 @@
 package br.dh.meli.integratorprojectfresh.integration;
 
-
 import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementGetResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.ExceptionType;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
@@ -20,12 +19,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import br.dh.meli.integratorprojectfresh.model.Announcement;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * The type Annoucement controller test it.
+ */
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -40,17 +41,30 @@ public class AnnoucementControllerTestIT {
     @Autowired
     private ObjectMapper objectMapper;
 
+    /**
+     * The Announcement.
+     */
     Announcement announcement;
 
+    /**
+     * The Annoucement get response dto.
+     */
     AnnouncementGetResponseDTO annoucementGetResponseDTO;
 
 
+    /**
+     * Sets .
+     */
     @BeforeEach
     void setup() {
-//        announcement = new Announcement(1L, "maça", "description")
-//        annoucementGetResponseDTO = new AnnoucementGetResponseDTO(announcement);
+
     }
 
+    /**
+     * Gets return all annoucement get response dto sucess.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo retorna o anuncio por categoria em caso de sucesso")
     void get_ReturnAllAnnoucementGetResponseDTO_Sucess() throws Exception {
@@ -61,9 +75,14 @@ public class AnnoucementControllerTestIT {
                 .andDo(print());
 
         response.andExpect(status().isOk());
-        //  .andExpect(jsonPath("$.announcementId", CoreMatchers.is(1)));
+
     }
 
+    /**
+     * Gets returnannoucement category get response dto sucess.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo retorna o anuncio por categoria em caso de sucesso")
     void get_ReturnannoucementCategoryGetResponseDTO_Sucess() throws Exception {
@@ -75,9 +94,14 @@ public class AnnoucementControllerTestIT {
                 .andDo(print());
 
         response.andExpect(status().isOk());
-              //  .andExpect(jsonPath("$.announcementId", CoreMatchers.is(1)));
+
     }
 
+    /**
+     * Gets returnannoucement category get response dto when category not exist.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo retorna erro se a categoria não existe")
     void get_ReturnannoucementCategoryGetResponseDTO_WhenCategoryNotExist() throws Exception {
@@ -92,10 +116,13 @@ public class AnnoucementControllerTestIT {
                 .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.OBJECT_NOT_FOUND.name())))
                 .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.CATEGORY_NOT_FOUND)))
                 .andExpect(jsonPath("$.status", CoreMatchers.is(HttpStatus.NOT_FOUND.value())));
-
-
     }
 
+    /**
+     * Gets returnannoucement get response dto sucess.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo retorna o anuncio correto em caso de sucesso")
     void get_ReturnannoucementGetResponseDTO_Sucess() throws Exception {
@@ -108,9 +135,13 @@ public class AnnoucementControllerTestIT {
 
             response.andExpect(status().isOk())
                    .andExpect(jsonPath("$.announcementId", CoreMatchers.is(1)));
-
     }
 
+    /**
+     * Gets return exception not found when product not exist.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo retorna uma mensagem NOT FOUND quando é informado o ID de um anuncio que nao existe")
     void get_ReturnExceptionNotFound_WhenProductNotExist() throws Exception {
@@ -128,6 +159,11 @@ public class AnnoucementControllerTestIT {
 
     }
 
+    /**
+     * Gets returnannoucement get response dto by letra sucess.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo retorna o anuncio correto quando informado o ID e a categoria de ordenaçao em caso de sucesso")
     void get_ReturnannoucementGetResponseDTOByLetra_Sucess() throws Exception {
@@ -144,6 +180,11 @@ public class AnnoucementControllerTestIT {
 
     }
 
+    /**
+     * Gets return exception not found when product by letra not exist.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se o metodo retorna uma mensagem NOT FOUND quando é informado o ID correto com uma categoria inexistente")
     void get_ReturnExceptionNotFound_WhenProductByLetraNotExist() throws Exception {

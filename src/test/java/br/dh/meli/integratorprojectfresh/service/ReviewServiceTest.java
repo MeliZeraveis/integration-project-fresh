@@ -16,7 +16,6 @@ import br.dh.meli.integratorprojectfresh.repository.PurchaseOrderRepository;
 import br.dh.meli.integratorprojectfresh.repository.ReviewRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -26,15 +25,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * The type Review service test.
+ */
 @ExtendWith(MockitoExtension.class)
 class ReviewServiceTest {
 
@@ -50,23 +49,49 @@ class ReviewServiceTest {
     @Mock
     private AnnouncementRepository announcementRepository;
 
+    /**
+     * The Review dto.
+     */
     ReviewDTO reviewDTO;
 
+    /**
+     * The Review request dto.
+     */
     ReviewRequestDTO reviewRequestDTO;
 
+    /**
+     * The Review post response dto.
+     */
     ReviewPostResponseDTO reviewPostResponseDTO;
 
+    /**
+     * The Review put response dto.
+     */
     ReviewPutResponseDTO reviewPutResponseDTO;
 
+    /**
+     * The Review get response dto.
+     */
     ReviewGetResponseDTO reviewGetResponseDTO;
+    /**
+     * The Review.
+     */
     Review review;
 
+    /**
+     * The Announcement.
+     */
     Announcement announcement;
 
+    /**
+     * The Purchase order.
+     */
     PurchaseOrder purchaseOrder;
 
 
-
+    /**
+     * Sets up.
+     */
     @BeforeEach
     void setUp() {
         LocalDateTime date = LocalDateTime.parse("2020-03-09 17:55:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
@@ -92,6 +117,11 @@ class ReviewServiceTest {
 
     */
 
+    /**
+     * Save method throw not found exception when announcement id is invalid.
+     *
+     * @throws NotFoundException the not found exception
+     */
     @Test
     void SaveMethod_ThrowNotFoundException_WhenAnnouncementIdIsInvalid() throws NotFoundException {
 
@@ -105,11 +135,13 @@ class ReviewServiceTest {
                     () -> Assertions.assertEquals(Msg.ANNOUNCEMENT_NOT_FOUND, actualException.getMessage()));
     }
 
+    /**
+     * Save method throw not found exception when purchase order id is invalid.
+     *
+     * @throws ActionNotAllowedException the action not allowed exception
+     */
     @Test
     void SaveMethod_ThrowNotFoundException_WhenPurchaseOrderIdIsInvalid() throws ActionNotAllowedException {
-
-          // BDDMockito.when(purchaseOrderRepository.findByAnnouncementIdAndBuyerId(2L,1L))
-                //   .thenReturn(List.of(purchaseOrder));
 
            final var actualException = assertThrows(
                     ActionNotAllowedException.class,
@@ -119,11 +151,13 @@ class ReviewServiceTest {
     }
 
 
+    /**
+     * Save method throw not found exception when valid if review exist is invalid.
+     *
+     * @throws NotFoundException the not found exception
+     */
     @Test
     void SaveMethod_ThrowNotFoundException_WhenValidIfReviewExistIsInvalid() throws NotFoundException {
-
-        //BDDMockito.when(announcementRepository.findById(ArgumentMatchers.any()))
-               // .thenReturn(java.util.Optional.ofNullable(ArgumentMatchers.any()));
 
         final var actualException = assertThrows(
                 NotFoundException.class,
@@ -131,6 +165,4 @@ class ReviewServiceTest {
         assertAll(
                 () -> Assertions.assertEquals(Msg.REVIEW_NOT_FOUND, actualException.getMessage()));
     }
-
-
 }

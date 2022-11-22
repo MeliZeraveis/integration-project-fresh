@@ -28,11 +28,13 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;;
 
 
+/**
+ * The type Batch stock service test.
+ */
 @ExtendWith(MockitoExtension.class)
 class BatchStockServiceTest {
 
@@ -42,18 +44,48 @@ class BatchStockServiceTest {
     @Mock
     private BatchStockRepository repo;
 
+    /**
+     * The Section repo.
+     */
     @Mock
     SectionRepository sectionRepo;
 
+    /**
+     * The Batch stock dto response due date.
+     */
     BatchStockDTOResponseDueDate batchStockDTOResponseDueDate;
+    /**
+     * The Batch stock get response dto.
+     */
     BatchStockGetResponseDTO batchStockGetResponseDTO;
+    /**
+     * The Batch stock.
+     */
     BatchStock batchStock;
+    /**
+     * The Inbound order.
+     */
     InboundOrder inboundOrder;
+    /**
+     * The Warehouse.
+     */
     Warehouse warehouse;
+    /**
+     * The Section.
+     */
     Section section;
+    /**
+     * The Announcement.
+     */
     Announcement announcement;
+    /**
+     * The Batch stock list.
+     */
     List<BatchStock> batchStockList;
 
+    /**
+     * Sets up.
+     */
     @BeforeEach
     void setUp() {
         LocalDate manufacturingDate = LocalDate.parse("2021-12-12");
@@ -73,16 +105,24 @@ class BatchStockServiceTest {
         announcement = new Announcement(1L, "Camisa", "Camisa branca", 4L, BigDecimal.valueOf(100.0), 1L, section, batchStockList, null, new ArrayList<>(), new ArrayList<>());
     }
 
+    /**
+     * Get batch stock due date return batch stock filtered when params are valid.
+     */
     @Test
     void GetBatchStockDueDate_ReturnBatchStockFiltered_WhenParamsAreValid() {
         BDDMockito.when(sectionRepo.findById(1L)).thenReturn(Optional.ofNullable(section));
         batchStockGetResponseDTO = service.getBatchStockByBatchStockId(1000, 1L);
-assertAll(
+        assertAll(
                 () -> assertThat(batchStockGetResponseDTO).isNotNull(),
                 () -> assertThat(batchStockGetResponseDTO.getBatchStock()).isNotNull()
         );
     }
 
+    /**
+     * Get batch stock due date throw exception when batch stock list is empty.
+     *
+     * @throws NotFoundException the not found exception
+     */
     @Test
     void GetBatchStockDueDate_ThrowException_WhenBatchStockListIsEmpty() throws NotFoundException {
         final var actualException = assertThrows(
@@ -93,6 +133,11 @@ assertAll(
         );
     }
 
+    /**
+     * Get batch stock due date throw exception when section is empty.
+     *
+     * @throws NotFoundException the not found exception
+     */
     @Test
     void GetBatchStockDueDate_ThrowException_WhenSectionIsEmpty() throws NotFoundException {
 
@@ -107,6 +152,11 @@ assertAll(
         );
     }
 
+    /**
+     * Get batch stock due date throw exception when batch stock lis filtered is empty.
+     *
+     * @throws NotFoundException the not found exception
+     */
     @Test
     void GetBatchStockDueDate_ThrowException_WhenBatchStockLisFilteredIsEmpty() throws NotFoundException {
         section.getInboundOrder().get(0).setBatchStock(new ArrayList<>());
@@ -120,6 +170,9 @@ assertAll(
         );
     }
 
+    /**
+     * Find batch filtered return batch stock filtered when category fs is valid.
+     */
     @Test
     void FindBatchFiltered_ReturnBatchStockFiltered_WhenCategoryFSIsValid() {
         BDDMockito.when(repo.findAllByDueDateBetween(ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(batchStockList);
@@ -131,6 +184,9 @@ assertAll(
         );
     }
 
+    /**
+     * Find batch filtered return batch stock filtered when category rf is valid.
+     */
     @Test
     void FindBatchFiltered_ReturnBatchStockFiltered_WhenCategoryRFIsValid() {
         BDDMockito.when(repo.findAllByDueDateBetween(ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(batchStockList);
@@ -142,6 +198,9 @@ assertAll(
         );
     }
 
+    /**
+     * Find batch filtered return batch stock filtered when category ff is valid.
+     */
     @Test
     void FindBatchFiltered_ReturnBatchStockFiltered_WhenCategoryFFIsValid() {
         BDDMockito.when(repo.findAllByDueDateBetween(ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(batchStockList);
@@ -153,6 +212,9 @@ assertAll(
         );
     }
 
+    /**
+     * Find batch filtered return batch stock filtered when order desc is valid.
+     */
     @Test
     void FindBatchFiltered_ReturnBatchStockFiltered_WhenOrderDescIsValid() {
         BDDMockito.when(repo.findAllByDueDateBetween(ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(batchStockList);
@@ -164,6 +226,11 @@ assertAll(
         );
     }
 
+    /**
+     * Find batch stock filtered throw exception when batch stock list is empty.
+     *
+     * @throws NotFoundException the not found exception
+     */
     @Test
     void FindBatchStockFiltered_ThrowException_WhenBatchStockListIsEmpty() throws NotFoundException {
 
@@ -175,6 +242,11 @@ assertAll(
         );
     }
 
+    /**
+     * Find batch stock filtered throw exception when category is valid.
+     *
+     * @throws NotFoundException the not found exception
+     */
     @Test
     void FindBatchStockFiltered_ThrowException_WhenCategoryIsValid() throws NotFoundException {
 
@@ -186,6 +258,11 @@ assertAll(
         );
     }
 
+    /**
+     * Find batch stock filtered throw exception when batch stock list.
+     *
+     * @throws NotFoundException the not found exception
+     */
     @Test
     void FindBatchStockFiltered_ThrowException_WhenBatchStockList() throws NotFoundException {
 
@@ -197,6 +274,11 @@ assertAll(
         );
     }
 
+    /**
+     * Find batch stock filtered throw exception when order is invalid.
+     *
+     * @throws NotFoundException the not found exception
+     */
     @Test
     void FindBatchStockFiltered_ThrowException_WhenOrderIsInvalid() throws NotFoundException {
 
@@ -208,6 +290,11 @@ assertAll(
         );
     }
 
+    /**
+     * Find batch stock filtered throw exception when order is desc.
+     *
+     * @throws NotFoundException the not found exception
+     */
     @Test
     void FindBatchStockFiltered_ThrowException_WhenOrderIsDesc() throws NotFoundException {
 

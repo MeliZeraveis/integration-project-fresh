@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,12 +22,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * The type Review controller test it.
+ */
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -53,6 +52,9 @@ public class ReviewControllerTestIT {
 
     private ReviewRequestDTO reviewRequestDTO;
 
+    /**
+     * Sets up.
+     */
     @BeforeEach
     void setUp() {
 
@@ -64,6 +66,11 @@ public class ReviewControllerTestIT {
         reviewRepository.save(review);
     }
 
+    /**
+     * Save.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Deve retornar 200 quando salvar uma review")
     void save() throws Exception{
@@ -71,9 +78,13 @@ public class ReviewControllerTestIT {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(reviewRequestDTO)));
         response.andExpect(status().isCreated());
-
     }
 
+    /**
+     * Save invalid grade.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Deve retornar 400 quando salvar uma review com nota inválida")
     void saveInvalidGrade() throws Exception{
@@ -83,10 +94,14 @@ public class ReviewControllerTestIT {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(reviewRequestDTO)));
         response.andExpect(status().isBadRequest());
-
     }
 
 
+    /**
+     * Update.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName(("Deve retornar 200 quando atualizar uma review"))
     void update() throws Exception{
@@ -99,6 +114,11 @@ public class ReviewControllerTestIT {
                 .andDo(print());
     }
 
+    /**
+     * Update invalid grade.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName(("Deve retornar 400 quando atualizar uma review com nota inválida"))
     void updateInvalidGrade() throws Exception{
@@ -111,8 +131,11 @@ public class ReviewControllerTestIT {
                 .andDo(print());
     }
 
-
-
+    /**
+     * Update invalid id.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName(("Deve retornar 404 quando atualizar uma review inexistente"))
     void updateInvalidId() throws Exception{
@@ -125,7 +148,11 @@ public class ReviewControllerTestIT {
                 .andDo(print());
     }
 
-
+    /**
+     * Find by id.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Deve retornar 200 quando buscar uma review")
     void findById() throws Exception{
@@ -137,6 +164,11 @@ public class ReviewControllerTestIT {
         response.andExpect(status().isOk());
     }
 
+    /**
+     * Find by id invalid.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Deve retornar 404 quando buscar uma review inexistente")
     void findByIdInvalid() throws Exception{
@@ -148,7 +180,11 @@ public class ReviewControllerTestIT {
         response.andExpect(status().isNotFound());
     }
 
-
+    /**
+     * Gets all reviews.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Deve retornar 200 quando buscar  uma lista de reviews por id do anúncio")
     void getAllReviews() throws Exception{
@@ -160,6 +196,11 @@ public class ReviewControllerTestIT {
         response.andExpect(status().isOk());
     }
 
+    /**
+     * Gets all reviews invalid.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Deve retornar 404 quando buscar  uma lista de reviews por id do anúncio inexistente")
     void getAllReviewsInvalid() throws Exception{

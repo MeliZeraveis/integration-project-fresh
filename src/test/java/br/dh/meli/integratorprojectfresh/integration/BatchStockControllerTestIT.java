@@ -22,6 +22,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * The type Batch stock controller test it.
+ */
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -36,15 +39,29 @@ public class BatchStockControllerTestIT {
     @Autowired
     private ObjectMapper objectMapper;
 
+    /**
+     * The Batch stock.
+     */
     BatchStock batchStock;
 
+    /**
+     * The Batch stock get response dto.
+     */
     BatchStockGetResponseDTO batchStockGetResponseDTO;
 
+    /**
+     * Sets .
+     */
     @BeforeEach
     void setup() {
         //
     }
 
+    /**
+     * Gets return batch stock get response dto when successful.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void get_ReturnBatchStockGetResponseDTO_WhenSuccessful() throws Exception {
         ResultActions response = mockMvc
@@ -58,6 +75,11 @@ public class BatchStockControllerTestIT {
 
     }
 
+    /**
+     * Gets return exception not found when batch stock by due date not exist.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void get_ReturnExceptionNotFound_WhenBatchStockByDueDateNotExist() throws Exception {
 
@@ -74,6 +96,11 @@ public class BatchStockControllerTestIT {
                 .andExpect(jsonPath("$.status", CoreMatchers.is(HttpStatus.NOT_FOUND.value())));
     }
 
+    /**
+     * Gets return batch stock get response dto by asc order when successful.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void get_ReturnBatchStockGetResponseDTOByAscOrder_WhenSuccessful() throws Exception {
         ResultActions response = mockMvc
@@ -88,6 +115,11 @@ public class BatchStockControllerTestIT {
 
     }
 
+    /**
+     * Gets return exception not found when batch stock by asc order not exist.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void get_ReturnExceptionNotFound_WhenBatchStockByAscOrderNotExist() throws Exception {
 
@@ -105,26 +137,4 @@ public class BatchStockControllerTestIT {
                 .andExpect(jsonPath("$.status", CoreMatchers.is(HttpStatus.NOT_FOUND.value())));
     }
 
-    static class ReviewControllerTestIT {
-
-        @BeforeEach
-        void setUp() {
-        }
-
-        @Test
-        void save() {
-        }
-
-        @Test
-        void update() {
-        }
-
-        @Test
-        void getReviewByReviewId() {
-        }
-
-        @Test
-        void getAllReviews() {
-        }
-    }
 }

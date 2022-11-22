@@ -3,12 +3,9 @@ package br.dh.meli.integratorprojectfresh.integration;
 
 import br.dh.meli.integratorprojectfresh.dto.request.PurchaseOrderItemsRequestDTO;
 import br.dh.meli.integratorprojectfresh.dto.request.PurchaseOrderRequestDTO;
-import br.dh.meli.integratorprojectfresh.dto.response.PurchaseOrderItemsResponseDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.PurchaseOrderResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.ExceptionType;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
-import br.dh.meli.integratorprojectfresh.enums.OrderStatus;
-import br.dh.meli.integratorprojectfresh.exception.BusinessRuleException;
 import br.dh.meli.integratorprojectfresh.model.PurchaseOrder;
 import br.dh.meli.integratorprojectfresh.model.PurchaseOrderItems;
 import br.dh.meli.integratorprojectfresh.repository.PurchaseOrderItemsRepository;
@@ -33,12 +30,14 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * The type Purchase order controller test it.
+ */
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -57,12 +56,27 @@ public class PurchaseOrderControllerTestIT {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    /**
+     * The Purchase order.
+     */
     PurchaseOrder purchaseOrder;
 
+    /**
+     * The Purchase order response dto.
+     */
     PurchaseOrderResponseDTO purchaseOrderResponseDTO;
+    /**
+     * The Purchase order request dto.
+     */
     PurchaseOrderRequestDTO purchaseOrderRequestDTO;
+    /**
+     * The Purchase order items.
+     */
     PurchaseOrderItemsRequestDTO purchaseOrderItems;
 
+    /**
+     * Sets .
+     */
     @BeforeEach
     void setup() {
         itemsRepo.deleteAll();
@@ -96,6 +110,11 @@ public class PurchaseOrderControllerTestIT {
 
     }
 
+    /**
+     * Gets returnannoucement get response dto sucess.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Sucesso GET")
     void get_ReturnannoucementGetResponseDTO_Sucess() throws Exception {
@@ -109,6 +128,11 @@ public class PurchaseOrderControllerTestIT {
         response.andExpect(status().isOk());
     }
 
+    /**
+     * Save method return purchase order response dto when sucess.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Sucesso Save/Post")
     void SaveMethod_ReturnPurchaseOrderResponseDTO_WhenSucess() throws Exception {
@@ -120,6 +144,11 @@ public class PurchaseOrderControllerTestIT {
         response.andExpect(status().isCreated());
     }
 
+    /**
+     * Save method return purchase order response dto when date are invalid.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Erro ao enviar data invalida - SAVE/POST")
     void SaveMethod_ReturnPurchaseOrderResponseDTO_WhenDateAreInvalid() throws Exception {
@@ -136,6 +165,11 @@ public class PurchaseOrderControllerTestIT {
 
     }
 
+    /**
+     * Save method return purchase order response dto when buyer are invalid.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Erro ao enviar buyer invalida - SAVE/POST")
     void SaveMethod_ReturnPurchaseOrderResponseDTO_WhenBuyerAreInvalid() throws Exception {
@@ -151,6 +185,11 @@ public class PurchaseOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.BUYER_ID_NOT_NULL)));
     }
 
+    /**
+     * Save method return purchase order response dto when order status are invalid.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Erro ao enviar oderStatus invalida - SAVE/POST")
     void SaveMethod_ReturnPurchaseOrderResponseDTO_WhenOrderStatusAreInvalid() throws Exception {
@@ -166,6 +205,11 @@ public class PurchaseOrderControllerTestIT {
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.PURCHASE_ORDER_STATUS_NOT_NULL)));
     }
 
+    /**
+     * Save method return purchase order response dto when total value are invalid.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Erro ao enviar totalValue invalida - SAVE/POST")
     void SaveMethod_ReturnPurchaseOrderResponseDTO_WhenTotalValueAreInvalid() throws Exception {
@@ -182,6 +226,11 @@ public class PurchaseOrderControllerTestIT {
     }
 
 
+    /**
+     * Save method return purchase order response dto when buyer not found.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("BuyerId Not Found - Save/Post")
     void SaveMethod_ReturnPurchaseOrderResponseDTO_WhenBuyerNotFound() throws Exception {
@@ -197,6 +246,11 @@ public class PurchaseOrderControllerTestIT {
                 .andExpect(jsonPath("$.status", CoreMatchers.is(HttpStatus.NOT_FOUND.value())));
     }
 
+    /**
+     * Save method return purchase order response dto when announcement is not found.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("BuyerId Not Found - Save/Post")
     void SaveMethod_ReturnPurchaseOrderResponseDTO_WhenAnnouncementIsNotFound() throws Exception {
@@ -212,6 +266,11 @@ public class PurchaseOrderControllerTestIT {
                 .andExpect(jsonPath("$.status", CoreMatchers.is(HttpStatus.NOT_FOUND.value())));
     }
 
+    /**
+     * Put method return purchase order response dto when announcement is not found.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Exception quando compra quantidade de produto maior que o que tem no estoque - PUT")
     void PutMethod_ReturnPurchaseOrderResponseDTO_WhenAnnouncementIsNotFound() throws Exception {
@@ -226,6 +285,11 @@ public class PurchaseOrderControllerTestIT {
                 .andExpect(jsonPath("$.status", CoreMatchers.is(HttpStatus.UNPROCESSABLE_ENTITY.value())));
     }
 
+    /**
+     * Put method return purchase order response dto when sucess.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Sucesso Put")
     void PutMethod_ReturnPurchaseOrderResponseDTO_WhenSucess() throws Exception {
@@ -238,6 +302,11 @@ public class PurchaseOrderControllerTestIT {
 
     }
 
+    /**
+     * Get method returnannoucement get response dto when id is invalid.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Not Found Exception - GET")
     void GetMethod_ReturnannoucementGetResponseDTO_WhenIdIsInvalid() throws Exception {
@@ -254,6 +323,11 @@ public class PurchaseOrderControllerTestIT {
                 .andExpect(jsonPath("$.status", CoreMatchers.is(HttpStatus.NOT_FOUND.value())));
     }
 
+    /**
+     * Put method return purchase order response dto when id is invalid.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Exception Put")
     void PutMethod_ReturnPurchaseOrderResponseDTO_WhenIdIsInvalid() throws Exception {
@@ -269,6 +343,11 @@ public class PurchaseOrderControllerTestIT {
 
     }
 
+    /**
+     * Put method return purchase order response dto when status is aproved.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Exception Put")
     void PutMethod_ReturnPurchaseOrderResponseDTO_WhenStatusIsAproved() throws Exception {
@@ -283,6 +362,5 @@ public class PurchaseOrderControllerTestIT {
                 .andExpect(jsonPath("$.status", CoreMatchers.is(HttpStatus.BAD_REQUEST.value())));
 
     }
-
 
 }

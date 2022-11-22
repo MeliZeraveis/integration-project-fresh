@@ -28,11 +28,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
-//import static org.junit.Assert.assertEquals;
-//import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * The type Inbound order service test.
+ */
 @ExtendWith(MockitoExtension.class)
 class InboundOrderServiceTest {
 
@@ -51,18 +52,51 @@ class InboundOrderServiceTest {
     private InboundOrderRepository inboundOrderRepo;
     @Mock
     private BatchStockRepository batchStockRepo;
+    /**
+     * The Inbound order post response dto.
+     */
     InboundOrderPostResponseDTO inboundOrderPostResponseDTO;
+    /**
+     * The Inbound order put response dto.
+     */
     InboundOrderPutResponseDTO inboundOrderPutResponseDTO;
+    /**
+     * The Inbound order request dto.
+     */
     InboundOrderRequestDTO inboundOrderRequestDTO;
+    /**
+     * The Inbound order.
+     */
     InboundOrder inboundOrder;
+    /**
+     * The Batch stock list.
+     */
     List<BatchStockDTO> batchStockList;
+    /**
+     * The Batch stock list 2.
+     */
     List<BatchStock> batchStockList2;
+    /**
+     * The Inbound order dto.
+     */
     InboundOrderDTO inboundOrderDTO;
+    /**
+     * The Warehouse test.
+     */
     Warehouse warehouseTest;
+    /**
+     * The Section test.
+     */
     Section sectionTest;
+    /**
+     * The Announcement test.
+     */
     Announcement announcementTest;
 
 
+    /**
+     * Sets .
+     */
     @BeforeEach
     void setup() {
         LocalDate manufacturingDate = LocalDate.parse("2022-03-09");
@@ -99,6 +133,9 @@ class InboundOrderServiceTest {
         announcementTest = new Announcement(1L, "Alface Test", "description", 3L, BigDecimal.valueOf(1.80), 1L, sectionTest, new ArrayList<>(), null, new ArrayList<>(), new ArrayList<>());
     }
 
+    /**
+     * Save method return new inbound order when params are valid.
+     */
     @Test
     @DisplayName("Sucesso ao criar novo pedido de entrada")
     void SaveMethod_ReturnNewInboundOrder_WhenParamsAreValid() {
@@ -118,6 +155,11 @@ class InboundOrderServiceTest {
         assertThat(inboundOrderPostTest).isNotNull();
     }
 
+    /**
+     * Save method throws exception when warehouse not found.
+     *
+     * @throws NotFoundException the not found exception
+     */
     @Test
     @DisplayName("Erro ao encontrar warehouse")
     void SaveMethod_ThrowsException_WhenWarehouseNotFound() throws NotFoundException {
@@ -128,6 +170,11 @@ class InboundOrderServiceTest {
         });
     }
 
+    /**
+     * Save method throws exception when announcement not exists.
+     *
+     * @throws NotFoundException the not found exception
+     */
     @Test
     @DisplayName("Erro ao encontrar anuncio")
     void SaveMethod_ThrowsException_WhenAnnouncementNotExists() throws NotFoundException {
@@ -141,6 +188,11 @@ class InboundOrderServiceTest {
         });
     }
 
+    /**
+     * Save method throws exception when section is empty.
+     *
+     * @throws NotFoundException the not found exception
+     */
     @Test
     @DisplayName("Erro ao encontrar seção existente")
     void SaveMethod_ThrowsException_WhenSectionIsEmpty() throws NotFoundException {
@@ -155,6 +207,11 @@ class InboundOrderServiceTest {
         });
     }
 
+    /**
+     * Save method throws exeption when section exceeded limit.
+     *
+     * @throws ActionNotAllowedException the action not allowed exception
+     */
     @Test
     @DisplayName("Exceção quando limite da seção é ultrapassado")
     void SaveMethod_ThrowsExeption_WhenSectionExceededLimit() throws ActionNotAllowedException {
@@ -170,6 +227,11 @@ class InboundOrderServiceTest {
         });
     }
 
+    /**
+     * Save method throws exeption when section doesnt belong to ware house.
+     *
+     * @throws ActionNotAllowedException the action not allowed exception
+     */
     @Test
     @DisplayName("Exceção quando seção não pertence ao armazém")
     void SaveMethod_ThrowsExeption_WhenSectionDoesntBelongToWareHouse() throws ActionNotAllowedException {
@@ -186,6 +248,11 @@ class InboundOrderServiceTest {
                 () -> Assertions.assertEquals(Msg.SECTION_NOT_BELONG_WAREHOUSE, actualException.getMessage()));
     }
 
+    /**
+     * Is valid warehouse method throws exception when id is invalid.
+     *
+     * @throws NotFoundException the not found exception
+     */
     @Test
     @DisplayName("Testa mensagem da exceção quando warehouse não é encontrada")
     void IsValidWarehouseMethod_ThrowsException_WhenIdIsInvalid() throws NotFoundException {
@@ -197,6 +264,11 @@ class InboundOrderServiceTest {
         );
     }
 
+    /**
+     * Is valid announcement method throws exception when id is invalid.
+     *
+     * @throws NotFoundException the not found exception
+     */
     @Test
     @DisplayName("Testa mensagem da exceção quando anuncio não é encontrada")
     void IsValidAnnouncementMethod_ThrowsException_WhenIdIsInvalid() throws NotFoundException {
@@ -208,6 +280,11 @@ class InboundOrderServiceTest {
         );
     }
 
+    /**
+     * Is section method valid throws exception when id is invalid.
+     *
+     * @throws NotFoundException the not found exception
+     */
     @Test
     @DisplayName("Testa mensagem da exceção quando seção não é encontrada")
     void IsSectionMethodValid_ThrowsException_WhenIdIsInvalid() throws NotFoundException {
@@ -220,6 +297,9 @@ class InboundOrderServiceTest {
         );
     }
 
+    /**
+     * Update method return updated inbound order when params are valid.
+     */
     @Test
     @DisplayName("Sucesso ao atualizar inboundOrder")
     void UpdateMethod_ReturnUpdatedInboundOrder_WhenParamsAreValid() {
@@ -253,6 +333,11 @@ class InboundOrderServiceTest {
 
     }
 
+    /**
+     * Valid if inbound order exist method throw exception when id is invalid.
+     *
+     * @throws NotFoundException the not found exception
+     */
     @Test
     @DisplayName("Testa mensagem de erro do metodo ifInboundOrderExist")
     void ValidIfInboundOrderExistMethod_ThrowException_WhenIdIsInvalid() throws NotFoundException {
@@ -265,6 +350,11 @@ class InboundOrderServiceTest {
         );
     }
 
+    /**
+     * Valid batch method throw exception when id is invalid.
+     *
+     * @throws NotFoundException the not found exception
+     */
     @Test
     @DisplayName("Testa metodo IsValidBatch quando id não é encontrado")
     void ValidBatchMethod_ThrowException_WhenIdIsInvalid() throws NotFoundException {
@@ -277,6 +367,11 @@ class InboundOrderServiceTest {
         );
     }
 
+    /**
+     * Is valid warehouse method throws exception when manager is invalid.
+     *
+     * @throws ManagerNotValidException the manager not valid exception
+     */
     @Test
     @DisplayName("Testa mensagem da exceção quando o representante/gerente não é valido")
     void IsValidWarehouseMethod_ThrowsException_WhenManagerIsInvalid() throws ManagerNotValidException {
@@ -293,6 +388,11 @@ class InboundOrderServiceTest {
         );
     }
 
+    /**
+     * Is section method valid throws exception when section type is incorrect.
+     *
+     * @throws SectionTypeException the section type exception
+     */
     @Test
     @DisplayName("Testa mensagem da exceção quando seção é divergente")
     void IsSectionMethodValid_ThrowsException_WhenSectionTypeIsIncorrect() throws SectionTypeException {
@@ -309,6 +409,11 @@ class InboundOrderServiceTest {
         );
     }
 
+    /**
+     * Valid section batch stock update throws exception when section type is incorrect.
+     *
+     * @throws SectionTypeException the section type exception
+     */
     @Test
     @DisplayName("Testa mensagem da exceção quando seção é divergente")
     void ValidSectionBatchStockUpdate_ThrowsException_WhenSectionTypeIsIncorrect() throws SectionTypeException {
@@ -325,6 +430,11 @@ class InboundOrderServiceTest {
         );
     }
 
+    /**
+     * Valid section batch stock update throws exception when volume limit exceeded.
+     *
+     * @throws ActionNotAllowedException the action not allowed exception
+     */
     @Test
     @DisplayName("Testa mensagem da exceção quando seção é divergente")
     void ValidSectionBatchStockUpdate_ThrowsException_WhenVolumeLimitExceeded() throws ActionNotAllowedException {
@@ -346,6 +456,11 @@ class InboundOrderServiceTest {
         );
     }
 
+    /**
+     * Valid section update throws exception when section not found.
+     *
+     * @throws NotFoundException the not found exception
+     */
     @Test
     @DisplayName("Testa se a section existe")
     void ValidSectionUpdate_ThrowsException_WhenSectionNotFound() throws NotFoundException {
@@ -361,6 +476,11 @@ class InboundOrderServiceTest {
         );
     }
 
+    /**
+     * Save method throws exeption when valid batch due date is invalid.
+     *
+     * @throws ActionNotAllowedException the action not allowed exception
+     */
     @Test
     @DisplayName("Exceção quando seção não pertence ao armazém")
     void SaveMethod_ThrowsExeption_WhenValidBatchDueDateIsInvalid() throws ActionNotAllowedException {

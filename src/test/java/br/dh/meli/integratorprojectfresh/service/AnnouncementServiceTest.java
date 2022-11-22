@@ -24,6 +24,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * The type Announcement service test.
+ */
 @ExtendWith(MockitoExtension.class)
 class AnnouncementServiceTest {
     @InjectMocks
@@ -32,13 +35,34 @@ class AnnouncementServiceTest {
     @Mock
     private AnnouncementRepository repository;
 
+    /**
+     * The Response dto.
+     */
     AnnouncementGetResponseDTO responseDTO;
+    /**
+     * The Inbound order.
+     */
     InboundOrder inboundOrder;
+    /**
+     * The Announcement.
+     */
     Announcement announcement;
+    /**
+     * The Batch stock.
+     */
     BatchStock batchStock;
+    /**
+     * The Section.
+     */
     Section section;
+    /**
+     * The Warehouse.
+     */
     Warehouse warehouse;
 
+    /**
+     * Sets up.
+     */
     @BeforeEach
     void setUp() {
         LocalDate manufacturingDate = LocalDate.parse("2021-12-12");
@@ -62,6 +86,9 @@ class AnnouncementServiceTest {
 
     }
 
+    /**
+     * Get announcement by announcement id return new announcement when id is valid.
+     */
     @Test
     @DisplayName("Sucesso ao retornar uma lista de anúncios")
     void GetAnnouncementByAnnouncementId_ReturnNewAnnouncement_WhenIdIsValid() {
@@ -71,6 +98,9 @@ class AnnouncementServiceTest {
 
     }
 
+    /**
+     * Find announcement by batch stock number return batch stock number filter when id and letter are valid.
+     */
     @Test
     @DisplayName("Sucesso ao retornar BatchStockNumber")
     void FindAnnouncementByBatchStockNumber_ReturnBatchStockNumberFilter_WhenIdAndLetterAreValid() {
@@ -79,6 +109,9 @@ class AnnouncementServiceTest {
         assertThat(responseDTO).isNotNull();
     }
 
+    /**
+     * Get announcement by announcement id throws exception when annoucement not found.
+     */
     @Test
     @DisplayName("Erro quando Announcement não existe")
     void GetAnnouncementByAnnouncementId_ThrowsException_WhenAnnoucementNotFound() {
@@ -91,6 +124,9 @@ class AnnouncementServiceTest {
         );
     }
 
+    /**
+     * Find announcement by batch stock number throws exception when annoucement not found.
+     */
     @Test
     @DisplayName("Erro quando Announcement não existe")
     void FindAnnouncementByBatchStockNumber_ThrowsException_WhenAnnoucementNotFound() {
@@ -103,6 +139,11 @@ class AnnouncementServiceTest {
         );
     }
 
+    /**
+     * Find announcement by batch stock number throws exception when letra not found.
+     *
+     * @throws NotFoundException the not found exception
+     */
     @Test
     @DisplayName("Erro quando filtro não existe")
     void FindAnnouncementByBatchStockNumber_ThrowsException_WhenLetraNotFound() throws NotFoundException {
@@ -114,6 +155,5 @@ class AnnouncementServiceTest {
                 () -> Assertions.assertEquals(Msg.LETTER_NOT_VALID, actualException.getMessage())
         );
     }
-
 
 }

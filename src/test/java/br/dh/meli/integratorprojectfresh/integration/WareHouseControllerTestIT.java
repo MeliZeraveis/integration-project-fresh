@@ -21,6 +21,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * The type Ware house controller test it.
+ */
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -38,6 +41,11 @@ public class WareHouseControllerTestIT {
     private WarehouseProductQuantityGetResponseDTO warehouseProductQuantity;
 
 
+    /**
+     * Gets return exception announcement not found announcement id not exist.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @DisplayName("Testa se retorna uma exception ANNOUNCEMENT_NOT_FOUND quando o product_id nao existe")
     void get_ReturnExceptionAnnouncementNotFound_AnnouncementIdNotExist() throws Exception{
@@ -53,6 +61,11 @@ public class WareHouseControllerTestIT {
                 .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.ANNOUNCEMENT_NOT_FOUND)));
     }
 
+    /**
+     * Gets return warehouse product quantity get response dto sucess.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void get_ReturnWarehouseProductQuantityGetResponseDTO_Sucess() throws Exception {
         ResultActions response = mockMvc
