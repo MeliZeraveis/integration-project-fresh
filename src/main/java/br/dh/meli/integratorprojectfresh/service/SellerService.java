@@ -4,6 +4,7 @@ import br.dh.meli.integratorprojectfresh.dto.request.PurchaseOrderFinishedDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.SalesSallerListDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.SellerDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
+import br.dh.meli.integratorprojectfresh.exception.InvalidParamException;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.model.Announcement;
 import br.dh.meli.integratorprojectfresh.model.PurchaseOrder;
@@ -100,6 +101,9 @@ public class SellerService implements ISellerService {
     @Override
     public SalesSallerListDTO getSalesByDate(Long id, LocalDate date1, LocalDate date2) {
         User seller = validateSeller(id);
+        if (date1.isAfter(date2)){
+            throw new InvalidParamException(Msg.DATE_INVALID);
+        }
         totalEarnings = new BigDecimal(0);
         totalProductsSold = 0;
         findSales(seller);
@@ -108,6 +112,10 @@ public class SellerService implements ISellerService {
         purchaseOrdersFinish = purchaseOrdersFinish.stream().filter(p ->  p.getDate().toLocalDate().isAfter(date1)
                         && p.getDate().toLocalDate().isBefore(date2))
                 .distinct().collect(Collectors.toList());
+
+        if (purchaseOrdersFinish.isEmpty()){
+            throw  new NotFoundException(Msg.SALES_NOT_FOUND);
+        }
 
         for (PurchaseOrder p : purchaseOrdersFinish){
              itemsSoldFilter = itemsSold.stream()

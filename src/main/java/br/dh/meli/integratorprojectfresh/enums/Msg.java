@@ -66,4 +66,8 @@ public enum Msg {
 
 
  public  static final String SELLER_NOT_HAS_AD = "Seller has no ads posted.";
+
+ public  static  final String SALES_NOT_FOUND = "Sales not found.";
+
+ public  static  final String DATE_INVALID = "'date1' must be earlier than 'date2'";
 }
