@@ -33,12 +33,22 @@ Esta API está inserida no contexto de venda de produtos frescos, refrigerados e
 ## 📄 Requisitos Obrigatórios 
 
 01 Inserir o lote no armazém de atendimento;
+
 02 Adicionar produto ao carrinho de compras;
+
 03 Verificar a localização de um produto no armazém;
+
 04 Consultar o estoque de um produto em todos os armazéns;
+
 05 Consultar a data de validade por lote
+
 06 Requisito individual: 
+
 Filtro de produtos por preço;
+
 Filtro de produtos por nome;
+
 Inserir novo produto no marketplace;
+
 Editar produto existente no marketplace;
+
