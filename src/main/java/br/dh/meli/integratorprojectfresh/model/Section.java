@@ -11,6 +11,9 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Section.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -24,7 +27,6 @@ public class Section {
     private Long sectionCode;
 
     @Column(name = "type", nullable = false, length = 50)
-//    @Enumerated(EnumType.STRING)
     private String type;
 
     @Column(name = "max_capacity", nullable = false)
@@ -49,6 +51,15 @@ public class Section {
     @JsonIgnoreProperties("section")
     private Warehouse warehouse;
 
+    /**
+     * Instantiates a new Section.
+     *
+     * @param sectionCode     the section code
+     * @param type            the type
+     * @param maxCapacity     the max capacity
+     * @param usedCapacity    the used capacity
+     * @param listAnnoucement the list annoucement
+     */
     public Section(long sectionCode, String type, float maxCapacity, float usedCapacity, ArrayList<Announcement> listAnnoucement) {
     this.sectionCode = sectionCode;
     this.type = type;

@@ -19,11 +19,32 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * The interface Batch stock service.
+ */
 public interface IBatchStockService {
+    /**
+     * Gets batch stock by batch stock id.
+     *
+     * @param numberOfDays the number of days
+     * @param sectionCode  the section code
+     * @return the batch stock by batch stock id
+     */
     BatchStockGetResponseDTO getBatchStockByBatchStockId(Integer numberOfDays, Long sectionCode);
 
+    /**
+     * Find batch stock by batch stock number batch stock get response dto.
+     *
+     * @param numberOfDays the number of days
+     * @param category     the category
+     * @param order        the order
+     * @return the batch stock get response dto
+     */
     BatchStockGetResponseDTO findBatchStockByBatchStockNumber(Integer numberOfDays, String category, String order);
 
+    /**
+     * The type Batch stock service.
+     */
     @Service
     @RequiredArgsConstructor
     class BatchStockService implements IBatchStockService {
@@ -81,6 +102,9 @@ public interface IBatchStockService {
         }
     }
 
+    /**
+     * The type Announcement service.
+     */
     @Service
     @RequiredArgsConstructor
     class AnnouncementService implements IAnnouncementService {

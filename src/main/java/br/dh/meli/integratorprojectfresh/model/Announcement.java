@@ -1,6 +1,5 @@
 package br.dh.meli.integratorprojectfresh.model;
 
-import br.dh.meli.integratorprojectfresh.enums.Sections;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -10,9 +9,11 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Announcement.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -66,6 +67,15 @@ public class Announcement {
     @JsonIgnoreProperties("announcement")
     private List<Review> review;
 
+    /**
+     * Instantiates a new Announcement.
+     *
+     * @param name        the name
+     * @param description the description
+     * @param sellerId    the seller id
+     * @param price       the price
+     * @param sectionCode the section code
+     */
     public Announcement(String name, String description, Long sellerId, BigDecimal price, Long sectionCode) {
         this.name = name;
         this.description = description;

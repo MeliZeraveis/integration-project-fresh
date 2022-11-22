@@ -12,14 +12,14 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
+/**
+ * The type Warehouse service.
+ */
 @Service
 @RequiredArgsConstructor
 public class WarehouseService implements IWareshouseService {
 
-
     private final AnnouncementRepository announcementRepo;
-
 
     @Override
     public WarehouseProductQuantityGetResponseDTO getWarehouseProductsQuantityListByAnnoucementId(Long announcementId) {

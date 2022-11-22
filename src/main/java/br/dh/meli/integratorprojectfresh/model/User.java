@@ -1,7 +1,5 @@
 package br.dh.meli.integratorprojectfresh.model;
 
-import br.dh.meli.integratorprojectfresh.enums.Roles;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,6 +9,9 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.List;
 
+/**
+ * The type User.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -33,7 +34,6 @@ public class User {
     private String email;
 
     @Column(name = "role", nullable = false, length = 30)
-    // @Enumerated(EnumType.STRING)
     private String role;
 
     @OneToOne(mappedBy = "manager")
@@ -48,6 +48,15 @@ public class User {
     @JsonIgnoreProperties("user")
     private List<Review> review;
 
+    /**
+     * Instantiates a new User.
+     *
+     * @param id       the id
+     * @param username the username
+     * @param password the password
+     * @param email    the email
+     * @param role     the role
+     */
     public User(long id, String username, String password, String email, String role) {
         this.userId = id;
         this.username = username;

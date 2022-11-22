@@ -11,6 +11,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * The type Purchase order.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -44,6 +47,14 @@ public class PurchaseOrder {
   @JsonIgnoreProperties("purchaseOrder")
   private List<PurchaseOrderItems> orderItem;
 
+  /**
+   * Instantiates a new Purchase order.
+   *
+   * @param date    the date
+   * @param status  the status
+   * @param total   the total
+   * @param buyerId the buyer id
+   */
   public PurchaseOrder(LocalDateTime date, String status, BigDecimal total, Long buyerId) {
     this.date = date;
     this.status = status;

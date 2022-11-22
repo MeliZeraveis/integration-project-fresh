@@ -9,6 +9,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+/**
+ * The type Review.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -43,7 +46,11 @@ public class Review {
     @JsonIgnoreProperties("review")
     private User user;
 
-
+    /**
+     * Instantiates a new Review.
+     *
+     * @param review the review
+     */
     public Review(ReviewDTO review) {
         this.grade = review.getGrade();
         this.comment = review.getComment();
@@ -51,6 +58,12 @@ public class Review {
         this.userId = review.getUserId();
     }
 
+    /**
+     * Instantiates a new Review.
+     *
+     * @param reviewDTO the review dto
+     * @param reviewId  the review id
+     */
     public Review(ReviewDTO reviewDTO, Long reviewId) {
         this.reviewId = reviewId;
         this.grade = reviewDTO.getGrade();

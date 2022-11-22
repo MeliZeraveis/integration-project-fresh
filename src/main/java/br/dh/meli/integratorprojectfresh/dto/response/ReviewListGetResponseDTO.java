@@ -8,6 +8,9 @@ import lombok.Setter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The type Review list get response dto.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,6 +18,11 @@ public class ReviewListGetResponseDTO {
    private Long announcementId;
    private List<ReviewListGetDTO> reviews;
 
+    /**
+     * Instantiates a new Review list get response dto.
+     *
+     * @param reviews the reviews
+     */
     public ReviewListGetResponseDTO(List<Review> reviews) {
            this.announcementId = announcementId;
             this.reviews = reviews.stream().map(ReviewListGetDTO::new).collect(Collectors.toList());

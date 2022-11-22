@@ -1,8 +1,6 @@
 package br.dh.meli.integratorprojectfresh.service;
 
-import br.dh.meli.integratorprojectfresh.dto.request.ReviewDTO;
 import br.dh.meli.integratorprojectfresh.dto.request.ReviewRequestDTO;
-//import br.dh.meli.integratorprojectfresh.dto.response.ReviewListPostResponseDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.*;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.exception.ActionNotAllowedException;
@@ -21,6 +19,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * The type Review service.
+ */
 @Service
 @RequiredArgsConstructor
 public class ReviewService implements IReviewService {
@@ -29,6 +30,11 @@ public class ReviewService implements IReviewService {
     private final UserRepository userRepo;
     private final PurchaseOrderRepository purchaseOrderRepo;
 
+    /**
+     * Valid if announcement exist.
+     *
+     * @param announcementId the announcement id
+     */
     void validIfAnnouncementExist(Long announcementId) {
         Optional<Announcement> announcement = announcementRepo.findById(announcementId);
         if (announcement.isEmpty()) {
@@ -36,6 +42,12 @@ public class ReviewService implements IReviewService {
         }
     }
 
+    /**
+     * Valid if purchase order is approved.
+     *
+     * @param announcementId the announcement id
+     * @param buyerId        the buyer id
+     */
     void validIfPurchaseOrderIsApproved(Long announcementId, Long buyerId) {
         List<PurchaseOrder> purchaseOrder = purchaseOrderRepo.findByAnnouncementIdAndBuyerId(announcementId, buyerId);
         if (purchaseOrder.isEmpty()) {
@@ -43,6 +55,12 @@ public class ReviewService implements IReviewService {
         }
     }
 
+    /**
+     * Valid if review exist.
+     *
+     * @param reviewId the review id
+     * @throws NotFoundException the not found exception
+     */
     void validIfReviewExist(Long reviewId) throws NotFoundException {
         if(reviewRepo.findById(reviewId).isEmpty()) {
             throw new NotFoundException(Msg.REVIEW_NOT_FOUND);
