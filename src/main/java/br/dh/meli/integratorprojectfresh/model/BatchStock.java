@@ -61,6 +61,12 @@ public class BatchStock {
         @JsonIgnoreProperties(value = {"batchStock", "warehouse"})
         private InboundOrder inboundOrder;
 
+        @ManyToOne(fetch = FetchType.EAGER)
+        @JoinColumn(name = "order_number_id", insertable = false, updatable = false)
+        @JsonIgnore
+        @JsonIgnoreProperties(value = {"batchStock", "warehouse"})
+        private OutboundOrder outboundOrder;
+
         @ManyToOne(fetch = FetchType.LAZY)
         @JsonIgnore
         @JoinColumn(name = "announcement_id", insertable = false, updatable = false)
