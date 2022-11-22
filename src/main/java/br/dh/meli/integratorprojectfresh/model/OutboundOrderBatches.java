@@ -1,6 +1,5 @@
 package br.dh.meli.integratorprojectfresh.model;
 
-import br.dh.meli.integratorprojectfresh.dto.request.BatchStockDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -70,90 +69,20 @@ public class OutboundOrderBatches {
   private Announcement announcement;
 
   /**
-   * Instantiates a new Outbound order batches.
+   * Instantiates a new Outbound order batch.
    *
-   * @param a           the a
-   * @param orderNumber the order number
+   * @param batch the batch data
    */
-  public OutboundOrderBatches(BatchStockDTO a, Long orderNumber) {
-    this.announcementId = a.getAnnouncementId();
-    this.sectionType = a.getSectionType();
-    this.manufacturingDate = a.getManufacturingDate();
-    this.dueDate = a.getDueDate();
-    this.productQuantity = a.getProductQuantity();
-    this.price = a.getPrice();
-    this.volume = a.getVolume();
-    this.orderNumberId = orderNumber;
-    this.manufacturingTime =  a.getManufacturingTime();
-  }
-
-  /**
-   * Instantiates a new Outbound order batches.
-   *
-   * @param a           the a
-   * @param orderNumber the order number
-   * @param batchNumber the batch number
-   */
-  public OutboundOrderBatches(BatchStockDTO a, Long orderNumber, Long batchNumber) {
-    this.batchNumber = batchNumber;
-    this.announcementId = a.getAnnouncementId();
-    this.sectionType = a.getSectionType();
-    this.manufacturingDate = a.getManufacturingDate();
-    this.dueDate = a.getDueDate();
-    this.productQuantity = a.getProductQuantity();
-    this.price = a.getPrice();
-    this.volume = a.getVolume();
-    this.orderNumberId = orderNumber;
-    this.manufacturingTime = a.getManufacturingTime();
-  }
-
-  /**
-   * Instantiates a new Outbound order batches.
-   *
-   * @param announcementId    the announcement id
-   * @param sectionType       the section type
-   * @param productQuantity   the product quantity
-   * @param manufacturingDate the manufacturing date
-   * @param manufacturingTime the manufacturing time
-   * @param volume            the volume
-   * @param dueDate           the due date
-   * @param price             the price
-   */
-  public OutboundOrderBatches(Long announcementId, String sectionType, int productQuantity, LocalDate manufacturingDate, LocalDateTime manufacturingTime, Float volume, LocalDate dueDate, BigDecimal price) {
-    this.announcementId = announcementId;
-    this.sectionType = sectionType;
-    this.productQuantity = productQuantity;
-    this.manufacturingDate = manufacturingDate;
-    this.manufacturingTime = manufacturingTime;
-    this.volume = volume;
-    this.dueDate = dueDate;
-    this.price = price;
-  }
-
-  /**
-   * Instantiates a new Outbound order batches.
-   *
-   * @param batchNumber       the batch number
-   * @param announcementId    the announcement id
-   * @param sectionType       the section type
-   * @param productQuantity   the product quantity
-   * @param manufacturingDate the manufacturing date
-   * @param manufacturingTime the manufacturing time
-   * @param volume            the volume
-   * @param dueDate           the due date
-   * @param price             the price
-   * @param inboundOrder      the inbound order
-   */
-  public OutboundOrderBatches(long batchNumber, long announcementId, String sectionType, int productQuantity, LocalDate manufacturingDate, LocalDateTime manufacturingTime, float volume, LocalDate dueDate, BigDecimal price, InboundOrder inboundOrder) {
-    this.batchNumber = batchNumber;
-    this.announcementId = announcementId;
-    this.sectionType = sectionType;
-    this.productQuantity = productQuantity;
-    this.manufacturingDate = manufacturingDate;
-    this.manufacturingTime = manufacturingTime;
-    this.volume = volume;
-    this.dueDate = dueDate;
-    this.price = price;
+  public OutboundOrderBatches(BatchStock batch) {
+    this.announcementId = batch.getAnnouncementId();
+    this.sectionType = batch.getSectionType();
+    this.manufacturingDate = batch.getManufacturingDate();
+    this.manufacturingTime =  batch.getManufacturingTime();
+    this.productQuantity = batch.getProductQuantity();
+    this.volume = batch.getVolume();
+    this.dueDate = batch.getDueDate();
+    this.price = batch.getPrice();
+    this.orderNumberId = batch.getOrderNumberId();
   }
 
   /**

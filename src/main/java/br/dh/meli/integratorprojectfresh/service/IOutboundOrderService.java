@@ -2,10 +2,7 @@ package br.dh.meli.integratorprojectfresh.service;
 
 import br.dh.meli.integratorprojectfresh.dto.request.OutboundOrderRequestDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.BatchStockGetResponseDTO;
-import br.dh.meli.integratorprojectfresh.dto.response.OutboundOrderPostResponseDTO;
-import br.dh.meli.integratorprojectfresh.dto.response.OutboundOrderPutResponseDTO;
-
-import java.util.List;
+import br.dh.meli.integratorprojectfresh.dto.response.OutboundOrderResponseDTO;
 
 /**
  * The interface for Outbound orders service.
@@ -24,7 +21,7 @@ public interface IOutboundOrderService {
    * @param outboundOrder the outbound order
    * @return the outbound order post response DTO
    */
-  OutboundOrderPostResponseDTO save(OutboundOrderRequestDTO outboundOrder);
+  OutboundOrderResponseDTO save(OutboundOrderRequestDTO outboundOrder);
 
   /**
    * Update outbound order put response DTO.
@@ -32,6 +29,6 @@ public interface IOutboundOrderService {
    * @param outboundOrder the outbound order
    * @return the outbound order put response DTO
    */
-  OutboundOrderPutResponseDTO update(OutboundOrderRequestDTO outboundOrder);
+  OutboundOrderResponseDTO update(OutboundOrderRequestDTO outboundOrder);
 }
 
