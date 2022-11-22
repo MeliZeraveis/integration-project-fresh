@@ -17,4 +17,12 @@ public class SectionDetailResponseDTO {
     private float usedCapacity;
     private Long warehouseCode;
     private String type;
+
+    public SectionDetailResponseDTO(Section section) {
+        this.sectionCode = section.getSectionCode();
+        this.maxCapacity = section.getMaxCapacity();
+        this.usedCapacity = section.getUsedCapacity();
+        this.warehouseCode = section.getWarehouseCode();
+        this.type = section.getType();
+    }
 }

@@ -33,6 +33,7 @@ public enum Msg {
   public static final String SECTION_ORDER_ALREADY_APPROVED = "Purchase Order already approved.";
   public static final String MAX_CAPACITY_NOT_NULL = "Max capacity cannot be null.";
   public static final String MAX_CAPACITY_POSITIVE = "Max capacity requested is not positive.";
+  public static final String ORDER_TYPE_NOT_FOUND = "Order type not found.";
 
   public static final String LETTER_NOT_VALID = "The letter must to be L, V or Q";
   public static final String LIMIT_CAPACITY_SECTION = "Total sector capacity limit exceeded.";
