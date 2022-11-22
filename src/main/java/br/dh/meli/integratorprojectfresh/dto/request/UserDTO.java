@@ -1,6 +1,8 @@
 package br.dh.meli.integratorprojectfresh.dto.request;
 
+import br.dh.meli.integratorprojectfresh.annotations.OneOf;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
+import br.dh.meli.integratorprojectfresh.enums.Roles;
 import br.dh.meli.integratorprojectfresh.model.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,6 +34,7 @@ public class UserDTO {
     private String email;
 
     @NotNull(message = Msg.ROLE_REQUIRED)
+    @OneOf(value = {Roles.SELLER, Roles.MANAGER, Roles.BUYER}, message = Msg.ROLE_IS_NOT_EXIST)
     private String role;
 
     public UserDTO(String username, String password, String email, String role) {

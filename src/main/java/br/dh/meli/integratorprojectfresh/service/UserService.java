@@ -3,6 +3,7 @@ package br.dh.meli.integratorprojectfresh.service;
 //import br.dh.meli.integratorprojectfresh.dto.request.UserDTO;
 import br.dh.meli.integratorprojectfresh.dto.request.UserDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
+import br.dh.meli.integratorprojectfresh.enums.Roles;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.model.User;
 import br.dh.meli.integratorprojectfresh.repository.UserRepository;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -39,19 +41,10 @@ public class UserService implements IUserService{
         }
     }
 
-    void validRole(User user) {
-            if(user.getRole().equalsIgnoreCase("manager") || user.getRole().equalsIgnoreCase("buyer") || user.getRole().equalsIgnoreCase("seller")) {
-            }
-            else {
-                throw new NotFoundException(Msg.ROLE_IS_NOT_EXIST);
-            }
-        }
-
     @Override
     public UserDTO save(UserDTO userDTO) {
         User user = new User(userDTO);
         validUserNameAndEmail(user);
-        validRole(user);
         repo.save(user);
         return userDTO;
     }
@@ -65,7 +58,6 @@ public class UserService implements IUserService{
             throw new NotFoundException(Msg.USER_NOT_FOUND);}
         User updateUser = optionalUser.get();
 
-        validRole(newUser);
         update_validUserNameAndEmail(updateUser);
 
         updateUser.setUsername(user.getUsername());

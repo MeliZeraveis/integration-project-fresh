@@ -51,22 +51,6 @@ public class UserServiceTest {
         userList.add(user);
     }
 
-//    @Test
-//    @DisplayName("Erro ao salvar o USER")
-//    void SaveMethod_ThrowsException_WhenUser() throws NotFoundException {
-//        User user1 = new User(1l, "teste", "teste", "email@emai.com", "buyer");
-//        userList.add(user1);
-//        BDDMockito.when(repo.findAll())
-//                .thenReturn(userList);
-//        BDDMockito.when(repo.save(ArgumentMatchers.any()))
-//                .thenReturn(userDTO);
-//
-//
-//        UserDTO userDTO1 = service.save(userDTO);
-//
-//        assertThat(userDTO1).isNotNull();
-//    }
-
     @Test
     @DisplayName("Exceção quando o nome ou o email esta em formato incorreto")
     void SaveMethod_ThrowsExeption_WhenNameOrEmailIncorretFormat() throws ActionNotAllowedException {
