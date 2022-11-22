@@ -70,13 +70,13 @@ public class OutboundOrderService implements IOutboundOrderService {
     batches.forEach(batch -> batch.setOrderNumberId(order.getOrderNumber()));
     batchRepo.saveAllAndFlush(batches);
     batchStockRepo.deleteAllById(outboundOrder.getOutboundOrder().getBatchIds());
-  
+
     return read(order.getOrderNumber());
   }
 
   @Override
   public OutboundOrderResponseDTO update(OutboundOrderRequestDTO outboundOrder) {
-    OutboundOrder order = orderRepo.findById(outboundOrder.getOutboundOrder().getOrderNumber())
+    orderRepo.findById(outboundOrder.getOutboundOrder().getOrderNumber())
             .orElseThrow(() -> new NotFoundException(Msg.OUTBOUND_ORDER_NOT_FOUND));
     return save(outboundOrder);
   }
