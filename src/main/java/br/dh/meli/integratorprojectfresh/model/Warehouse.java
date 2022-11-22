@@ -44,4 +44,5 @@ public class Warehouse {
     @JoinColumn(name = "manager_id")
     private User manager;
 
+
 }

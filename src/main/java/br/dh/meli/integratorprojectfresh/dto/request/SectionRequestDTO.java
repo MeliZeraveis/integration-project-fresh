@@ -2,18 +2,19 @@ package br.dh.meli.integratorprojectfresh.dto.request;
 
 import br.dh.meli.integratorprojectfresh.annotations.OneOf;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
-import br.dh.meli.integratorprojectfresh.model.BatchStock;
 import br.dh.meli.integratorprojectfresh.model.Section;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class SectionRequestDTO {
     @NotNull
     private float maxCapacity;
@@ -24,6 +25,7 @@ public class SectionRequestDTO {
     @NotNull
     private Long warehouseCode;
 
+    @NotEmpty
     @OneOf(value = {"Fresh", "Frozen", "Refrigerated"}, message = Msg.SECTION_NOT_VALID)
     private String type;
 

@@ -39,6 +39,7 @@ public class SectionService implements ISectionService {
                 .orElseThrow(() -> new NotFoundException(Msg.SECTION_NOT_FOUND));
 
         Section editSection = new Section(section.getMaxCapacity(), section.getUsedCapacity(), warehouse.getWarehouseCode(), section.getType());
+        editSection.setSectionCode(id);
         Section updatedSection = sectionRepo.save(editSection);
 
         return new SectionResponseDTO(updatedSection);
