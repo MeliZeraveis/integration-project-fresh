@@ -77,8 +77,8 @@ public class AnnouncementController {
    * @return the response entity
    */
 
-    @GetMapping(value = Routes.ANNOUNCEMENT_BY_QUERY_STRING, params = {"productName"})
-  ResponseEntity<List<AnnouncementListResponseDTO>> findAnnouncementByQueryString(@RequestParam String productName) {
+    @GetMapping(value = Routes.ANNOUNCEMENT_BY_PRODUCT_NAME, params = {"productName"})
+  ResponseEntity<List<AnnouncementListResponseDTO>> findAnnouncementByProductName(@RequestParam String productName) {
     List<AnnouncementListResponseDTO> announcement = service.findAnnouncementByQueryString(productName);
     return new ResponseEntity<>(announcement, HttpStatus.OK);
   }
@@ -111,7 +111,7 @@ public class AnnouncementController {
 
   /**
    * create announcement that matches the body
-   * @param announcementRequestDTO
+   * @param announcementRequestDTO the announcement request
    * @return new announcement
    */
 

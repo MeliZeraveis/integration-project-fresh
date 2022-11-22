@@ -9,7 +9,7 @@ public class Routes {
   public static final String PRODUCT_LIST = "/list";
   public static final String PRODUCT_LIST_BATCH = "/list/batch";
   public static final String PURCHASE_ORDER = "/orders";
-  public static final String ANNOUNCEMENT_BY_QUERY_STRING = "/list/query";
+  public static final String ANNOUNCEMENT_BY_PRODUCT_NAME = "/list/product-name";
   public static final String ANNOUNCEMENT_BY_PRICE = "/list/price";
   public static final String ANNOUNCEMENT_UPDATE = "/update";
   public static final String ANNOUNCEMENT_SAVE = "/save";

@@ -66,4 +66,8 @@ public enum Msg {
   public static final String SELLER_NOT_FOUND = "Seller not found.";
   public static final String USER_NOT_AUTHORIZED = "User not authorized.";
   public static final String ANNOUNCEMENT_ALREADY_EXISTS = "Announcement already exists.";
+  public static final String NAME_NOT_BLANK = "Product name cannot be blank.";
+  public static final String DESCRIPTION_NOT_BLANK = "Description cannot be blank.";
+  public static final String PRICE_NOT_NULL = "Price cannot be null.";
+  public static final String SELLER_NOT_NULL = "Seller cannot be null.";
 }
