@@ -52,7 +52,6 @@ public class UserService implements IUserService{
     @Override
     public UserDTO update(UserDTO user, Long id) {
         Optional<User> optionalUser = repo.findById(id);
-       User newUser = new User(user);
 
         if (optionalUser.isEmpty()){
             throw new NotFoundException(Msg.USER_NOT_FOUND);}
