@@ -212,5 +212,42 @@ public class ReviewControllerTestIT {
         response.andExpect(status().isNotFound());
     }
 
+    /**
+     * Gets all reviews filter.
+     *
+     * @throws Exception the exception
+     */
+    @Test
+    @DisplayName("Deve retornar 200 quando buscar  uma lista de reviews por id do anúncio e filtro de nota")
+    void getAllReviewsFilter() throws Exception{
+        ResultActions response = mockMvc
+                .perform(get("/api/v1/fresh-product/review/list/grade")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("announcementId", "2")
+                        .param("reviewGrade", "4"))
+                .andDo(print());
+        response.andExpect(status().isOk());
+    }
+
+    /**
+     * Gets all reviews filter invalid.
+     *
+     * @throws Exception the exception
+     */
+    @Test
+    @DisplayName("Deve retornar 404 quando buscar  uma lista de reviews por id do anúncio e filtro de nota inexistente")
+    void getAllReviewsFilterInvalid() throws Exception{
+        ResultActions response = mockMvc
+                .perform(get("/api/v1/fresh-product/review/list/grade")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("announcementId", "0")
+                        .param("reviewGrade", "4"))
+                .andDo(print());
+        response.andExpect(status().isNotFound());
+    }
+
+
+
+
 }
 

@@ -1,9 +1,8 @@
 package br.dh.meli.integratorprojectfresh.controller;
 
 import br.dh.meli.integratorprojectfresh.dto.request.ReviewRequestDTO;
-import br.dh.meli.integratorprojectfresh.dto.response.ReviewGetResponseDTO;
-import br.dh.meli.integratorprojectfresh.dto.response.ReviewPostResponseDTO;
-import br.dh.meli.integratorprojectfresh.dto.response.ReviewPutResponseDTO;
+import br.dh.meli.integratorprojectfresh.dto.response.*;
+import br.dh.meli.integratorprojectfresh.enums.Routes;
 import br.dh.meli.integratorprojectfresh.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -69,5 +68,19 @@ public class ReviewController {
     @GetMapping("/review/list")
     public ResponseEntity<List<ReviewGetResponseDTO>> getAllReviews(@RequestParam Long announcementId) {
         return new ResponseEntity<>(reviewService.getAllReviews(announcementId), HttpStatus.OK);
+    }
+
+    /**
+     * Find review by review grade response entity.
+     *
+     * @param announcementId the announcement id
+     * @param reviewGrade    the review grade
+     * @return the response entity
+     */
+    @GetMapping("review/list/grade")
+    @ResponseBody
+    public ResponseEntity<List<ReviewGetResponseDTO>> findReviewByReviewGrade(@RequestParam Long announcementId, @RequestParam Integer reviewGrade) {
+        List<ReviewGetResponseDTO> review = reviewService.findReviewByReviewGrade(announcementId, reviewGrade);
+        return new ResponseEntity<>(review, HttpStatus.OK);
     }
 }

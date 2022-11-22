@@ -19,9 +19,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/**
- * The type Review service.
- */
 @Service
 @RequiredArgsConstructor
 public class ReviewService implements IReviewService {
@@ -30,11 +27,6 @@ public class ReviewService implements IReviewService {
     private final UserRepository userRepo;
     private final PurchaseOrderRepository purchaseOrderRepo;
 
-    /**
-     * Valid if announcement exist.
-     *
-     * @param announcementId the announcement id
-     */
     void validIfAnnouncementExist(Long announcementId) {
         Optional<Announcement> announcement = announcementRepo.findById(announcementId);
         if (announcement.isEmpty()) {
@@ -42,12 +34,6 @@ public class ReviewService implements IReviewService {
         }
     }
 
-    /**
-     * Valid if purchase order is approved.
-     *
-     * @param announcementId the announcement id
-     * @param buyerId        the buyer id
-     */
     void validIfPurchaseOrderIsApproved(Long announcementId, Long buyerId) {
         List<PurchaseOrder> purchaseOrder = purchaseOrderRepo.findByAnnouncementIdAndBuyerId(announcementId, buyerId);
         if (purchaseOrder.isEmpty()) {
@@ -55,12 +41,6 @@ public class ReviewService implements IReviewService {
         }
     }
 
-    /**
-     * Valid if review exist.
-     *
-     * @param reviewId the review id
-     * @throws NotFoundException the not found exception
-     */
     void validIfReviewExist(Long reviewId) throws NotFoundException {
         if(reviewRepo.findById(reviewId).isEmpty()) {
             throw new NotFoundException(Msg.REVIEW_NOT_FOUND);
@@ -102,6 +82,27 @@ public class ReviewService implements IReviewService {
             throw new NotFoundException(Msg.REVIEW_NOT_FOUND);
         }
         return reviews.stream().map(ReviewGetResponseDTO::new).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ReviewGetResponseDTO> findReviewByReviewGrade(Long announcementId, Integer reviewGrade) {
+        List<Review> reviews = reviewRepo.findAllByAnnouncementId(announcementId);
+        if(reviews.isEmpty()) {
+            throw new NotFoundException(Msg.REVIEW_NOT_FOUND);
+        }
+        if(reviewGrade < 1 || reviewGrade > 5) {
+            throw new ActionNotAllowedException(Msg.REVIEW_GRADE_NOT_ALLOWED);
+        }
+
+        List<ReviewGetResponseDTO> reviewsFilter = reviews.stream()
+                .filter(review -> review.getGrade().equals(reviewGrade))
+                .map(ReviewGetResponseDTO::new)
+                .collect(Collectors.toList());
+        if(reviewsFilter.isEmpty()) {
+            throw new NotFoundException(Msg.REVIEW_NOT_FOUND);
+        }
+        return reviewsFilter;
+
     }
 }
 

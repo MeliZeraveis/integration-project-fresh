@@ -16,6 +16,7 @@ import br.dh.meli.integratorprojectfresh.repository.PurchaseOrderRepository;
 import br.dh.meli.integratorprojectfresh.repository.ReviewRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -104,8 +105,8 @@ class ReviewServiceTest {
         reviewPostResponseDTO = new ReviewPostResponseDTO(review);
         reviewPutResponseDTO = new ReviewPutResponseDTO(review);
     }
-
-   /* @Test
+/*
+    @Test
     void SaveMethod_ReturnNewReview_WhenParamsAreValid() {
         BDDMockito.when(announcementRepository.findById(2L))
                 .thenReturn(java.util.Optional.ofNullable(announcement));
@@ -165,4 +166,41 @@ class ReviewServiceTest {
         assertAll(
                 () -> Assertions.assertEquals(Msg.REVIEW_NOT_FOUND, actualException.getMessage()));
     }
+
+    @Test
+    @DisplayName("Erro quando Announcement não existe")
+    void FindAllByAnnouncementId_ThrowsException_WhenAnnoucementIsEmpty() throws NotFoundException {
+
+        final var actualException = assertThrows(
+                NotFoundException.class,
+                () -> reviewService.getAllReviews(2L));
+        assertAll(
+                () -> assertEquals(Msg.REVIEW_NOT_FOUND, actualException.getMessage())
+
+        );
+    }
+
+    @Test
+    @DisplayName("Erro quando filtro não existe")
+    void FindReviewByFilter_ThrowsException_WhenFilterIsEmpty() throws NotFoundException {
+
+        final var actualException = assertThrows(
+                NotFoundException.class,
+                () -> reviewService.findReviewByReviewGrade(2L, 1));
+        assertAll(
+                () -> assertEquals(Msg.REVIEW_NOT_FOUND, actualException.getMessage())
+
+        );
+
+    }
+
+    /*
+    @Test
+    @DisplayName("Erro quando filtro não é permitido")
+    void FindReviewByFilter_ThrowsException_WhenFilterIsInvalid() throws ActionNotAllowedException {
+        BDDMockito.when(reviewService.findReviewByReviewGrade(2L, 6))
+                .thenReturn(java.util.Optional.ofNullable(ArgumentMatchers.any()));
+
+
+*/
 }

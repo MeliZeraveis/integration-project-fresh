@@ -62,4 +62,5 @@ public enum Msg {
   public static final String USER_ID_REQUIRED = "User ID is required.";
   public static final String REVIEW_NOT_FOUND = "Review not found.";
   public static final String PURCHASE_ORDER_NOT_APPROVED = "Purchase Order is not approved.";
+    public static final String REVIEW_GRADE_NOT_ALLOWED = "Review grade is not allowed.";
 }
