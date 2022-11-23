@@ -10,13 +10,39 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.ElementType.TYPE_USE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * The interface One of.
+ */
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 @Documented
 @Constraint(validatedBy = OneOfValidator.class)
 public @interface OneOf {
-  String message() default "must be one of the values in the list: {values}";
+    /**
+     * Message string.
+     *
+     * @return the string
+     */
+    String message() default "must be one of the values in the list: {values}";
+
+    /**
+     * Groups class [ ].
+     *
+     * @return the class [ ]
+     */
     Class<?>[] groups() default {};
+
+    /**
+     * Payload class [ ].
+     *
+     * @return the class [ ]
+     */
     Class<? extends Payload>[] payload() default {};
+
+    /**
+     * Value string [ ].
+     *
+     * @return the string [ ]
+     */
     String[] value() default {};
 }

@@ -15,6 +15,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * The type Batch stock.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -67,7 +70,13 @@ public class BatchStock {
         @JsonIgnoreProperties("batchStock")
         private Announcement announcement;
 
-        public BatchStock(BatchStockDTO a, Long orderNumber) {
+    /**
+     * Instantiates a new Batch stock.
+     *
+     * @param a           the a
+     * @param orderNumber the order number
+     */
+    public BatchStock(BatchStockDTO a, Long orderNumber) {
                 this.announcementId = a.getAnnouncementId();
                 this.sectionType = a.getSectionType();
                 this.manufacturingDate = a.getManufacturingDate();
@@ -79,7 +88,14 @@ public class BatchStock {
                 this.manufacturingTime =  a.getManufacturingTime();
         }
 
-        public BatchStock(BatchStockDTO a, Long orderNumber, Long batchNumber) {
+    /**
+     * Instantiates a new Batch stock.
+     *
+     * @param a           the a
+     * @param orderNumber the order number
+     * @param batchNumber the batch number
+     */
+    public BatchStock(BatchStockDTO a, Long orderNumber, Long batchNumber) {
                 this.batchNumber = batchNumber;
                 this.announcementId = a.getAnnouncementId();
                 this.sectionType = a.getSectionType();
@@ -92,7 +108,19 @@ public class BatchStock {
                 this.manufacturingTime = a.getManufacturingTime();
         }
 
-        public BatchStock(Long announcementId, String sectionType, int productQuantity, LocalDate manufacturingDate, LocalDateTime manufacturingTime, Float volume, LocalDate dueDate, BigDecimal price) {
+    /**
+     * Instantiates a new Batch stock.
+     *
+     * @param announcementId    the announcement id
+     * @param sectionType       the section type
+     * @param productQuantity   the product quantity
+     * @param manufacturingDate the manufacturing date
+     * @param manufacturingTime the manufacturing time
+     * @param volume            the volume
+     * @param dueDate           the due date
+     * @param price             the price
+     */
+    public BatchStock(Long announcementId, String sectionType, int productQuantity, LocalDate manufacturingDate, LocalDateTime manufacturingTime, Float volume, LocalDate dueDate, BigDecimal price) {
                 this.announcementId = announcementId;
                 this.sectionType = sectionType;
                 this.productQuantity = productQuantity;
@@ -103,7 +131,21 @@ public class BatchStock {
                 this.price = price;
         }
 
-        public BatchStock(long batchNumber, long announcementId, String sectionType, int productQuantity, LocalDate manufacturingDate, LocalDateTime manufacturingTime, float volume, LocalDate dueDate, BigDecimal price, InboundOrder inboundOrder) {
+    /**
+     * Instantiates a new Batch stock.
+     *
+     * @param batchNumber       the batch number
+     * @param announcementId    the announcement id
+     * @param sectionType       the section type
+     * @param productQuantity   the product quantity
+     * @param manufacturingDate the manufacturing date
+     * @param manufacturingTime the manufacturing time
+     * @param volume            the volume
+     * @param dueDate           the due date
+     * @param price             the price
+     * @param inboundOrder      the inbound order
+     */
+    public BatchStock(long batchNumber, long announcementId, String sectionType, int productQuantity, LocalDate manufacturingDate, LocalDateTime manufacturingTime, float volume, LocalDate dueDate, BigDecimal price, InboundOrder inboundOrder) {
                 this.batchNumber = batchNumber;
                 this.announcementId = announcementId;
                 this.sectionType = sectionType;

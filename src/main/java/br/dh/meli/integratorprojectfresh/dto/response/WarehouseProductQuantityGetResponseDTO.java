@@ -10,14 +10,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The type Warehouse product quantity get response dto.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
 public class WarehouseProductQuantityGetResponseDTO {
 
+    /**
+     * The Product id.
+     */
     public Long productId;
+    /**
+     * The Warehouses.
+     */
     public List<BatchStockQuantityResponseDTO> warehouses;
 
+    /**
+     * Instantiates a new Warehouse product quantity get response dto.
+     *
+     * @param announcement the announcement
+     */
     public WarehouseProductQuantityGetResponseDTO(Announcement announcement) {
         this.warehouses = announcement.getBatchStock().stream()
                 .map(BatchStockQuantityResponseDTO::new)
@@ -25,6 +39,13 @@ public class WarehouseProductQuantityGetResponseDTO {
         this.productId = announcement.getAnnouncementId();
     }
 
+    /**
+     * Instantiates a new Warehouse product quantity get response dto.
+     *
+     * @param announcement the announcement
+     * @param longs        the longs
+     * @param integers     the integers
+     */
     public WarehouseProductQuantityGetResponseDTO(Announcement announcement, List<Long> longs, List<Integer> integers) {
         this.productId = announcement.getAnnouncementId();
         List<BatchStockQuantityResponseDTO> warehouseList = new ArrayList<>();

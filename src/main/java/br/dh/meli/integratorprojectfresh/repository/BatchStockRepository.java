@@ -14,6 +14,7 @@ import java.util.List;
 public interface BatchStockRepository extends JpaRepository<BatchStock, Long> {
     /**
      * Find all by announcement id list.
+     *
      * @param announcementId the announcement id
      * @return the list
      */
@@ -21,6 +22,7 @@ public interface BatchStockRepository extends JpaRepository<BatchStock, Long> {
 
     /**
      * Find all by due date between list.
+     *
      * @param today   today's date
      * @param dueDate the due date
      * @return the list

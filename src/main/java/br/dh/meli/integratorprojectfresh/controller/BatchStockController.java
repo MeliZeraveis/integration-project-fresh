@@ -10,19 +10,37 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * The type Batch stock controller.
+ */
 @RestController
 @RequestMapping("/api/v1/fresh-products/due-date")
 public class BatchStockController {
    @Autowired
     private IBatchStockService service;
 
-   @GetMapping
+    /**
+     * Gets batch stock by batch stock id.
+     *
+     * @param numberOfDays the number of days
+     * @param sectionCode  the section code
+     * @return the batch stock by batch stock id
+     */
+    @GetMapping
    @ResponseBody
     public ResponseEntity<BatchStockGetResponseDTO> getBatchStockByBatchStockId(@RequestParam Integer numberOfDays, @RequestParam Long sectionCode) {
          BatchStockGetResponseDTO batchStock = service.getBatchStockByBatchStockId(numberOfDays, sectionCode);
          return new ResponseEntity<>(batchStock, HttpStatus.OK);
     }
 
+    /**
+     * Find batch stock by batch stock number response entity.
+     *
+     * @param numberOfDays the number of days
+     * @param category     the category
+     * @param order        the order
+     * @return the response entity
+     */
     @GetMapping("/list")
     @ResponseBody
     public ResponseEntity<BatchStockGetResponseDTO> findBatchStockByBatchStockNumber(@RequestParam Integer numberOfDays, @RequestParam String category, @RequestParam String order) {

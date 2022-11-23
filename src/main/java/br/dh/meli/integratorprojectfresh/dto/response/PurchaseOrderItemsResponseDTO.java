@@ -18,6 +18,11 @@ public class PurchaseOrderItemsResponseDTO {
     private Long productId;
     private Integer quantity;
 
+    /**
+     * Instantiates a new Purchase order items response dto.
+     *
+     * @param purchaseOrderItems the purchase order items
+     */
     public PurchaseOrderItemsResponseDTO(PurchaseOrderItems purchaseOrderItems) {
         this.productId = purchaseOrderItems.getAnnouncementId();
         this.quantity = purchaseOrderItems.getProductQuantity();

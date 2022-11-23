@@ -25,23 +25,25 @@ public class AnnouncementGetResponseDTO {
   private Long announcementId;
   private List<BatchStockAnnouncementDTO> batchStock;
 
-  /**
-   * Instantiates a new Announcement GET response DTO.
-   * @param announcement the announcement
-   */
-  public AnnouncementGetResponseDTO(Announcement announcement) {
+    /**
+     * Instantiates a new Announcement GET response DTO.
+     *
+     * @param announcement the announcement
+     */
+    public AnnouncementGetResponseDTO(Announcement announcement) {
     this.announcementId = announcement.getAnnouncementId();
     this.batchStock = announcement.getBatchStock().stream()
             .map(BatchStockAnnouncementDTO::new)
             .collect(Collectors.toList());
   }
 
-  /**
-   * Instantiates a new Announcement get response DTO, sorting by L: batch number, P: product quantity, or V: due date.
-   * @param announcement the announcement
-   * @param sortBy       the criteria to sort the batches by
-   */
-  public AnnouncementGetResponseDTO(Announcement announcement, Character sortBy) {
+    /**
+     * Instantiates a new Announcement get response DTO, sorting by L: batch number, P: product quantity, or V: due date.
+     *
+     * @param announcement the announcement
+     * @param sortBy       the criteria to sort the batches by
+     */
+    public AnnouncementGetResponseDTO(Announcement announcement, Character sortBy) {
     Map<Character, Comparator<BatchStock>> comparators = Map.of(
             'L', Comparator.comparing(BatchStock::getBatchNumber),
             'Q', Comparator.comparingInt(BatchStock::getProductQuantity),

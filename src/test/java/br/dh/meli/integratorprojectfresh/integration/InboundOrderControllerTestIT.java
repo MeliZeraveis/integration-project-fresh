@@ -880,10 +880,11 @@ public class InboundOrderControllerTestIT {
 
         ResultActions response = mockMvc.perform(post("/api/v1/fresh-product/inboundorder")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)));
+                .content(objectMapper.writeValueAsString(inboundOrderRequestDTO)))
+                .andDo(print());
 
         response.andExpect(status().is4xxClientError())
-                .andExpect(jsonPath("$.title", CoreMatchers.is("Action not allowed")))
+               .andExpect(jsonPath("$.title", CoreMatchers.is("Action not allowed")))
                 .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.BATCH_EXPIRED)));
     }
 

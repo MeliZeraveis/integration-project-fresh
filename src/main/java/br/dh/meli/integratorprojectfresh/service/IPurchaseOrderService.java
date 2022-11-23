@@ -11,7 +11,27 @@ import java.util.List;
  * Interface for the Purchase Order Service
  */
 public interface IPurchaseOrderService {
+    /**
+     * Read list.
+     *
+     * @param id the id
+     * @return the list
+     */
     List<PurchaseOrderItemsResponseDTO> read(Long id);
+
+    /**
+     * Save purchase order response dto.
+     *
+     * @param purchaseOrder the purchase order
+     * @return the purchase order response dto
+     */
     PurchaseOrderResponseDTO save(PurchaseOrderRequestDTO purchaseOrder);
+
+    /**
+     * Update purchase order response dto.
+     *
+     * @param id the id
+     * @return the purchase order response dto
+     */
     PurchaseOrderResponseDTO update(Long id);
 }

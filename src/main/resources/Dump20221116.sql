@@ -23,17 +23,17 @@ DROP TABLE IF EXISTS `announcement`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `announcement` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `description` varchar(100) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `price` decimal(11,2) NOT NULL,
-  `section` bigint NOT NULL,
-  `seller_id` bigint NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK7rdhbftg9ekxsn5rvynoun5by` (`section`),
-  KEY `FKkjp0ij7gmr87d524p9mfrylx4` (`seller_id`),
-  CONSTRAINT `FK7rdhbftg9ekxsn5rvynoun5by` FOREIGN KEY (`section`) REFERENCES `section` (`id`),
-  CONSTRAINT `FKkjp0ij7gmr87d524p9mfrylx4` FOREIGN KEY (`seller_id`) REFERENCES `user` (`id`)
+                                `id` bigint NOT NULL AUTO_INCREMENT,
+                                `description` varchar(100) NOT NULL,
+                                `name` varchar(50) NOT NULL,
+                                `price` decimal(11,2) NOT NULL,
+                                `section` bigint NOT NULL,
+                                `seller_id` bigint NOT NULL,
+                                PRIMARY KEY (`id`),
+                                KEY `FK7rdhbftg9ekxsn5rvynoun5by` (`section`),
+                                KEY `FKkjp0ij7gmr87d524p9mfrylx4` (`seller_id`),
+                                CONSTRAINT `FK7rdhbftg9ekxsn5rvynoun5by` FOREIGN KEY (`section`) REFERENCES `section` (`id`),
+                                CONSTRAINT `FKkjp0ij7gmr87d524p9mfrylx4` FOREIGN KEY (`seller_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -55,21 +55,21 @@ DROP TABLE IF EXISTS `batch_stock`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `batch_stock` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `announcement_id` bigint NOT NULL,
-  `due_date` date NOT NULL,
-  `manufacturing_date` date NOT NULL,
-  `manufacturing_time` datetime(6) NOT NULL,
-  `order_number_id` bigint NOT NULL,
-  `price` decimal(19,2) NOT NULL,
-  `product_quantity` int NOT NULL,
-  `section_type` varchar(255) NOT NULL,
-  `volume` float NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK3lts4yvcd4w8xpi15b2ru4cm8` (`announcement_id`),
-  KEY `FK2wl49q6kcl6bpqub3mv0q8upv` (`order_number_id`),
-  CONSTRAINT `FK2wl49q6kcl6bpqub3mv0q8upv` FOREIGN KEY (`order_number_id`) REFERENCES `inbound_order` (`id`),
-  CONSTRAINT `FK3lts4yvcd4w8xpi15b2ru4cm8` FOREIGN KEY (`announcement_id`) REFERENCES `announcement` (`id`)
+                               `id` bigint NOT NULL AUTO_INCREMENT,
+                               `announcement_id` bigint NOT NULL,
+                               `due_date` date NOT NULL,
+                               `manufacturing_date` date NOT NULL,
+                               `manufacturing_time` datetime(6) NOT NULL,
+                               `order_number_id` bigint NOT NULL,
+                               `price` decimal(19,2) NOT NULL,
+                               `product_quantity` int NOT NULL,
+                               `section_type` varchar(255) NOT NULL,
+                               `volume` float NOT NULL,
+                               PRIMARY KEY (`id`),
+                               KEY `FK3lts4yvcd4w8xpi15b2ru4cm8` (`announcement_id`),
+                               KEY `FK2wl49q6kcl6bpqub3mv0q8upv` (`order_number_id`),
+                               CONSTRAINT `FK2wl49q6kcl6bpqub3mv0q8upv` FOREIGN KEY (`order_number_id`) REFERENCES `inbound_order` (`id`),
+                               CONSTRAINT `FK3lts4yvcd4w8xpi15b2ru4cm8` FOREIGN KEY (`announcement_id`) REFERENCES `announcement` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -91,15 +91,15 @@ DROP TABLE IF EXISTS `inbound_order`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `inbound_order` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `order_date` date NOT NULL,
-  `section_code` bigint NOT NULL,
-  `warehouse_code` bigint NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FKf3ycfu0pg4auw1tu7mee2rkbe` (`section_code`),
-  KEY `FKt40w6a2pkaqetpo7gfax7j01l` (`warehouse_code`),
-  CONSTRAINT `FKf3ycfu0pg4auw1tu7mee2rkbe` FOREIGN KEY (`section_code`) REFERENCES `section` (`id`),
-  CONSTRAINT `FKt40w6a2pkaqetpo7gfax7j01l` FOREIGN KEY (`warehouse_code`) REFERENCES `warehouse` (`id`)
+                                 `id` bigint NOT NULL AUTO_INCREMENT,
+                                 `order_date` date NOT NULL,
+                                 `section_code` bigint NOT NULL,
+                                 `warehouse_code` bigint NOT NULL,
+                                 PRIMARY KEY (`id`),
+                                 KEY `FKf3ycfu0pg4auw1tu7mee2rkbe` (`section_code`),
+                                 KEY `FKt40w6a2pkaqetpo7gfax7j01l` (`warehouse_code`),
+                                 CONSTRAINT `FKf3ycfu0pg4auw1tu7mee2rkbe` FOREIGN KEY (`section_code`) REFERENCES `section` (`id`),
+                                 CONSTRAINT `FKt40w6a2pkaqetpo7gfax7j01l` FOREIGN KEY (`warehouse_code`) REFERENCES `warehouse` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -121,14 +121,14 @@ DROP TABLE IF EXISTS `purchase_order`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `purchase_order` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `buyer_id` bigint NOT NULL,
-  `date` datetime(6) NOT NULL,
-  `status` varchar(255) NOT NULL,
-  `total` decimal(19,2) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FKnx7lx9kjhgwik0x63nyk1wnuo` (`buyer_id`),
-  CONSTRAINT `FKnx7lx9kjhgwik0x63nyk1wnuo` FOREIGN KEY (`buyer_id`) REFERENCES `user` (`id`)
+                                  `id` bigint NOT NULL AUTO_INCREMENT,
+                                  `buyer_id` bigint NOT NULL,
+                                  `date` datetime(6) NOT NULL,
+                                  `status` varchar(255) NOT NULL,
+                                  `total` decimal(19,2) NOT NULL,
+                                  PRIMARY KEY (`id`),
+                                  KEY `FKnx7lx9kjhgwik0x63nyk1wnuo` (`buyer_id`),
+                                  CONSTRAINT `FKnx7lx9kjhgwik0x63nyk1wnuo` FOREIGN KEY (`buyer_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -150,16 +150,16 @@ DROP TABLE IF EXISTS `purchase_order_items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `purchase_order_items` (
-  `id` bigint NOT NULL,
-  `announcement_id` bigint NOT NULL,
-  `product_price` double NOT NULL,
-  `product_quantity` int NOT NULL,
-  `purchase_order_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FKh6o5mrr6xdv31e5vxkekur42m` (`announcement_id`),
-  KEY `FKe5vf73k1ouhsxpth3vp7rnfis` (`purchase_order_id`),
-  CONSTRAINT `FKe5vf73k1ouhsxpth3vp7rnfis` FOREIGN KEY (`purchase_order_id`) REFERENCES `purchase_order` (`id`),
-  CONSTRAINT `FKh6o5mrr6xdv31e5vxkekur42m` FOREIGN KEY (`announcement_id`) REFERENCES `announcement` (`id`)
+                                        `id` bigint NOT NULL,
+                                        `announcement_id` bigint NOT NULL,
+                                        `product_price` double NOT NULL,
+                                        `product_quantity` int NOT NULL,
+                                        `purchase_order_id` bigint DEFAULT NULL,
+                                        PRIMARY KEY (`id`),
+                                        KEY `FKh6o5mrr6xdv31e5vxkekur42m` (`announcement_id`),
+                                        KEY `FKe5vf73k1ouhsxpth3vp7rnfis` (`purchase_order_id`),
+                                        CONSTRAINT `FKe5vf73k1ouhsxpth3vp7rnfis` FOREIGN KEY (`purchase_order_id`) REFERENCES `purchase_order` (`id`),
+                                        CONSTRAINT `FKh6o5mrr6xdv31e5vxkekur42m` FOREIGN KEY (`announcement_id`) REFERENCES `announcement` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -181,11 +181,11 @@ DROP TABLE IF EXISTS `section`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `section` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `max_capacity` float NOT NULL,
-  `type` varchar(50) NOT NULL,
-  `used_capacity` float NOT NULL,
-  PRIMARY KEY (`id`)
+                           `id` bigint NOT NULL AUTO_INCREMENT,
+                           `max_capacity` float NOT NULL,
+                           `type` varchar(50) NOT NULL,
+                           `used_capacity` float NOT NULL,
+                           PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -207,12 +207,12 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `email` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
-  `role` varchar(30) NOT NULL,
-  `username` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
+                        `id` bigint NOT NULL AUTO_INCREMENT,
+                        `email` varchar(50) NOT NULL,
+                        `password` varchar(50) NOT NULL,
+                        `role` varchar(30) NOT NULL,
+                        `username` varchar(50) NOT NULL,
+                        PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -234,14 +234,14 @@ DROP TABLE IF EXISTS `warehouse`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `warehouse` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `address` varchar(100) NOT NULL,
-  `country_code` varchar(2) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `manager_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FKmtyr26fo530xqjuttkatdh7xp` (`manager_id`),
-  CONSTRAINT `FKmtyr26fo530xqjuttkatdh7xp` FOREIGN KEY (`manager_id`) REFERENCES `user` (`id`)
+                             `id` bigint NOT NULL AUTO_INCREMENT,
+                             `address` varchar(100) NOT NULL,
+                             `country_code` varchar(2) NOT NULL,
+                             `name` varchar(50) NOT NULL,
+                             `manager_id` bigint DEFAULT NULL,
+                             PRIMARY KEY (`id`),
+                             KEY `FKmtyr26fo530xqjuttkatdh7xp` (`manager_id`),
+                             CONSTRAINT `FKmtyr26fo530xqjuttkatdh7xp` FOREIGN KEY (`manager_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -290,17 +290,17 @@ DROP TABLE IF EXISTS `announcement`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `announcement` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `description` varchar(100) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `price` decimal(11,2) NOT NULL,
-  `section` bigint NOT NULL,
-  `seller_id` bigint NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK7rdhbftg9ekxsn5rvynoun5by` (`section`),
-  KEY `FKkjp0ij7gmr87d524p9mfrylx4` (`seller_id`),
-  CONSTRAINT `FK7rdhbftg9ekxsn5rvynoun5by` FOREIGN KEY (`section`) REFERENCES `section` (`id`),
-  CONSTRAINT `FKkjp0ij7gmr87d524p9mfrylx4` FOREIGN KEY (`seller_id`) REFERENCES `user` (`id`)
+                                `id` bigint NOT NULL AUTO_INCREMENT,
+                                `description` varchar(100) NOT NULL,
+                                `name` varchar(50) NOT NULL,
+                                `price` decimal(11,2) NOT NULL,
+                                `section` bigint NOT NULL,
+                                `seller_id` bigint NOT NULL,
+                                PRIMARY KEY (`id`),
+                                KEY `FK7rdhbftg9ekxsn5rvynoun5by` (`section`),
+                                KEY `FKkjp0ij7gmr87d524p9mfrylx4` (`seller_id`),
+                                CONSTRAINT `FK7rdhbftg9ekxsn5rvynoun5by` FOREIGN KEY (`section`) REFERENCES `section` (`id`),
+                                CONSTRAINT `FKkjp0ij7gmr87d524p9mfrylx4` FOREIGN KEY (`seller_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -322,21 +322,21 @@ DROP TABLE IF EXISTS `batch_stock`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `batch_stock` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `announcement_id` bigint NOT NULL,
-  `due_date` date NOT NULL,
-  `manufacturing_date` date NOT NULL,
-  `manufacturing_time` datetime(6) NOT NULL,
-  `order_number_id` bigint NOT NULL,
-  `price` decimal(19,2) NOT NULL,
-  `product_quantity` int NOT NULL,
-  `section_type` varchar(255) NOT NULL,
-  `volume` float NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK3lts4yvcd4w8xpi15b2ru4cm8` (`announcement_id`),
-  KEY `FK2wl49q6kcl6bpqub3mv0q8upv` (`order_number_id`),
-  CONSTRAINT `FK2wl49q6kcl6bpqub3mv0q8upv` FOREIGN KEY (`order_number_id`) REFERENCES `inbound_order` (`id`),
-  CONSTRAINT `FK3lts4yvcd4w8xpi15b2ru4cm8` FOREIGN KEY (`announcement_id`) REFERENCES `announcement` (`id`)
+                               `id` bigint NOT NULL AUTO_INCREMENT,
+                               `announcement_id` bigint NOT NULL,
+                               `due_date` date NOT NULL,
+                               `manufacturing_date` date NOT NULL,
+                               `manufacturing_time` datetime(6) NOT NULL,
+                               `order_number_id` bigint NOT NULL,
+                               `price` decimal(19,2) NOT NULL,
+                               `product_quantity` int NOT NULL,
+                               `section_type` varchar(255) NOT NULL,
+                               `volume` float NOT NULL,
+                               PRIMARY KEY (`id`),
+                               KEY `FK3lts4yvcd4w8xpi15b2ru4cm8` (`announcement_id`),
+                               KEY `FK2wl49q6kcl6bpqub3mv0q8upv` (`order_number_id`),
+                               CONSTRAINT `FK2wl49q6kcl6bpqub3mv0q8upv` FOREIGN KEY (`order_number_id`) REFERENCES `inbound_order` (`id`),
+                               CONSTRAINT `FK3lts4yvcd4w8xpi15b2ru4cm8` FOREIGN KEY (`announcement_id`) REFERENCES `announcement` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -358,15 +358,15 @@ DROP TABLE IF EXISTS `inbound_order`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `inbound_order` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `order_date` date NOT NULL,
-  `section_code` bigint NOT NULL,
-  `warehouse_code` bigint NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FKf3ycfu0pg4auw1tu7mee2rkbe` (`section_code`),
-  KEY `FKt40w6a2pkaqetpo7gfax7j01l` (`warehouse_code`),
-  CONSTRAINT `FKf3ycfu0pg4auw1tu7mee2rkbe` FOREIGN KEY (`section_code`) REFERENCES `section` (`id`),
-  CONSTRAINT `FKt40w6a2pkaqetpo7gfax7j01l` FOREIGN KEY (`warehouse_code`) REFERENCES `warehouse` (`id`)
+                                 `id` bigint NOT NULL AUTO_INCREMENT,
+                                 `order_date` date NOT NULL,
+                                 `section_code` bigint NOT NULL,
+                                 `warehouse_code` bigint NOT NULL,
+                                 PRIMARY KEY (`id`),
+                                 KEY `FKf3ycfu0pg4auw1tu7mee2rkbe` (`section_code`),
+                                 KEY `FKt40w6a2pkaqetpo7gfax7j01l` (`warehouse_code`),
+                                 CONSTRAINT `FKf3ycfu0pg4auw1tu7mee2rkbe` FOREIGN KEY (`section_code`) REFERENCES `section` (`id`),
+                                 CONSTRAINT `FKt40w6a2pkaqetpo7gfax7j01l` FOREIGN KEY (`warehouse_code`) REFERENCES `warehouse` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -388,14 +388,14 @@ DROP TABLE IF EXISTS `purchase_order`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `purchase_order` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `buyer_id` bigint NOT NULL,
-  `date` datetime(6) NOT NULL,
-  `status` varchar(255) NOT NULL,
-  `total` decimal(19,2) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FKnx7lx9kjhgwik0x63nyk1wnuo` (`buyer_id`),
-  CONSTRAINT `FKnx7lx9kjhgwik0x63nyk1wnuo` FOREIGN KEY (`buyer_id`) REFERENCES `user` (`id`)
+                                  `id` bigint NOT NULL AUTO_INCREMENT,
+                                  `buyer_id` bigint NOT NULL,
+                                  `date` datetime(6) NOT NULL,
+                                  `status` varchar(255) NOT NULL,
+                                  `total` decimal(19,2) NOT NULL,
+                                  PRIMARY KEY (`id`),
+                                  KEY `FKnx7lx9kjhgwik0x63nyk1wnuo` (`buyer_id`),
+                                  CONSTRAINT `FKnx7lx9kjhgwik0x63nyk1wnuo` FOREIGN KEY (`buyer_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -417,16 +417,16 @@ DROP TABLE IF EXISTS `purchase_order_items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `purchase_order_items` (
-  `id` bigint NOT NULL,
-  `announcement_id` bigint NOT NULL,
-  `product_price` double NOT NULL,
-  `product_quantity` int NOT NULL,
-  `purchase_order_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FKh6o5mrr6xdv31e5vxkekur42m` (`announcement_id`),
-  KEY `FKe5vf73k1ouhsxpth3vp7rnfis` (`purchase_order_id`),
-  CONSTRAINT `FKe5vf73k1ouhsxpth3vp7rnfis` FOREIGN KEY (`purchase_order_id`) REFERENCES `purchase_order` (`id`),
-  CONSTRAINT `FKh6o5mrr6xdv31e5vxkekur42m` FOREIGN KEY (`announcement_id`) REFERENCES `announcement` (`id`)
+                                        `id` bigint NOT NULL,
+                                        `announcement_id` bigint NOT NULL,
+                                        `product_price` double NOT NULL,
+                                        `product_quantity` int NOT NULL,
+                                        `purchase_order_id` bigint DEFAULT NULL,
+                                        PRIMARY KEY (`id`),
+                                        KEY `FKh6o5mrr6xdv31e5vxkekur42m` (`announcement_id`),
+                                        KEY `FKe5vf73k1ouhsxpth3vp7rnfis` (`purchase_order_id`),
+                                        CONSTRAINT `FKe5vf73k1ouhsxpth3vp7rnfis` FOREIGN KEY (`purchase_order_id`) REFERENCES `purchase_order` (`id`),
+                                        CONSTRAINT `FKh6o5mrr6xdv31e5vxkekur42m` FOREIGN KEY (`announcement_id`) REFERENCES `announcement` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -448,11 +448,11 @@ DROP TABLE IF EXISTS `section`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `section` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `max_capacity` float NOT NULL,
-  `type` varchar(50) NOT NULL,
-  `used_capacity` float NOT NULL,
-  PRIMARY KEY (`id`)
+                           `id` bigint NOT NULL AUTO_INCREMENT,
+                           `max_capacity` float NOT NULL,
+                           `type` varchar(50) NOT NULL,
+                           `used_capacity` float NOT NULL,
+                           PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -474,12 +474,12 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `email` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
-  `role` varchar(30) NOT NULL,
-  `username` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
+                        `id` bigint NOT NULL AUTO_INCREMENT,
+                        `email` varchar(50) NOT NULL,
+                        `password` varchar(50) NOT NULL,
+                        `role` varchar(30) NOT NULL,
+                        `username` varchar(50) NOT NULL,
+                        PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -501,14 +501,14 @@ DROP TABLE IF EXISTS `warehouse`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `warehouse` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `address` varchar(100) NOT NULL,
-  `country_code` varchar(2) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `manager_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FKmtyr26fo530xqjuttkatdh7xp` (`manager_id`),
-  CONSTRAINT `FKmtyr26fo530xqjuttkatdh7xp` FOREIGN KEY (`manager_id`) REFERENCES `user` (`id`)
+                             `id` bigint NOT NULL AUTO_INCREMENT,
+                             `address` varchar(100) NOT NULL,
+                             `country_code` varchar(2) NOT NULL,
+                             `name` varchar(50) NOT NULL,
+                             `manager_id` bigint DEFAULT NULL,
+                             PRIMARY KEY (`id`),
+                             KEY `FKmtyr26fo530xqjuttkatdh7xp` (`manager_id`),
+                             CONSTRAINT `FKmtyr26fo530xqjuttkatdh7xp` FOREIGN KEY (`manager_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

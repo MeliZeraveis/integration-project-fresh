@@ -10,5 +10,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 
+/**
+ * The interface Section repository.
+ */
 public interface SectionRepository extends JpaRepository<Section, Long> {
 }

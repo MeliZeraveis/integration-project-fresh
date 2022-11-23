@@ -12,6 +12,9 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * The type Announcement.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -58,5 +61,6 @@ public class Announcement {
     @JsonIgnore
     @JsonIgnoreProperties("announcement")
     private List<PurchaseOrderItems> purchaseOrderItems;
+
 
 }

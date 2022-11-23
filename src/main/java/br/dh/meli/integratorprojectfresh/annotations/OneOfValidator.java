@@ -3,6 +3,9 @@ package br.dh.meli.integratorprojectfresh.annotations;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+/**
+ * The type One of validator.
+ */
 public class OneOfValidator implements ConstraintValidator<OneOf, String> {
 
     private String[] values;

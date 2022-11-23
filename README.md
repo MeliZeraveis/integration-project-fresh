@@ -24,3 +24,7 @@ Projeto Integrador para o Bootcamp Java do Meli wave 7 - Grupo 1
 
 ## Project Board
 - Trello: [Bootcamp Grupo 1](https://trello.com/b/mbVq2bS5/projeto-integrador)
+
+
+*A documentação e template do requisito 6 estão presentes na pasta docs
+
