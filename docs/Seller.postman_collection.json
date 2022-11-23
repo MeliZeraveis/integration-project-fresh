@@ -1,0 +1,89 @@
+{
+	"info": {
+		"_postman_id": "94c28137-5049-4f90-b199-be1f0b4f3cc4",
+		"name": "Seller",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET get all user sales",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/fresh-products/seller/3/details",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"seller",
+						"3",
+						"details"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET get user sales by date",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/fresh-products/seller/3?date1=2020-03-01&date2=2022-11-23",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"seller",
+						"3"
+					],
+					"query": [
+						{
+							"key": "date1",
+							"value": "2020-03-01"
+						},
+						{
+							"key": "date2",
+							"value": "2022-11-23"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Seller",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/fresh-products/seller/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"seller",
+						"3"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -7,6 +7,7 @@ import br.dh.meli.integratorprojectfresh.dto.request.PurchaseOrderRequestDTO;
 import br.dh.meli.integratorprojectfresh.enums.ExceptionType;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.enums.OrderStatus;
+import br.dh.meli.integratorprojectfresh.exception.ActionNotAllowedException;
 import br.dh.meli.integratorprojectfresh.exception.BusinessRuleException;
 import br.dh.meli.integratorprojectfresh.exception.InvalidParamException;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
@@ -19,6 +20,7 @@ import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -69,6 +71,14 @@ public class PurchaseOrderService implements IPurchaseOrderService {
     User buyer = userRepo.findById(purchaseOrder.getBuyerId())
             .orElseThrow(() -> new NotFoundException(Msg.BUYER_ID_NOT_FOUND));
 
+//    for(int i = 0; i < purchaseOrder.getProducts().size(); i++){
+//      if (Objects
+//              .equals(purchaseOrder.getProducts().get(i).getAnnouncementId(),
+//                      purchaseOrder.getProducts().get(i + 1).getAnnouncementId())){
+//        throw new ActionNotAllowedException("Product duplicated");
+//      }
+//    }
+
     // convert the product list back to model objects, fetch the price from the database and calculate the total
     List<PurchaseOrderItems> products = purchaseOrder.getProducts().stream()
             .map(PurchaseOrderItemsRequestDTO::toPurchaseOrderItems)
@@ -85,6 +95,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
     PurchaseOrder savedOrder = orderRepo.save(order);
     Long purchaseOrderId = savedOrder.getId();
     products.forEach(product -> product.setPurchaseOrderId(purchaseOrderId));
+    System.out.println(products.get(0).getId());
     itemsRepo.saveAll(products);
 
     // return the response back to the controller
