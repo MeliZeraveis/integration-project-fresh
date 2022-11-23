@@ -7,9 +7,7 @@ import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderRequestDTO;
 
 import br.dh.meli.integratorprojectfresh.enums.ExceptionType;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
-import br.dh.meli.integratorprojectfresh.enums.Roles;
-import br.dh.meli.integratorprojectfresh.exception.ActionNotAllowedException;
-import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
+
 import br.dh.meli.integratorprojectfresh.model.*;
 import br.dh.meli.integratorprojectfresh.repository.*;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -24,7 +24,6 @@ public class SectionDTO {
 
     public SectionDTO(Section section, Announcement announcement) {
         this.sectionCode = section.getSectionCode();
-        //this.warehouseCode = announcement.getBatchStock().stream().findFirst().get().getInboundOrder().getWarehouse().getWarehouseCode();
         this.warehouseCode = announcement.getBatchStock().get(0).getInboundOrder().getWarehouseCode();
     }
 }
