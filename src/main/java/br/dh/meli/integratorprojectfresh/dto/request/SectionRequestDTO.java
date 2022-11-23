@@ -18,15 +18,12 @@ import javax.validation.constraints.Positive;
 @AllArgsConstructor
 public class SectionRequestDTO {
     @NotNull(message = Msg.MAX_CAPACITY_NOT_NULL)
-    @Positive(message = Msg.MAX_CAPACITY_POSITIVE)
     private float maxCapacity;
 
     @NotNull(message = Msg.USED_CAPACITY_NOT_NULL)
-    @Positive(message = Msg.USED_CAPACITY_POSITIVE)
     private float usedCapacity;
 
     @NotNull(message = Msg.SECTION_CODE_NOT_EMPTY)
-    @Positive(message = Msg.SECTION_NOT_VALID)
     private Long warehouseCode;
 
     @NotEmpty(message = Msg.SECTION_CODE_NOT_EMPTY)
