@@ -1,6 +1,5 @@
 package br.dh.meli.integratorprojectfresh.integration;
 
-
 import br.dh.meli.integratorprojectfresh.dto.request.AnnouncementPostRequestDTO;
 import br.dh.meli.integratorprojectfresh.dto.request.AnnouncementUpdateRequestDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementGetResponseDTO;
@@ -29,8 +28,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.InstanceOfAssertFactories.DOUBLE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -66,8 +63,6 @@ public class AnnoucementControllerTestIT {
 
     @BeforeEach
     void setup() {
-//        announcement = new Announcement(1L, "maça", "description")
-//        annoucementGetResponseDTO = new AnnoucementGetResponseDTO(announcement);
         LocalDateTime manufacturingTime = LocalDateTime.parse("2020-03-09 17:55:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         LocalDate dueDate3 = LocalDate.parse("2021-11-11");
         LocalDate manufacturingDate = LocalDate.parse("2021-12-12");
@@ -81,8 +76,6 @@ public class AnnoucementControllerTestIT {
         announcement = new Announcement(1L, "Camisa", "Camisa branca", 3L, BigDecimal.valueOf(100.0), 1L, section, batchStockList2, user, new ArrayList<>());
         announcementRequestDTO = new AnnouncementPostRequestDTO(announcement);
         announcementUpdateRequestDTO = new AnnouncementUpdateRequestDTO(announcement);
-
-
     }
 
     @Test
@@ -95,7 +88,6 @@ public class AnnoucementControllerTestIT {
                 .andDo(print());
 
         response.andExpect(status().isOk());
-        //  .andExpect(jsonPath("$.announcementId", CoreMatchers.is(1)));
     }
 
     @Test
@@ -109,7 +101,6 @@ public class AnnoucementControllerTestIT {
                 .andDo(print());
 
         response.andExpect(status().isOk());
-              //  .andExpect(jsonPath("$.announcementId", CoreMatchers.is(1)));
     }
 
     @Test
@@ -302,19 +293,5 @@ public class AnnoucementControllerTestIT {
         response.andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.USER_NOT_AUTHORIZED)));
     }
-
-//    @Test
-//    @DisplayName("Testa passado valores minimos e maximos existentes no bd, retorna uma lista ordenada")
-//    void UpdateProduct_ThrowException_WhenParamsAreValid() throws Exception {
-//
-//        ResultActions response = mockMvc
-//                .perform(put("/api/v1/fresh-products/update")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(announcementUpdateRequestDTO)));
-//
-//        response.andExpect(status().isNotFound())
-//                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.OBJECT_NOT_FOUND.name())))
-//                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.USER_NOT_AUTHORIZED)));
-//    }
 
 }

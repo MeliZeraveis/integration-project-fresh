@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -72,16 +72,6 @@ class AnnouncementServiceTest {
 
         user = new User(3L, "usuarioTeste", "123456", "teste@email.com", "seller");
         announcementSeller = new Announcement(1L, "Camisa", "Camisa branca", 4L, BigDecimal.valueOf(100.0), 1L, section, batchStockList2, user, new ArrayList<>());
-
-
-        //        announcementList1 = new Announcement(2L, "banana", "Banana amarela", 4L, BigDecimal.valueOf(10.0), 1L, section, batchStockList2, null, new ArrayList<>());
-//        Announcement announcementList2 = new Announcement(3L, "Banana Prata", "Banana amarela", 3L, BigDecimal.valueOf(8.0), 1L, section, batchStockList2, null, new ArrayList<>());
-//        Announcement announcementList3 = new Announcement(4L, "Banana Nanica", "Banana amarela", 4L, BigDecimal.valueOf(6.8), 1L, section, batchStockList2, null, new ArrayList<>());
-////        List<Announcement> announcementList = new ArrayList<>();
-////        announcementList.add(announcementList1);
-////        announcementList.add(announcementList2);
-////        announcementList.add(announcementList3);
-//        listResponseDTO = new AnnouncementListResponseDTO(announcementList1);
 
         responseDTO = new AnnouncementGetResponseDTO(announcement);
         updateRequestDTO = new AnnouncementUpdateRequestDTO(1L, "sorvete", "sorvete de passas", BigDecimal.valueOf(10.0), 1L, 3L);
@@ -142,15 +132,6 @@ class AnnouncementServiceTest {
         );
     }
 
-//    @Test
-//    @DisplayName("Sucesso ao retornar uma lista de anúncios buscando por palavra chave - SEARCH")
-//    void FindAnnouncementByQueryString_ReturnListOfAnnouncement_WhenQueryStringIsValid() {
-//        BDDMockito.when(repository.findByNameContainingIgnoreCase("banana")).thenReturn(announcementList1);
-//        listResponseDTO = service.findAnnouncementByQueryString("banana");
-//        assertThat(responseDTO).isNotNull();
-//
-//    }
-
         @Test
     @DisplayName("Erro quando palavra chave não é encontrada no banco de dados")
     void FindAnnouncementByQueryString_ThrowError_WhenQueryStringIsNotFind() throws NotFoundException {
@@ -203,7 +184,6 @@ class AnnouncementServiceTest {
     void UpdateById_ThrowError_WhenUserIsEmpty() throws UnauthorizedException {
         updateRequestDTO.setSellerId(1L);
         user.setUserId(30L);
-//        user.setRole("buyer");
         BDDMockito.when(repository.findById(1L)).thenReturn(java.util.Optional.ofNullable(announcementSeller));
         final var actualException = assertThrows(
                 UnauthorizedException.class,
@@ -219,9 +199,7 @@ class AnnouncementServiceTest {
         updateRequestDTO.setSellerId(1L);
         user.setUserId(1L);
         user.setRole("buyer");
-//        user.setRole("buyer");
         BDDMockito.when(repository.findById(1L)).thenReturn(java.util.Optional.ofNullable(announcementSeller));
-//        BDDMockito.when(userRepo.findById(1L)).thenReturn(java.util.Optional.ofNullable(user));
         final var actualException = assertThrows(
                 UnauthorizedException.class,
                 () -> service.updateById(updateRequestDTO));

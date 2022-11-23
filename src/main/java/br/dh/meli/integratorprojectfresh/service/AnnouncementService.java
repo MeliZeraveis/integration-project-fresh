@@ -6,7 +6,6 @@ import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementListResponseDT
 import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementGetResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.enums.Sections;
-import br.dh.meli.integratorprojectfresh.exception.ActionNotAllowedException;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.exception.UnauthorizedException;
 import br.dh.meli.integratorprojectfresh.model.Announcement;

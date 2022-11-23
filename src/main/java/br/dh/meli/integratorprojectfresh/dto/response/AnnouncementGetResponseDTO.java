@@ -1,7 +1,6 @@
 package br.dh.meli.integratorprojectfresh.dto.response;
 
 import br.dh.meli.integratorprojectfresh.dto.request.BatchStockAnnouncementDTO;
-import br.dh.meli.integratorprojectfresh.dto.request.SectionDTO;
 import br.dh.meli.integratorprojectfresh.model.Announcement;
 import br.dh.meli.integratorprojectfresh.model.BatchStock;
 import lombok.AllArgsConstructor;

@@ -7,9 +7,6 @@ import br.dh.meli.integratorprojectfresh.dto.request.InboundOrderRequestDTO;
 
 import br.dh.meli.integratorprojectfresh.enums.ExceptionType;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
-import br.dh.meli.integratorprojectfresh.enums.Roles;
-import br.dh.meli.integratorprojectfresh.exception.ActionNotAllowedException;
-import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.model.*;
 import br.dh.meli.integratorprojectfresh.repository.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,8 +34,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+
 import java.util.stream.Collectors;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -119,8 +115,6 @@ public class InboundOrderControllerTestIT {
 
         inboundOrderRepository.save(inboundOrder);
         batchStockRepository.saveAll(batchStockList1);
-
-
     }
 
     @Test
@@ -471,8 +465,6 @@ public class InboundOrderControllerTestIT {
                 .andExpect(jsonPath("$.fields", CoreMatchers.containsString("inboundOrder.batchStock[0].price")))
                 .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString(Msg.PRICE_REQUIRED)));
     }
-
-    //PUT - UPDATE --------------------------------
 
     @Test
     @DisplayName("Testa se o metodo put retorna uma exceçao quando o ORDERDATE é nulo")

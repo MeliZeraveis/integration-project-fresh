@@ -3,17 +3,14 @@ package br.dh.meli.integratorprojectfresh.service;
 
 import br.dh.meli.integratorprojectfresh.dto.request.PurchaseOrderItemsRequestDTO;
 import br.dh.meli.integratorprojectfresh.dto.request.PurchaseOrderRequestDTO;
-import br.dh.meli.integratorprojectfresh.dto.response.InboundOrderPostResponseDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.PurchaseOrderItemsResponseDTO;
 import br.dh.meli.integratorprojectfresh.dto.response.PurchaseOrderResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
-import br.dh.meli.integratorprojectfresh.enums.OrderStatus;
 import br.dh.meli.integratorprojectfresh.enums.Roles;
 import br.dh.meli.integratorprojectfresh.exception.InvalidParamException;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.model.*;
 import br.dh.meli.integratorprojectfresh.repository.*;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,11 +27,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
+
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
@@ -251,7 +247,6 @@ public class PurchaseOrderServiceTest {
     @Test
     @DisplayName("Erro ao encontrar a lista de PurchaseOrderItems")
     void UpdateMethod_ThrowsException_WhenPurchaseOrderItemsNotFound() throws NotFoundException {
-        // BDDMockito.given(itemsRepo.findByPurchaseOrderId(ArgumentMatchers.any())).willThrow(new NotFoundException(Msg.PURCHASE_ORDER_ITEMS_NOT_FOUND));
 
         assertThrows(NotFoundException.class, () -> {
             service.update(purchaseOrderItemsList.get(0).getPurchaseOrderId());
@@ -261,27 +256,10 @@ public class PurchaseOrderServiceTest {
     @Test
     @DisplayName("Erro ao encontrar a lista de BatchStocks")
     void UpdateMethod_ThrowsException_WhenBatchListNotFound() throws NotFoundException {
-//        BDDMockito.given(batchStockRepo.findAllByAnnouncementId(ArgumentMatchers.any())).
-//        willThrow(new NotFoundException(Msg.BATCH_NOT_FOUND));
 
         assertThrows(NotFoundException.class, () -> {
             service.update(batchStockList.get(0).getBatchNumber());
         });
     }
-
-//    @Test
-//    @DisplayName("Erro de estoque insuficiente")
-//    void UpdateMethod_ThrowsException_WhenStockNotIsInsufficient() throws NotFoundException {
-//
-//        PurchaseOrderItems purchaseOrderItemsOver = new PurchaseOrderItems(1L, 1L, 20, BigDecimal.valueOf(20.00));
-//
-//        BDDMockito.given(batchStockRepo.findAllByAnnouncementId(ArgumentMatchers.any())).
-//                willThrow(new NotFoundException(Msg.BATCH_STOCK_INSUFFICIENT));
-//
-//        assertThrows(NotFoundException.class, () -> {
-//            service.update(batchStockList.get(0).getBatchNumber());
-//        });
-//    }
-
 
 }
