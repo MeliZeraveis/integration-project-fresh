@@ -3,12 +3,11 @@ package br.dh.meli.integratorprojectfresh.integration;
 
 import br.dh.meli.integratorprojectfresh.dto.request.PurchaseOrderItemsRequestDTO;
 import br.dh.meli.integratorprojectfresh.dto.request.PurchaseOrderRequestDTO;
-import br.dh.meli.integratorprojectfresh.dto.response.PurchaseOrderItemsResponseDTO;
+
 import br.dh.meli.integratorprojectfresh.dto.response.PurchaseOrderResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.ExceptionType;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
-import br.dh.meli.integratorprojectfresh.enums.OrderStatus;
-import br.dh.meli.integratorprojectfresh.exception.BusinessRuleException;
+
 import br.dh.meli.integratorprojectfresh.model.PurchaseOrder;
 import br.dh.meli.integratorprojectfresh.model.PurchaseOrderItems;
 import br.dh.meli.integratorprojectfresh.repository.PurchaseOrderItemsRepository;

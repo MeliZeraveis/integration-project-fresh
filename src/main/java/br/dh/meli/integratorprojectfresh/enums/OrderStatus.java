@@ -2,7 +2,7 @@ package br.dh.meli.integratorprojectfresh.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.hibernate.criterion.Order;
+
 
 /**
  * The enum OrderStatus lists the possible statuses of a purchase order.
