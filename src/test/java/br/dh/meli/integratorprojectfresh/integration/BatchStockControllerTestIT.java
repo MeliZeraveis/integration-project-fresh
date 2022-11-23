@@ -3,6 +3,8 @@ package br.dh.meli.integratorprojectfresh.integration;
 import br.dh.meli.integratorprojectfresh.dto.response.BatchStockGetResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.ExceptionType;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
+import br.dh.meli.integratorprojectfresh.enums.Routes;
+import br.dh.meli.integratorprojectfresh.enums.Sections;
 import br.dh.meli.integratorprojectfresh.model.BatchStock;
 import br.dh.meli.integratorprojectfresh.repository.BatchStockRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,7 +28,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class BatchStockControllerTestIT {
-
     @Autowired
     private MockMvc mockMvc;
 
@@ -82,6 +83,37 @@ public class BatchStockControllerTestIT {
                         .param("numberOfDays", "1000")
                         .param("category", "FS")
                         .param("order", "asc"))
+                .andDo(print());
+
+        response.andExpect(status().isOk());
+
+    }
+
+    @Test
+    void get_ReturnExceptionNotFound_WhenExpiredBatchStockByAscOrderNotExist() throws Exception {
+
+        ResultActions response = mockMvc
+                .perform(get(Routes.BASE_ROUTE + Routes.DUE_DATE_EXPIRED)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("date", "2022-11-01")
+                        .param("category", Sections.FRESH.getCode())
+                        .param("sortBy", "asc"))
+                .andDo(print());
+
+        response.andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.title", CoreMatchers.is(ExceptionType.OBJECT_NOT_FOUND.name())))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(Msg.BATCH_NOT_FOUND)))
+                .andExpect(jsonPath("$.status", CoreMatchers.is(HttpStatus.NOT_FOUND.value())));
+    }
+
+    @Test
+    void get_ReturnExpiredBatchStockGetResponseDTOByAscOrder_WhenSuccessful() throws Exception {
+        ResultActions response = mockMvc
+                .perform(get(Routes.BASE_ROUTE + Routes.DUE_DATE_EXPIRED)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("date", "2022-12-31")
+                        .param("category", Sections.FRESH.getCode())
+                        .param("sortBy", "asc"))
                 .andDo(print());
 
         response.andExpect(status().isOk());

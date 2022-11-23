@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "oubound_order_batches")
+@Table(name = "outbound_order_batches")
 public class OutboundOrderBatches {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
