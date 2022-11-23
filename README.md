@@ -23,7 +23,11 @@ Projeto Integrador para o Bootcamp Java do Meli wave 7 - Grupo 1
 - Swagger: [Projeto_Integrador_Grupo01](http://localhost:8080/swagger-ui.html#/)
 
 ## Project Board
+<<<<<<< HEAD
 - Trello: [Bootcamp Grupo 1](https://trello.com/b/mbVq2bS5/projeto-integrador)
 
 
 *A documentação e template do requisito 6 estão presentes na pasta docs
+=======
+- Trello: [Bootcamp Grupo 1](https://trello.com/b/mbVq2bS5/projeto-integrador)
+>>>>>>> develop

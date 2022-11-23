@@ -1,0 +1,165 @@
+{
+	"info": {
+		"_postman_id": "80de20d6-1d95-4f69-9a9c-8bb07fdf830f",
+		"name": "1. Inbound Order",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23721676"
+	},
+	"item": [
+		{
+			"name": "POST Create inbound order",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"inboundOrder\": {\n        \"orderDate\": \"2022-02-01\",\n        \"warehouseCode\": 2,\n        \"sectionCode\": 4,\n        \"batchStock\": [\n            {\n                \"announcementId\": 2,\n                \"sectionType\": \"Fresh\",\n                \"productQuantity\": 100,\n                \"manufacturingDate\": \"2020-03-03\",\n                \"manufacturingTime\": \"2020-03-09 10:30:00\",\n                \"volume\": 1.0,\n                \"dueDate\": \"2022-12-30\",\n                \"price\": 200.5\n            }\n        ]\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/fresh-product/inboundorder",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-product",
+						"inboundorder"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT Update Order",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\n    \"inboundOrder\": {\n\n        \"orderNumber\": 1,\n\n        \"orderDate\": \"2007-12-22\",\n\n        \"sectionCode\": 1,\n\n        \"warehouseCode\": 1,\n\n        \"batchStock\": [\n\n            {\n\n                \"batchNumber\": 1,\n\n                \"announcementId\": 1,\n\n                \"currentTemperature\": 35.5,\n\n                \"productQuantity\": 80,\n\n                \"manufacturingDate\": \"2002-02-01\",\n\n                \"manufacturingTime\": \"2002-03-09 17:55:00\",\n\n                \"volume\": 90.0,\n\n                \"dueDate\": \"2002-02-01\",\n\n                \"price\": 1000.5\n\n            }\n\n        ]\n\n    }\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/fresh-product/inboundorder",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-product",
+						"inboundorder"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Announcement",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/fresh-products/list?id=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"list"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get filter category",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/fresh-products/due-date/list?numberOfDays=1000&category=Fresh",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"due-date",
+						"list"
+					],
+					"query": [
+						{
+							"key": "numberOfDays",
+							"value": "1000"
+						},
+						{
+							"key": "category",
+							"value": "Fresh"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET BatchStockFindDate",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/fresh-products/due-date?numberOfDays=5&section=Fresh",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"due-date"
+					],
+					"query": [
+						{
+							"key": "numberOfDays",
+							"value": "5"
+						},
+						{
+							"key": "section",
+							"value": "Fresh"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
