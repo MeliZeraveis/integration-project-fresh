@@ -4,6 +4,7 @@ package br.dh.meli.integratorprojectfresh.service;
 import br.dh.meli.integratorprojectfresh.dto.response.BatchStockDTOResponseDueDate;
 import br.dh.meli.integratorprojectfresh.dto.response.BatchStockGetResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
+import br.dh.meli.integratorprojectfresh.enums.Sections;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.model.*;
 import br.dh.meli.integratorprojectfresh.repository.BatchStockRepository;
@@ -13,10 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
-import org.mockito.BDDMockito;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
@@ -179,18 +177,8 @@ assertAll(
     }
 
     @Test
-    void FindBatchStockFiltered_ThrowException_WhenCategoryIsValid() throws NotFoundException {
-
-        final var actualException = assertThrows(
-                NotFoundException.class,
-                () -> service.findBatchStockByBatchStockNumber(45, "FS", "asc"));
-        assertAll(
-                () -> Assertions.assertEquals(Msg.BATCH_NOT_FOUND, actualException.getMessage())
-        );
-    }
-
-    @Test
     void FindBatchStockFiltered_ThrowException_WhenBatchStockList() throws NotFoundException {
+        Mockito.when(repo.findAllByDueDateBetween(ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(batchStockList);
 
         final var actualException = assertThrows(
                 NotFoundException.class,
@@ -202,6 +190,7 @@ assertAll(
 
     @Test
     void FindBatchStockFiltered_ThrowException_WhenOrderIsInvalid() throws NotFoundException {
+        Mockito.when(repo.findAllByDueDateBetween(ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(batchStockList);
 
         final var actualException = assertThrows(
                 NotFoundException.class,
@@ -213,6 +202,7 @@ assertAll(
 
     @Test
     void FindBatchStockFiltered_ThrowException_WhenOrderIsDesc() throws NotFoundException {
+        Mockito.when(repo.findAllByDueDateBetween(ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(batchStockList);
 
         final var actualException = assertThrows(
                 NotFoundException.class,
@@ -221,4 +211,18 @@ assertAll(
                 () -> Assertions.assertEquals(Msg.CATEGORY_NOT_FOUND, actualException.getMessage())
         );
     }
+
+    @Test
+    void FindExpiredBatch_ReturnBatchStockFiltered_WhenCategoriesAreValid() {
+        for (String category : new String[] {Sections.FRESH.getCode(), Sections.FROZEN.getCode(), Sections.REFRIGERATED.getCode()}) {
+            Mockito.when(repo.findAllByDueDateBefore(ArgumentMatchers.any())).thenReturn(batchStockList);
+
+            batchStockGetResponseDTO = service.findExpiredBatchStock(LocalDate.parse("2022-12-31"), category, "asc");
+            assertAll(
+                    () -> assertThat(batchStockGetResponseDTO).isNotNull(),
+                    () -> assertThat(batchStockGetResponseDTO.getBatchStock()).isNotNull()
+            );
+        }
+    }
+
 }

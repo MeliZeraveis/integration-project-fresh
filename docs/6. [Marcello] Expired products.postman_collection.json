@@ -1,0 +1,146 @@
+{
+	"info": {
+		"_postman_id": "4b0d5620-09d1-4204-9593-27206808df33",
+		"name": "6. [Marcello] Expired products",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23671073"
+	},
+	"item": [
+		{
+			"name": "Expired batches by dueDate and category",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/fresh-products/due-date/expired?date=2022-12-31&category=FS&sortBy=desc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"due-date",
+						"expired"
+					],
+					"query": [
+						{
+							"key": "date",
+							"value": "2022-12-31"
+						},
+						{
+							"key": "category",
+							"value": "FS"
+						},
+						{
+							"key": "sortBy",
+							"value": "desc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Read an Outbound Order",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "id",
+						"value": "1",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/fresh-products/outbound-order/?id=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"outbound-order",
+						""
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Outbound Order",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"outboundOrder\": {\n        \"orderDate\": \"2022-11-22\",\n        \"warehouseCode\": 1,\n        \"sectionCode\": 2,\n        \"batchIds\": [\n            3,\n            4\n        ]\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/fresh-products/outbound-order/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"outbound-order",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Outbound Order",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"outboundOrder\": {\n        \"orderNumber\": 1,\n        \"orderDate\": \"2022-11-22\",\n        \"warehouseCode\": 1,\n        \"sectionCode\": 2,\n        \"batchIds\": [\n            7\n        ]\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/fresh-products/outbound-order/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"outbound-order",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
