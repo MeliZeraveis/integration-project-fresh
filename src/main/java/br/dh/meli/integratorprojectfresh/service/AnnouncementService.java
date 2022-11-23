@@ -100,6 +100,22 @@ public class AnnouncementService implements IAnnouncementService {
             .map(AnnouncementListResponseDTO::new)
             .collect(Collectors.toList());
   }
+  void isUserValid(Long sellerId) {
+    Optional<User> user = userRepo.findById(sellerId);
+    if (user.isEmpty()) {
+      throw new NotFoundException(Msg.SELLER_NOT_FOUND);
+    }
+    if (!user.get().getRole().equals("seller")){
+      throw new UnauthorizedException(Msg.USER_NOT_AUTHORIZED);
+    }
+  }
+
+  void isSectionValid(Long sectionCode) {
+    Optional<Section> section = sectionRepo.findBySectionCode(sectionCode);
+    if (section.isEmpty()) {
+      throw new NotFoundException(Msg.SECTION_NOT_FOUND);
+    }
+  }
 
   @Override
   public AnnouncementUpdateRequestDTO updateById(AnnouncementUpdateRequestDTO announcementRequestDTO) {
@@ -110,17 +126,8 @@ public class AnnouncementService implements IAnnouncementService {
     if (!announcement.get().getSellerId().equals(announcementRequestDTO.getSellerId())) {
       throw new UnauthorizedException(Msg.USER_NOT_AUTHORIZED);
     }
-    Optional<User> user = userRepo.findById(announcementRequestDTO.getSellerId());
-    if (user.isEmpty()) {
-      throw new NotFoundException(Msg.SELLER_NOT_FOUND);
-    }
-    if (!user.get().getRole().equals("seller")){
-      throw new UnauthorizedException(Msg.USER_NOT_AUTHORIZED);
-    }
-    Optional<Section> section = sectionRepo.findBySectionCode(announcementRequestDTO.getSectionCode());
-    if (section.isEmpty()) {
-      throw new NotFoundException(Msg.SECTION_NOT_FOUND);
-    }
+    isUserValid(announcementRequestDTO.getSellerId());
+    isSectionValid(announcementRequestDTO.getSectionCode());
     Announcement announcementUpdate = new Announcement(announcementRequestDTO);
     repo.save(announcementUpdate);
     return new AnnouncementUpdateRequestDTO(announcementUpdate);
@@ -129,17 +136,8 @@ public class AnnouncementService implements IAnnouncementService {
   @Override
   public AnnouncementPostRequestDTO save(AnnouncementPostRequestDTO announcementRequestDTO) {
     Announcement announcementUpdate = new Announcement(announcementRequestDTO);
-    Optional<Section> section = sectionRepo.findBySectionCode(announcementRequestDTO.getSectionCode());
-    Optional<User> user = userRepo.findById(announcementRequestDTO.getSellerId());
-    if (user.isEmpty()) {
-      throw new NotFoundException(Msg.SELLER_NOT_FOUND);
-    }
-    if (!user.get().getRole().equals("seller")){
-      throw new UnauthorizedException(Msg.USER_NOT_AUTHORIZED);
-    }
-    if (section.isEmpty()) {
-      throw new NotFoundException(Msg.SECTION_NOT_FOUND);
-    }
+    isUserValid(announcementRequestDTO.getSellerId());
+    isSectionValid(announcementRequestDTO.getSectionCode());
     repo.save(announcementUpdate);
     return new AnnouncementPostRequestDTO(announcementUpdate);
   }
