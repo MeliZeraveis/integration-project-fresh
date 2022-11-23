@@ -105,18 +105,6 @@ class ReviewServiceTest {
         reviewPostResponseDTO = new ReviewPostResponseDTO(review);
         reviewPutResponseDTO = new ReviewPutResponseDTO(review);
     }
-/*
-    @Test
-    void SaveMethod_ReturnNewReview_WhenParamsAreValid() {
-        BDDMockito.when(announcementRepository.findById(2L))
-                .thenReturn(java.util.Optional.ofNullable(announcement));
-        BDDMockito.when(purchaseOrderRepository.findById(1L))
-                .thenReturn(java.util.Optional.ofNullable(purchaseOrder));
-        ReviewPostResponseDTO reviewPostResponseDTO = reviewService.save(reviewRequestDTO);
-        assertThat(reviewPostResponseDTO).isNotNull();
-    }
-
-    */
 
     /**
      * Save method throw not found exception when announcement id is invalid.
@@ -167,6 +155,11 @@ class ReviewServiceTest {
                 () -> Assertions.assertEquals(Msg.REVIEW_NOT_FOUND, actualException.getMessage()));
     }
 
+    /**
+     * Find all by announcement id throws exception when annoucement is empty.
+     *
+     * @throws NotFoundException the not found exception
+     */
     @Test
     @DisplayName("Erro quando Announcement não existe")
     void FindAllByAnnouncementId_ThrowsException_WhenAnnoucementIsEmpty() throws NotFoundException {
@@ -180,6 +173,11 @@ class ReviewServiceTest {
         );
     }
 
+    /**
+     * Find review by filter throws exception when filter is empty.
+     *
+     * @throws NotFoundException the not found exception
+     */
     @Test
     @DisplayName("Erro quando filtro não existe")
     void FindReviewByFilter_ThrowsException_WhenFilterIsEmpty() throws NotFoundException {
@@ -194,13 +192,4 @@ class ReviewServiceTest {
 
     }
 
-    /*
-    @Test
-    @DisplayName("Erro quando filtro não é permitido")
-    void FindReviewByFilter_ThrowsException_WhenFilterIsInvalid() throws ActionNotAllowedException {
-        BDDMockito.when(reviewService.findReviewByReviewGrade(2L, 6))
-                .thenReturn(java.util.Optional.ofNullable(ArgumentMatchers.any()));
-
-
-*/
 }
