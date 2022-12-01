@@ -1,7 +1,7 @@
 package br.dh.meli.integratorprojectfresh.annotations;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class OneOfValidator implements ConstraintValidator<OneOf, String> {
 

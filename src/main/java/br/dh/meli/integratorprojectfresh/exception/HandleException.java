@@ -117,12 +117,12 @@ public class HandleException extends ResponseEntityExceptionHandler {
    * @param ex the MethodArgumentNotValidException instance
    * @return the generated ResponseEntity with the exception details and the status code
    */
-  @Override
+  @ExceptionHandler (MethodArgumentNotValidException.class)
   public ResponseEntity<Object> handleMethodArgumentNotValid(
           MethodArgumentNotValidException ex,
-          HttpHeaders httpHeaders,
+          HttpHeaders _httpHeaders,
           HttpStatus httpStatus,
-          WebRequest webRequest) {
+          WebRequest _webRequest) {
 
     List<FieldError> errors = ex.getBindingResult().getFieldErrors();
     ExceptionDetailsValidate exceptionDetails = ExceptionDetailsValidate.builder()
