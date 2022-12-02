@@ -117,6 +117,7 @@ public class HandleException extends ResponseEntityExceptionHandler {
    * @param ex the MethodArgumentNotValidException instance
    * @return the generated ResponseEntity with the exception details and the status code
    */
+  /*
   @ExceptionHandler (MethodArgumentNotValidException.class)
   public ResponseEntity<Object> handleMethodArgumentNotValid(
           MethodArgumentNotValidException ex,
@@ -135,7 +136,7 @@ public class HandleException extends ResponseEntityExceptionHandler {
 
     return new ResponseEntity<>(exceptionDetails, httpStatus);
   }
-
+  */
   /**
    * Handler for general unknown exception entities.
    * @param ex the Exception instance
