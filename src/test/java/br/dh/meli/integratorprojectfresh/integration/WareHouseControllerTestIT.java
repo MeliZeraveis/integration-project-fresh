@@ -1,10 +1,8 @@
 package br.dh.meli.integratorprojectfresh.integration;
 
-import br.dh.meli.integratorprojectfresh.dto.response.WarehouseProductQuantityGetResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.ExceptionType;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
-import br.dh.meli.integratorprojectfresh.repository.AnnouncementRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import br.dh.meli.integratorprojectfresh.enums.Routes;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,27 +23,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class WareHouseControllerTestIT {
-
+    private final String ROUTE = Routes.BASE_ROUTE + Routes.WAREHOUSE_QUERY_TYPE;
     @Autowired
     private MockMvc mockMvc;
-
-    @Autowired
-    private AnnouncementRepository repo;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    private WarehouseProductQuantityGetResponseDTO warehouseProductQuantity;
-
-
+    
     @Test
-    @DisplayName("Testa se retorna uma exception ANNOUNCEMENT_NOT_FOUND quando o product_id nao existe")
+    @DisplayName("Testa se retorna uma exception ANNOUNCEMENT_NOT_FOUND quando o product_id não existe")
     void get_ReturnExceptionAnnouncementNotFound_AnnouncementIdNotExist() throws Exception{
-
-        ResultActions response = mockMvc
-                .perform(get("/api/v1/fresh-products/warehouse/query_type")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .param("product_id", "77"))
+        ResultActions response = mockMvc.perform(get(ROUTE)
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("product_id", "77"))
                 .andDo(print());
 
         response.andExpect(status().isNotFound())
@@ -54,16 +41,13 @@ public class WareHouseControllerTestIT {
     }
 
     @Test
-    void get_ReturnWarehouseProductQuantityGetResponseDTO_Sucess() throws Exception {
-        ResultActions response = mockMvc
-                .perform(get("/api/v1/fresh-products/warehouse/query_type")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .param("product_id", "1"))
+    void get_ReturnWarehouseProductQuantityGetResponseDTO_Success() throws Exception {
+        ResultActions response = mockMvc.perform(get(ROUTE)
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("product_id", "1"))
                 .andDo(print());
 
         response.andExpect(status().isOk())
                 .andExpect(jsonPath("$.productId", CoreMatchers.is(1)));
     }
-
-
 }
