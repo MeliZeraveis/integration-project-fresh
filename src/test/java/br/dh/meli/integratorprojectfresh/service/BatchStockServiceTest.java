@@ -1,14 +1,11 @@
-
 package br.dh.meli.integratorprojectfresh.service;
 
-import br.dh.meli.integratorprojectfresh.dto.response.BatchStockDTOResponseDueDate;
 import br.dh.meli.integratorprojectfresh.dto.response.BatchStockGetResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.model.*;
 import br.dh.meli.integratorprojectfresh.repository.BatchStockRepository;
 import br.dh.meli.integratorprojectfresh.repository.SectionRepository;
-import br.dh.meli.integratorprojectfresh.service.BatchStockService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,27 +25,17 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
-
-import static org.junit.jupiter.api.Assertions.*;
-
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;;
 
-
 @ExtendWith(MockitoExtension.class)
 class BatchStockServiceTest {
-
     @InjectMocks
     private BatchStockService service;
-
     @Mock
     private BatchStockRepository repo;
-
     @Mock
     SectionRepository sectionRepo;
-
-    BatchStockDTOResponseDueDate batchStockDTOResponseDueDate;
     BatchStockGetResponseDTO batchStockGetResponseDTO;
     BatchStock batchStock;
     InboundOrder inboundOrder;
@@ -80,7 +67,7 @@ class BatchStockServiceTest {
     void GetBatchStockDueDate_ReturnBatchStockFiltered_WhenParamsAreValid() {
         BDDMockito.when(sectionRepo.findById(1L)).thenReturn(Optional.ofNullable(section));
         batchStockGetResponseDTO = service.getBatchStockByBatchStockId(1000, 1L);
-assertAll(
+        assertAll(
                 () -> assertThat(batchStockGetResponseDTO).isNotNull(),
                 () -> assertThat(batchStockGetResponseDTO.getBatchStock()).isNotNull()
         );
@@ -98,7 +85,6 @@ assertAll(
 
     @Test
     void GetBatchStockDueDate_ThrowException_WhenSectionIsEmpty() throws NotFoundException {
-
         section.setInboundOrder(new ArrayList<>());
         BDDMockito.when(sectionRepo.findById(ArgumentMatchers.any())).thenReturn(Optional.ofNullable(section));
 
@@ -169,7 +155,6 @@ assertAll(
 
     @Test
     void FindBatchStockFiltered_ThrowException_WhenBatchStockListIsEmpty() throws NotFoundException {
-
         final var actualException = assertThrows(
                 NotFoundException.class,
                 () -> service.findBatchStockByBatchStockNumber(45, "FS", "asc"));
@@ -180,7 +165,6 @@ assertAll(
 
     @Test
     void FindBatchStockFiltered_ThrowException_WhenCategoryIsValid() throws NotFoundException {
-
         final var actualException = assertThrows(
                 NotFoundException.class,
                 () -> service.findBatchStockByBatchStockNumber(45, "FS", "asc"));
@@ -191,7 +175,6 @@ assertAll(
 
     @Test
     void FindBatchStockFiltered_ThrowException_WhenBatchStockList() throws NotFoundException {
-
         final var actualException = assertThrows(
                 NotFoundException.class,
                 () -> service.findBatchStockByBatchStockNumber(45, "XX", "asc"));
@@ -202,7 +185,6 @@ assertAll(
 
     @Test
     void FindBatchStockFiltered_ThrowException_WhenOrderIsInvalid() throws NotFoundException {
-
         final var actualException = assertThrows(
                 NotFoundException.class,
                 () -> service.findBatchStockByBatchStockNumber(45, "XX", "asc"));
@@ -213,7 +195,6 @@ assertAll(
 
     @Test
     void FindBatchStockFiltered_ThrowException_WhenOrderIsDesc() throws NotFoundException {
-
         final var actualException = assertThrows(
                 NotFoundException.class,
                 () -> service.findBatchStockByBatchStockNumber(45, "ssssssssss", "desc"));
