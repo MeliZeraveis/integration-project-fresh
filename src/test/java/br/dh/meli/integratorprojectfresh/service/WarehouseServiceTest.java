@@ -28,13 +28,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 public class WarehouseServiceTest {
-
     @InjectMocks
     private WarehouseService service;
-
     @Mock
     private AnnouncementRepository announcementRepo;
-
     InboundOrder inboundOrder;
     Announcement announcement;
     BatchStock batchStock;
@@ -44,7 +41,6 @@ public class WarehouseServiceTest {
 
     @BeforeEach
     void setup() {
-
         LocalDate manufacturingDate = LocalDate.parse("2021-12-12");
         LocalDate dueDate1 = LocalDate.parse("2021-10-10");
         LocalDate dueDate2 = LocalDate.parse("2021-11-11");
@@ -65,34 +61,21 @@ public class WarehouseServiceTest {
         announcement = new Announcement(1L, "Camisa", "Camisa branca", 4L, BigDecimal.valueOf(100.0), 1L, section, batchStockList2, null, new ArrayList<>());
 
         responseDTO = new WarehouseProductQuantityGetResponseDTO(announcement);
-
-
     }
 
     @Test
     @DisplayName("teste-true")
     void GetWarehouseProductQuantityList_whenAnnouncementIdIsValid() {
         BDDMockito.when(announcementRepo.findById(1L)).thenReturn(java.util.Optional.ofNullable(announcement));
-        responseDTO = service.getWarehouseProductsQuantityListByAnnoucementId(1L);
-        assertThat(responseDTO).isNotNull();
+        assertThat(service.getWarehouseProductsQuantityListByAnnoucementId(1L)).isNotNull();
     }
 
     @Test
     @DisplayName("test-false")
     void GetAnnouncementByAnnouncementId_ThrowsException_WhenAnnoucementNotFound() {
-    final var actualException = assertThrows(NotFoundException.class,
-            () -> service.getWarehouseProductsQuantityListByAnnoucementId(99L));
+        final var actualException = assertThrows(NotFoundException.class,
+                () -> service.getWarehouseProductsQuantityListByAnnoucementId(99L));
 
-        assertAll (
-                () -> Assertions.assertEquals(Msg.ANNOUNCEMENT_NOT_FOUND, actualException.getMessage())
-        );
+        assertAll(() -> Assertions.assertEquals(Msg.ANNOUNCEMENT_NOT_FOUND, actualException.getMessage()));
     }
-
-
-
-
-
-
-
-
 }

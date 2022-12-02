@@ -1,6 +1,6 @@
 package br.dh.meli.integratorprojectfresh.service;
+
 import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementGetResponseDTO;
-import br.dh.meli.integratorprojectfresh.dto.response.AnnouncementListResponseDTO;
 import br.dh.meli.integratorprojectfresh.enums.Msg;
 import br.dh.meli.integratorprojectfresh.exception.NotFoundException;
 import br.dh.meli.integratorprojectfresh.model.*;
@@ -10,11 +10,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -23,16 +23,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @ExtendWith(MockitoExtension.class)
 class AnnouncementServiceTest {
     @InjectMocks
     private AnnouncementService service;
-
     @Mock
     private AnnouncementRepository repository;
-
     AnnouncementGetResponseDTO responseDTO;
     InboundOrder inboundOrder;
     Announcement announcement;
@@ -60,7 +56,6 @@ class AnnouncementServiceTest {
         announcement = new Announcement(1L, "Camisa", "Camisa branca", 4L, BigDecimal.valueOf(100.0), 1L, section, batchStockList2, null, new ArrayList<>());
 
         responseDTO = new AnnouncementGetResponseDTO(announcement);
-
     }
 
     @Test
@@ -69,7 +64,6 @@ class AnnouncementServiceTest {
         BDDMockito.when(repository.findById(1L)).thenReturn(java.util.Optional.ofNullable(announcement));
         responseDTO = service.getAnnouncementByAnnouncementId(1L);
         assertThat(responseDTO).isNotNull();
-
     }
 
     @Test
@@ -82,56 +76,37 @@ class AnnouncementServiceTest {
 
     @Test
     @DisplayName("Erro quando Announcement não existe")
-    void GetAnnouncementByAnnouncementId_ThrowsException_WhenAnnoucementNotFound() {
-
-        final var actualException = assertThrows(
-                NotFoundException.class,
-                () -> service.getAnnouncementByAnnouncementId(1L));
-        assertAll(
-                () -> Assertions.assertEquals(Msg.ANNOUNCEMENT_NOT_FOUND, actualException.getMessage())
-        );
+    void GetAnnouncementByAnnouncementId_ThrowsException_WhenAnnouncementNotFound() {
+        assertAll(() -> Assertions.assertEquals(Msg.ANNOUNCEMENT_NOT_FOUND,
+                assertThrows(NotFoundException.class, () -> service.getAnnouncementByAnnouncementId(1L)).getMessage()));
     }
 
     @Test
     @DisplayName("Erro quando Announcement não existe")
     void FindAnnouncementByBatchStockNumber_ThrowsException_WhenAnnoucementNotFound() {
-
-        final var actualException = assertThrows(
-                NotFoundException.class,
-                () -> service.findAnnouncementByBatchStockNumber(1L,'Q'));
-        assertAll(
-                () -> Assertions.assertEquals(Msg.ANNOUNCEMENT_IS_EMPTY, actualException.getMessage())
-        );
+        assertAll(() -> Assertions.assertEquals(Msg.ANNOUNCEMENT_IS_EMPTY,
+                assertThrows(NotFoundException.class, () -> service.findAnnouncementByBatchStockNumber(1L,'Q')).getMessage()));
     }
 
     @Test
     @DisplayName("Erro quando filtro não existe")
     void FindAnnouncementByBatchStockNumber_ThrowsException_WhenLetraNotFound() throws NotFoundException {
         BDDMockito.when(repository.findById(1L)).thenReturn(java.util.Optional.ofNullable(announcement));
-        final var actualException = assertThrows(
-                NotFoundException.class,
-                () -> service.findAnnouncementByBatchStockNumber(1L,'A'));
-        assertAll(
-                () -> Assertions.assertEquals(Msg.LETTER_NOT_VALID, actualException.getMessage())
-        );
+        assertAll(() -> Assertions.assertEquals(Msg.LETTER_NOT_VALID,
+                assertThrows(NotFoundException.class, () -> service.findAnnouncementByBatchStockNumber(1L,'A')).getMessage()));
     }
+
     @Test
-    @DisplayName("Retorna todo os anuncios com sucesso")
+    @DisplayName("Retorna todos os anúncios com sucesso")
     void GetAllAnnouncement_ThrowsException_Success() {
         BDDMockito.when(repository.findAll()).thenReturn(List.of(announcement));
-
-        List<AnnouncementListResponseDTO> reposnseListAnnouncementDTO = service.getAllAnnouncements();
-
-        assertThat(reposnseListAnnouncementDTO).isNotNull();
+        assertThat(service.getAllAnnouncements()).isNotNull();
     }
-
-
 
     @Test
     @DisplayName("Retorna todo os anuncios por categoria com sucesso")
     void GetAnnouncementsByCategory_ThrowsException_Success() {
         BDDMockito.when(repository.findBySectionType(ArgumentMatchers.anyString())).thenReturn(List.of(announcement));
-        List<AnnouncementListResponseDTO> reposnseListAnnouncementDTO = service.getAnnouncementsByCategory("FS");
-        assertThat(reposnseListAnnouncementDTO).isNotNull();
+        assertThat(service.getAnnouncementsByCategory("FS")).isNotNull();
     }
 }
